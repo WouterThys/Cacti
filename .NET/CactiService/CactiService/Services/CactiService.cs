@@ -1,10 +1,10 @@
-﻿using CactiService.Repos;
+﻿using CactiServer.Repos;
 using Common.Services.Cactuses;
 using Grpc.Core;
 
-namespace CactiService.Services
+namespace CactiServer.Services
 {
-    public class CactiService : Cactuses.CactusesClient
+    public class CactiService : Cactuses.CactusesBase
     {
 
         private readonly ILogger<CactiService> _logger;

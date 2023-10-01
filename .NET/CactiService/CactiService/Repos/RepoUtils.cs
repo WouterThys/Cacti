@@ -1,7 +1,8 @@
 ﻿using System.Data.Common;
 using System.Data;
+using Database;
 
-namespace CactiService.Repos
+namespace CactiServer.Repos
 {
     public class RepoUtils
     {

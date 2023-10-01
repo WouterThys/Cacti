@@ -1,0 +1,4 @@
+[submodule ".NET/Libraries/Database"]
+	path = .NET/Libraries/Database
+	url = https://github.com/WouterThys/Database.git
+	branch = master

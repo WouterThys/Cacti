@@ -1,13 +1,10 @@
 ﻿using Common.Proto;
-using Common.Services.Cactuses;
-using Microsoft.VisualBasic;
+using Database;
 using System.Data;
 using System.Data.Common;
-using System.Reflection.Metadata;
-using System.Reflection.PortableExecutable;
-using static CactiService.Repos.RepoUtils;
+using static CactiServer.Repos.RepoUtils;
 
-namespace CactiService.Repos
+namespace CactiServer.Repos
 {
     public class CactiRepo
     {
@@ -17,16 +14,21 @@ namespace CactiService.Repos
         private const string SqlUpdate = TableName + "Update";
         private const string SqlDelete = TableName + "Delete";
 
-        protected readonly ILogger _logger;
+        protected readonly ILogger<CactiRepo> _logger;
         protected readonly IDatabase _db;
 
+        public CactiRepo(ILogger<CactiRepo> logger, IDatabase db) 
+        { 
+            _logger = logger;
+            _db = db;
+        }
 
 
         private static void InitializeBaseFromReader(DbDataReader reader, DbConnection conn, Cactus cactus) 
         {
         }
 
-        private static void AddSqlParameters(DbCommand cmd, Document obj)
+        private static void AddSqlParameters(DbCommand cmd, Cactus obj)
         {
             
         }
@@ -58,7 +60,7 @@ namespace CactiService.Repos
             return list;
         }
 
-        public async Task<Document> Save(Document obj)
+        public async Task<Cactus> Save(Cactus obj)
         {
             if (obj.Id <= 0)
             {
@@ -120,8 +122,8 @@ namespace CactiService.Repos
 
         public async Task<long> Delete(long id)
         {
-            var dummy = new Document() { Id = id };
-            if (Constants.IsValidId(id))
+            var dummy = new Cactus() { Id = id };
+            if (id > 1)
             {
                 await using (var conn = await GetConnection(_db))
                 {
@@ -146,12 +148,12 @@ namespace CactiService.Repos
 
         private void OnChanged(DbActionType type, Cactus? obj)
         {
-            _logger.LogTrace("Object changed: {Code} {Type}", obj?.Code, type);
+            //_logger.LogTrace("Object changed: {Code} {Type}", obj?.Code, type);
 
-            if (obj != null)
-            {
-                _callback.OnChanged(type, obj);
-            }
+            //if (obj != null)
+            //{
+            //    _callback.OnChanged(type, obj);
+            //}
         }
     }
 }
