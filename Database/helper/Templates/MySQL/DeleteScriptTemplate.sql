@@ -1,0 +1,1 @@
+﻿DELETE FROM {TABLE} WHERE id = @deleteId;

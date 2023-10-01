@@ -1,0 +1,13 @@
+﻿USE `{SCHEMA}`;
+DROP procedure IF EXISTS `{TABLE}DeleteAll`;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `{TABLE}DeleteAll`(
+	primaryKey int
+)
+BEGIN
+	DELETE FROM {TABLE} WHERE
+{DELETE_ALL_LINK_VALUES}
+END$$
+
+DELIMITER ;

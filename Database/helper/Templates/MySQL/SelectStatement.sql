@@ -1,0 +1,11 @@
+﻿USE `{SCHEMA}`;
+DROP procedure IF EXISTS `{TABLE}SelectAll`;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `{TABLE}SelectAll`()
+BEGIN
+
+	SELECT * FROM {TABLE};
+
+END$$
+DELIMITER ;

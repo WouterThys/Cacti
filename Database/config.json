@@ -1,0 +1,26 @@
+{
+    "SourceDbSettings": {
+      "DbServer": "localhost",
+      "DbSchema": "cacti",
+      "DbUser": "waldo",
+      "DbPassword": "waldow",
+      "DbProvider": "MySql.Data.MySqlClient.MySqlConnection, MySql.Data"
+    },
+    "CreateProcedureSettings": {
+      "AdditionalProceduresDirectory": "procedures\\",
+      "ScriptOutputFilename": "output\\procedures.sql",
+      "IgnoreTables":  "logs, updatescripts"
+    },
+    "CreateUpdatescriptsSettings": {
+      "ScriptOutputFilename": "output\\updates.sql"
+    },
+    "CreateDatabaseSettings": {
+      "ScriptOutputFilename": "output\\create_db.sql",
+      "AdditionalScript": "..\\additional_create_script\\additional_create_script.sql"
+    },
+    "ExecuteSettings": {
+      "ScriptFile": "procedures.sql"
+    }
+  
+  }
+  
