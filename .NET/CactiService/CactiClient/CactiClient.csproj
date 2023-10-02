@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="DevExpress.Win.Design" Version="23.1.4" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 
   <ItemGroup>
@@ -33,10 +34,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Shared\Shared.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="View\" />
   </ItemGroup>
 
   <ItemGroup>

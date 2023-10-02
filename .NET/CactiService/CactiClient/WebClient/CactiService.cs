@@ -11,9 +11,22 @@ namespace CactiClient.WebClient
 {
     public class CactiService
     {
+        private static CactiService? instance;
+        public static CactiService Initialize(GrpcChannel channel)
+        {
+            instance = new CactiService(channel);
+            return instance;
+        }
+        public static CactiService GetInstance()
+        {
+            if (instance == null) throw new NullReferenceException("Instance is null");
+            return instance;
+        }
+
+
         private readonly Cactuses.CactusesClient _CactusClient;
 
-        public CactiService(GrpcChannel channel) : base()
+        private CactiService(GrpcChannel channel) : base()
         {
             _CactusClient = new Cactuses.CactusesClient(channel);
         }

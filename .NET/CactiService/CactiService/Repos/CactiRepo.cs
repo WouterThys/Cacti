@@ -24,13 +24,22 @@ namespace CactiServer.Repos
         }
 
 
-        private static void InitializeBaseFromReader(DbDataReader reader, DbConnection conn, Cactus cactus) 
+        private static void InitializeFromReader(DbDataReader reader, DbConnection conn, Cactus obj) 
         {
+            obj.Id = DatabaseAccess.RGetLong(reader, "id");
+            obj.Code = DatabaseAccess.RGetString(reader, "code");
+            obj.Description = DatabaseAccess.RGetString(reader, "description");
+            obj.Location = DatabaseAccess.RGetString(reader, "location");
+            obj.Barcodes = DatabaseAccess.RGetString(reader, "barcodes");
         }
 
         private static void AddSqlParameters(DbCommand cmd, Cactus obj)
         {
-            
+            DatabaseAccess.AddDbValue(cmd, "id", obj.Id);
+            DatabaseAccess.AddDbValue(cmd, "code", obj.Code);
+            DatabaseAccess.AddDbValue(cmd, "description", obj.Description);
+            DatabaseAccess.AddDbValue(cmd, "location", obj.Location);
+            DatabaseAccess.AddDbValue(cmd, "barcodes", obj.Barcodes);
         }
 
 
@@ -50,7 +59,7 @@ namespace CactiServer.Repos
                 while (await reader.ReadAsync())
                 {
                     var cactus = new Cactus();
-                    InitializeBaseFromReader(reader, conn, cactus);
+                    InitializeFromReader(reader, conn, cactus);
                     list.Add(cactus);
                 }
             }
