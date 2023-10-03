@@ -3,6 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("kotlin-android")
     kotlin("kapt")
+    id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
     id("com.google.protobuf")
 }
@@ -36,6 +37,10 @@ android {
     }
     kotlinOptions {
         jvmTarget = "17"
+    }
+    buildFeatures {
+        dataBinding = true
+        viewBinding = true
     }
 }
 
@@ -83,6 +88,7 @@ dependencies {
     implementation("androidx.recyclerview:recyclerview:1.3.1")
     implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
     implementation("androidx.fragment:fragment-ktx:1.6.1")
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
