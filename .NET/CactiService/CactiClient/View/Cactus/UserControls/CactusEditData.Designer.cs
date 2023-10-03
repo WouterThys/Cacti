@@ -37,6 +37,7 @@
             LocationTextEdit = new DevExpress.XtraEditors.TextEdit();
             ImagePictureEdit = new DevExpress.XtraEditors.PictureEdit();
             BarcodePictureEdit = new DevExpress.XtraEditors.PictureEdit();
+            InfoTextEdit = new DevExpress.XtraEditors.TextEdit();
             Root = new DevExpress.XtraLayout.LayoutControlGroup();
             layoutControlGroup1 = new DevExpress.XtraLayout.LayoutControlGroup();
             ItemForCode = new DevExpress.XtraLayout.LayoutControlItem();
@@ -47,6 +48,7 @@
             emptySpaceItem2 = new DevExpress.XtraLayout.EmptySpaceItem();
             ItemForBarcode = new DevExpress.XtraLayout.LayoutControlItem();
             emptySpaceItem3 = new DevExpress.XtraLayout.EmptySpaceItem();
+            ItemForInfo = new DevExpress.XtraLayout.LayoutControlItem();
             ((System.ComponentModel.ISupportInitialize)mvvmContext).BeginInit();
             ((System.ComponentModel.ISupportInitialize)bsCactus).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dataLayoutControl1).BeginInit();
@@ -56,6 +58,7 @@
             ((System.ComponentModel.ISupportInitialize)LocationTextEdit.Properties).BeginInit();
             ((System.ComponentModel.ISupportInitialize)ImagePictureEdit.Properties).BeginInit();
             ((System.ComponentModel.ISupportInitialize)BarcodePictureEdit.Properties).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)InfoTextEdit.Properties).BeginInit();
             ((System.ComponentModel.ISupportInitialize)Root).BeginInit();
             ((System.ComponentModel.ISupportInitialize)layoutControlGroup1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)ItemForCode).BeginInit();
@@ -66,6 +69,7 @@
             ((System.ComponentModel.ISupportInitialize)emptySpaceItem2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)ItemForBarcode).BeginInit();
             ((System.ComponentModel.ISupportInitialize)emptySpaceItem3).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)ItemForInfo).BeginInit();
             SuspendLayout();
             // 
             // mvvmContext
@@ -83,6 +87,7 @@
             dataLayoutControl1.Controls.Add(LocationTextEdit);
             dataLayoutControl1.Controls.Add(ImagePictureEdit);
             dataLayoutControl1.Controls.Add(BarcodePictureEdit);
+            dataLayoutControl1.Controls.Add(InfoTextEdit);
             dataLayoutControl1.DataSource = bsCactus;
             dataLayoutControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             dataLayoutControl1.Location = new System.Drawing.Point(0, 0);
@@ -95,27 +100,27 @@
             // CodeTextEdit
             // 
             CodeTextEdit.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", bsCactus, "Code", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            CodeTextEdit.Location = new System.Drawing.Point(227, 12);
+            CodeTextEdit.Location = new System.Drawing.Point(281, 12);
             CodeTextEdit.Name = "CodeTextEdit";
-            CodeTextEdit.Size = new System.Drawing.Size(143, 20);
+            CodeTextEdit.Size = new System.Drawing.Size(89, 20);
             CodeTextEdit.StyleController = dataLayoutControl1;
             CodeTextEdit.TabIndex = 0;
             // 
             // DescriptionTextEdit
             // 
             DescriptionTextEdit.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", bsCactus, "Description", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            DescriptionTextEdit.Location = new System.Drawing.Point(227, 36);
+            DescriptionTextEdit.Location = new System.Drawing.Point(281, 36);
             DescriptionTextEdit.Name = "DescriptionTextEdit";
-            DescriptionTextEdit.Size = new System.Drawing.Size(143, 20);
+            DescriptionTextEdit.Size = new System.Drawing.Size(89, 20);
             DescriptionTextEdit.StyleController = dataLayoutControl1;
             DescriptionTextEdit.TabIndex = 2;
             // 
             // LocationTextEdit
             // 
             LocationTextEdit.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", bsCactus, "Location", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            LocationTextEdit.Location = new System.Drawing.Point(227, 60);
+            LocationTextEdit.Location = new System.Drawing.Point(281, 60);
             LocationTextEdit.Name = "LocationTextEdit";
-            LocationTextEdit.Size = new System.Drawing.Size(143, 20);
+            LocationTextEdit.Size = new System.Drawing.Size(89, 20);
             LocationTextEdit.StyleController = dataLayoutControl1;
             LocationTextEdit.TabIndex = 3;
             // 
@@ -128,19 +133,36 @@
             ImagePictureEdit.Properties.ShowMenu = false;
             ImagePictureEdit.Properties.ShowZoomSubMenu = DevExpress.Utils.DefaultBoolean.False;
             ImagePictureEdit.Properties.SizeMode = DevExpress.XtraEditors.Controls.PictureSizeMode.Squeeze;
-            ImagePictureEdit.Size = new System.Drawing.Size(146, 145);
+            ImagePictureEdit.Size = new System.Drawing.Size(200, 220);
             ImagePictureEdit.StyleController = dataLayoutControl1;
             ImagePictureEdit.TabIndex = 1;
             // 
             // BarcodePictureEdit
             // 
             BarcodePictureEdit.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", bsCactus, "Barcode", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            BarcodePictureEdit.Location = new System.Drawing.Point(261, 267);
+            BarcodePictureEdit.Location = new System.Drawing.Point(266, 259);
             BarcodePictureEdit.Name = "BarcodePictureEdit";
+            BarcodePictureEdit.Properties.ShowEditMenuItem = DevExpress.Utils.DefaultBoolean.False;
+            BarcodePictureEdit.Properties.ShowMenu = false;
+            BarcodePictureEdit.Properties.ShowZoomSubMenu = DevExpress.Utils.DefaultBoolean.False;
             BarcodePictureEdit.Properties.SizeMode = DevExpress.XtraEditors.Controls.PictureSizeMode.Squeeze;
-            BarcodePictureEdit.Size = new System.Drawing.Size(109, 101);
+            BarcodePictureEdit.Size = new System.Drawing.Size(104, 109);
             BarcodePictureEdit.StyleController = dataLayoutControl1;
             BarcodePictureEdit.TabIndex = 1;
+            // 
+            // InfoTextEdit
+            // 
+            InfoTextEdit.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", bsCactus, "Info", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            InfoTextEdit.Location = new System.Drawing.Point(12, 350);
+            InfoTextEdit.Name = "InfoTextEdit";
+            InfoTextEdit.Properties.Appearance.FontSizeDelta = -1;
+            InfoTextEdit.Properties.Appearance.ForeColor = System.Drawing.Color.Silver;
+            InfoTextEdit.Properties.Appearance.Options.UseFont = true;
+            InfoTextEdit.Properties.Appearance.Options.UseForeColor = true;
+            InfoTextEdit.Properties.ReadOnly = true;
+            InfoTextEdit.Size = new System.Drawing.Size(250, 18);
+            InfoTextEdit.StyleController = dataLayoutControl1;
+            InfoTextEdit.TabIndex = 4;
             // 
             // Root
             // 
@@ -155,7 +177,7 @@
             // 
             layoutControlGroup1.AllowDrawBackground = false;
             layoutControlGroup1.GroupBordersVisible = false;
-            layoutControlGroup1.Items.AddRange(new DevExpress.XtraLayout.BaseLayoutItem[] { ItemForCode, ItemForDescription, ItemForLocation, ItemForImage, emptySpaceItem1, emptySpaceItem2, ItemForBarcode, emptySpaceItem3 });
+            layoutControlGroup1.Items.AddRange(new DevExpress.XtraLayout.BaseLayoutItem[] { ItemForCode, ItemForDescription, ItemForLocation, ItemForImage, emptySpaceItem1, emptySpaceItem2, ItemForBarcode, emptySpaceItem3, ItemForInfo });
             layoutControlGroup1.Location = new System.Drawing.Point(0, 0);
             layoutControlGroup1.Name = "autoGeneratedGroup0";
             layoutControlGroup1.Size = new System.Drawing.Size(362, 360);
@@ -163,27 +185,27 @@
             // ItemForCode
             // 
             ItemForCode.Control = CodeTextEdit;
-            ItemForCode.Location = new System.Drawing.Point(150, 0);
+            ItemForCode.Location = new System.Drawing.Point(204, 0);
             ItemForCode.Name = "ItemForCode";
-            ItemForCode.Size = new System.Drawing.Size(212, 24);
+            ItemForCode.Size = new System.Drawing.Size(158, 24);
             ItemForCode.Text = "Code";
             ItemForCode.TextSize = new System.Drawing.Size(53, 13);
             // 
             // ItemForDescription
             // 
             ItemForDescription.Control = DescriptionTextEdit;
-            ItemForDescription.Location = new System.Drawing.Point(150, 24);
+            ItemForDescription.Location = new System.Drawing.Point(204, 24);
             ItemForDescription.Name = "ItemForDescription";
-            ItemForDescription.Size = new System.Drawing.Size(212, 24);
+            ItemForDescription.Size = new System.Drawing.Size(158, 24);
             ItemForDescription.Text = "Description";
             ItemForDescription.TextSize = new System.Drawing.Size(53, 13);
             // 
             // ItemForLocation
             // 
             ItemForLocation.Control = LocationTextEdit;
-            ItemForLocation.Location = new System.Drawing.Point(150, 48);
+            ItemForLocation.Location = new System.Drawing.Point(204, 48);
             ItemForLocation.Name = "ItemForLocation";
-            ItemForLocation.Size = new System.Drawing.Size(212, 24);
+            ItemForLocation.Size = new System.Drawing.Size(158, 24);
             ItemForLocation.Text = "Location";
             ItemForLocation.TextSize = new System.Drawing.Size(53, 13);
             // 
@@ -192,7 +214,7 @@
             ItemForImage.Control = ImagePictureEdit;
             ItemForImage.Location = new System.Drawing.Point(0, 0);
             ItemForImage.Name = "ItemForImage";
-            ItemForImage.Size = new System.Drawing.Size(150, 149);
+            ItemForImage.Size = new System.Drawing.Size(204, 224);
             ItemForImage.StartNewLine = true;
             ItemForImage.Text = "Image";
             ItemForImage.TextSize = new System.Drawing.Size(0, 0);
@@ -201,25 +223,25 @@
             // emptySpaceItem1
             // 
             emptySpaceItem1.AllowHotTrack = false;
-            emptySpaceItem1.Location = new System.Drawing.Point(150, 72);
+            emptySpaceItem1.Location = new System.Drawing.Point(204, 72);
             emptySpaceItem1.Name = "emptySpaceItem1";
-            emptySpaceItem1.Size = new System.Drawing.Size(212, 77);
+            emptySpaceItem1.Size = new System.Drawing.Size(158, 152);
             emptySpaceItem1.TextSize = new System.Drawing.Size(0, 0);
             // 
             // emptySpaceItem2
             // 
             emptySpaceItem2.AllowHotTrack = false;
-            emptySpaceItem2.Location = new System.Drawing.Point(0, 149);
+            emptySpaceItem2.Location = new System.Drawing.Point(0, 224);
             emptySpaceItem2.Name = "emptySpaceItem2";
-            emptySpaceItem2.Size = new System.Drawing.Size(362, 106);
+            emptySpaceItem2.Size = new System.Drawing.Size(362, 23);
             emptySpaceItem2.TextSize = new System.Drawing.Size(0, 0);
             // 
             // ItemForBarcode
             // 
             ItemForBarcode.Control = BarcodePictureEdit;
-            ItemForBarcode.Location = new System.Drawing.Point(249, 255);
+            ItemForBarcode.Location = new System.Drawing.Point(254, 247);
             ItemForBarcode.Name = "ItemForBarcode";
-            ItemForBarcode.Size = new System.Drawing.Size(113, 105);
+            ItemForBarcode.Size = new System.Drawing.Size(108, 113);
             ItemForBarcode.StartNewLine = true;
             ItemForBarcode.Text = "Barcode";
             ItemForBarcode.TextSize = new System.Drawing.Size(0, 0);
@@ -228,10 +250,20 @@
             // emptySpaceItem3
             // 
             emptySpaceItem3.AllowHotTrack = false;
-            emptySpaceItem3.Location = new System.Drawing.Point(0, 255);
+            emptySpaceItem3.Location = new System.Drawing.Point(0, 247);
             emptySpaceItem3.Name = "emptySpaceItem3";
-            emptySpaceItem3.Size = new System.Drawing.Size(249, 105);
+            emptySpaceItem3.Size = new System.Drawing.Size(254, 91);
             emptySpaceItem3.TextSize = new System.Drawing.Size(0, 0);
+            // 
+            // ItemForInfo
+            // 
+            ItemForInfo.Control = InfoTextEdit;
+            ItemForInfo.Location = new System.Drawing.Point(0, 338);
+            ItemForInfo.Name = "ItemForInfo";
+            ItemForInfo.Size = new System.Drawing.Size(254, 22);
+            ItemForInfo.Text = "Info";
+            ItemForInfo.TextSize = new System.Drawing.Size(0, 0);
+            ItemForInfo.TextVisible = false;
             // 
             // CactusEditData
             // 
@@ -249,6 +281,7 @@
             ((System.ComponentModel.ISupportInitialize)LocationTextEdit.Properties).EndInit();
             ((System.ComponentModel.ISupportInitialize)ImagePictureEdit.Properties).EndInit();
             ((System.ComponentModel.ISupportInitialize)BarcodePictureEdit.Properties).EndInit();
+            ((System.ComponentModel.ISupportInitialize)InfoTextEdit.Properties).EndInit();
             ((System.ComponentModel.ISupportInitialize)Root).EndInit();
             ((System.ComponentModel.ISupportInitialize)layoutControlGroup1).EndInit();
             ((System.ComponentModel.ISupportInitialize)ItemForCode).EndInit();
@@ -259,6 +292,7 @@
             ((System.ComponentModel.ISupportInitialize)emptySpaceItem2).EndInit();
             ((System.ComponentModel.ISupportInitialize)ItemForBarcode).EndInit();
             ((System.ComponentModel.ISupportInitialize)emptySpaceItem3).EndInit();
+            ((System.ComponentModel.ISupportInitialize)ItemForInfo).EndInit();
             ResumeLayout(false);
         }
 
@@ -282,5 +316,7 @@
         private DevExpress.XtraEditors.PictureEdit BarcodePictureEdit;
         private DevExpress.XtraLayout.LayoutControlItem ItemForBarcode;
         private DevExpress.XtraLayout.EmptySpaceItem emptySpaceItem3;
+        private DevExpress.XtraEditors.TextEdit InfoTextEdit;
+        private DevExpress.XtraLayout.LayoutControlItem ItemForInfo;
     }
 }

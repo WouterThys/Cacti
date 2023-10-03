@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+import "photo.proto";
+
+option csharp_namespace = "Common.Services.Photoes";
+option java_package = "com.cacti.services.generated";
+option java_multiple_files = true;
+
+package services.photos;
+
+service Photos {
+  rpc GetAll(GetAllPhotoRequest) returns (GetAllPhotoReply);
+  rpc Update(UpdatePhotoRequest) returns (UpdatePhotoReply);
+  rpc Delete(DeletePhotoRequest) returns (DeletePhotoReply);
+}
+
+message GetAllPhotoRequest {
+	repeated sint64 ids = 1; 
+}
+
+message GetAllPhotoReply {
+	repeated objects.Photo data = 1;
+}
+
+message UpdatePhotoRequest {
+	objects.Photo data = 1;
+}
+
+message UpdatePhotoReply {
+	objects.Photo data = 1;
+}
+
+message DeletePhotoRequest {
+	sint64 id = 1;
+}
+
+message DeletePhotoReply {
+	sint64 id = 1;
+}
+

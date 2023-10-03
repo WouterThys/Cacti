@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Shared.Utils;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,6 +20,7 @@ namespace CactiClient.Model
                 Location = cactus.Location,
                 Barcodes = cactus.Barcodes,
                 PhotoId = cactus.PhotoId,
+                LastModified = GRPCUtils.ConvertDate(cactus.LastModified),
             };
         }
 
@@ -32,6 +34,7 @@ namespace CactiClient.Model
                 Location = cactus.Location,
                 Barcodes = cactus.Barcodes,
                 PhotoId = cactus.PhotoId,
+                LastModified = GRPCUtils.ConvertDate(cactus.LastModified),
             };
         }
 

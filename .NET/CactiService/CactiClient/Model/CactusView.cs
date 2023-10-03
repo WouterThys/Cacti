@@ -19,6 +19,7 @@ namespace CactiClient.Model
         public string Location { get; set; } = "";
         public string Barcodes { get; set; } = "";
         public long PhotoId { get; set; }
+        public DateTime LastModified { get; set; }
 
 
         [JsonIgnore]
@@ -32,6 +33,22 @@ namespace CactiClient.Model
 
         [JsonIgnore]
         public bool HasPhoto => PhotoId > 1;
+
+        [JsonIgnore]
+        public string Info 
+        { 
+            get
+            {
+                if (Id > 1)
+                {
+                    return $"{Id} - {LastModified:dd/MM/yyyy HH:mm}";
+                }
+                else
+                {
+                    return "Nieuwe cactus";
+                }
+            }
+        }
 
         #region Equals
 
