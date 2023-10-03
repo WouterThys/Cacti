@@ -23,6 +23,15 @@
     <Protobuf Include="..\..\..\Proto\callbackservice.proto">
       <Link>Protos\callbackservice.proto</Link>
     </Protobuf>
+    <Protobuf Include="..\..\..\Proto\fileservice.proto">
+      <Link>Protos\fileservice.proto</Link>
+    </Protobuf>
+    <Protobuf Include="..\..\..\Proto\photo.proto">
+      <Link>Protos\photo.proto</Link>
+    </Protobuf>
+    <Protobuf Include="..\..\..\Proto\photoservice.proto">
+      <Link>Protos\photoservice.proto</Link>
+    </Protobuf>
   </ItemGroup>
 
 </Project>

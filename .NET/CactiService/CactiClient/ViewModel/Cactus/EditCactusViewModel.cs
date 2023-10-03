@@ -4,11 +4,18 @@ using Common.Proto;
 using DevExpress.Mvvm;
 using DevExpress.Mvvm.DataAnnotations;
 using DevExpress.Mvvm.POCO;
+using DevExpress.XtraEditors;
+using DevExpress.XtraReports.UI;
 using Google.Api;
+using IronBarCode;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.Drawing;
+using System.IO;
 using System.Threading.Tasks;
-using static DevExpress.Xpo.Helpers.AssociatedCollectionCriteriaHelper;
+using System.Windows.Forms;
 
 namespace CactiClient.ViewModel.Cactus
 {
@@ -28,8 +35,14 @@ namespace CactiClient.ViewModel.Cactus
 
         // Private stuff
         private readonly CactiService _service = CactiService.GetInstance();
+        private readonly PhotoService _photoService = PhotoService.GetInstance();
+        private readonly FileService _fileService = FileService.GetInstance();
+
         private bool _closeOnLoad = false;
         private bool _forceClose = false;
+
+        private readonly List<Photo> _photosToSave = new(); 
+
 
         // Public MVVM variables
         public virtual CactusView Original { get; set; }
@@ -49,13 +62,17 @@ namespace CactiClient.ViewModel.Cactus
                 return;
             }
 
-
             if (Original != null)
             {
                 var originalString = JsonConvert.SerializeObject(Original);
                 if (Editable == null) 
                 {
                     Editable = JsonConvert.DeserializeObject<CactusView>(originalString);
+                    LoadBarcode();
+                    if (Editable.HasPhoto) 
+                    {
+                        LoadPhoto();
+                    }
                 }
                 else 
                 {
@@ -64,6 +81,8 @@ namespace CactiClient.ViewModel.Cactus
                 }
             }
             IsLoading = false;
+            _photosToSave.Clear();
+
             UpdateCommands();
         }
 
@@ -73,10 +92,17 @@ namespace CactiClient.ViewModel.Cactus
             this.RaiseCanExecuteChanged(m => m.SaveAndClose());
             this.RaiseCanExecuteChanged(m => m.Reset());
             this.RaiseCanExecuteChanged(m => m.Delete());
+
+            this.RaiseCanExecuteChanged(m => m.OpenFile());
         }
 
         private bool PropertiesChanged()
         {
+            if (_photosToSave.Count > 0) 
+            {
+                return true;
+            }
+
             var originalString = JsonConvert.SerializeObject(Original);
             var editableString = JsonConvert.SerializeObject(Editable);
 
@@ -114,6 +140,64 @@ namespace CactiClient.ViewModel.Cactus
             base.OnClose(e);
         }
 
+        private void LoadPhoto() 
+        {
+            if (Editable == null) return;
+            if (!Editable.HasPhoto) return;
+
+            Editable.ImageLoading = true;
+            Task.Factory.StartNew(async (disp) => 
+            {
+                if (Editable == null) return;
+                if (!Editable.HasPhoto) return;
+
+                var photo = await _photoService.Get(Editable.PhotoId);
+                if (photo == null) return;
+
+                var path = await _fileService.Load(photo.Path);
+
+                Editable.Image = Image.FromFile(path);
+
+                if (disp == null) return;
+                await ((IDispatcherService)disp).BeginInvoke(() => 
+                {
+                    Editable.ImageLoading = false;
+                    this.RaisePropertyChanged(m => m.Editable);
+                });
+
+            }, DispatcherService);
+        }
+
+        private async Task SavePhotos() 
+        {
+            if (_photosToSave == null) return;
+            foreach (var photo in _photosToSave ) 
+            {
+                if (!string.IsNullOrEmpty(photo.Path)) 
+                {
+                    var path = await _fileService.Save(photo.Path);
+                    photo.Path = path;
+                }
+
+                var savedPhoto = await _photoService.Save(photo);
+                if (savedPhoto != null && Editable != null)
+                {
+                    Editable.PhotoId = savedPhoto.Id;
+                }
+            }
+            _photosToSave.Clear();
+        }
+
+
+        private void LoadBarcode()
+        {
+            if (Editable == null) return;
+            if (Editable.Id <= 1) return;
+
+            GeneratedBarcode qrCode = QRCodeWriter.CreateQrCode(Editable.Id.ToString());
+            Editable.Barcode = qrCode.ToImage();
+        }
+
         #region Commands
 
         public virtual bool CanSave() 
@@ -128,6 +212,8 @@ namespace CactiClient.ViewModel.Cactus
             Task.Factory.StartNew(async (disp) => 
             {
                 if (Editable == null) return;
+
+                await SavePhotos();
 
                 var toSave = Mapper.Map(Editable);
                 var saved = await _service.Save(toSave);
@@ -192,6 +278,47 @@ namespace CactiClient.ViewModel.Cactus
                     });
 
                 }, DispatcherService);
+            }
+        }
+
+
+        public virtual bool CanOpenFile()
+        {
+            return !IsLoading && Editable != null && Editable.Id > 1;
+        }
+        public virtual void OpenFile()
+        {
+            if (Editable == null) return;
+
+            XtraOpenFileDialog openFileDialog = new()
+            {
+                InitialDirectory = "Pictures",
+                Filter = "png files (*.png)|*.png|jpg files (*.jpg)|*.jpg|All files (*.*)|*.*",
+                Multiselect = false,
+                RestoreDirectory = true
+            };
+
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                // Get the path of specified file.
+                string filePath = openFileDialog.FileName;
+                string code = Path.GetFileName(filePath);
+
+                // Read the contents of the file into a stream.
+                var fileStream = openFileDialog.OpenFile();
+                Editable.Image = Image.FromStream(fileStream);
+
+                // For now only 1 photo allowed
+                _photosToSave.Clear();
+                _photosToSave.Add(new Photo() 
+                { 
+                    Id = -1,
+                    Code = code,
+                    Path = filePath
+                });
+
+                this.RaisePropertyChanged(m => m.Editable);
+                UpdateCommands();
             }
         }
 

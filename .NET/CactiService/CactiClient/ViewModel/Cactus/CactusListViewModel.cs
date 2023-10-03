@@ -8,6 +8,8 @@ using DevExpress.Mvvm.POCO;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,6 +29,8 @@ namespace CactiClient.ViewModel.Cactus
         public override string ViewName => "CactusListView";
 
         private readonly CactiService _service = CactiService.GetInstance();
+        private readonly PhotoService _photoService = PhotoService.GetInstance();
+        private readonly FileService _fileService = FileService.GetInstance();
         private readonly CallbackService _callback = CallbackService.GetInstance();
 
 
@@ -50,13 +54,13 @@ namespace CactiClient.ViewModel.Cactus
                 if (cactiList != null)
                 {
                     var mappedList = new List<CactusView>();
-                    Parallel.ForEach(cactiList, (c) =>
+                    foreach (var cactus in cactiList)
                     {
-                        if (c.Id > 1)
+                        if (cactus.Id > 1)
                         {
-                            mappedList.Add(Mapper.Map(c));
+                            mappedList.Add(Mapper.Map(cactus));
                         }
-                    });
+                    }
 
                     if (disp == null) return;
                     _ = ((IDispatcherService)disp).BeginInvoke(() =>
@@ -80,6 +84,44 @@ namespace CactiClient.ViewModel.Cactus
 
         private void StartLoadingImages()
         {
+            foreach (var cactus in Cacti) 
+            { 
+                if (cactus.HasPhoto) 
+                {
+                    LoadPhoto(cactus);
+                }
+            }
+        }
+
+        private void LoadPhoto(CactusView? cactus) 
+        { 
+            if (cactus == null) return;
+            if (!cactus.HasPhoto) return;
+
+            Task.Factory.StartNew(async (disp) => 
+            {
+                if (cactus == null) return;
+                if (!cactus.HasPhoto) return;
+
+                var photo = await _photoService.Get(cactus.PhotoId);
+                if (photo == null) return;
+
+                var path = await _fileService.Load(photo.Path);
+                if (File.Exists(path)) 
+                { 
+                    cactus.Image = Image.FromFile(path);
+
+                    if (disp == null) return;
+
+                    _ = ((IDispatcherService)disp).BeginInvoke(() => 
+                    {
+                        var index = Cacti.IndexOf(cactus);
+                        Cacti.ResetItem(index);
+
+                    });
+                    
+                }
+            }, DispatcherService);
         }
 
         public virtual void OnSelectionChanged()
@@ -164,11 +206,13 @@ namespace CactiClient.ViewModel.Cactus
                 {
                     case UpdateAction.Insert:
                         Cacti.Add(mapped);
+                        LoadPhoto(mapped);
                         break;
                     case UpdateAction.Update:
                         var index = Cacti.IndexOf(mapped);
                         Cacti[index] = mapped;
                         Cacti.ResetItem(index);
+                        LoadPhoto(mapped);
                         break;
                     case UpdateAction.Delete:
                         Cacti.Remove(mapped);

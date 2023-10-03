@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+option csharp_namespace = "Common.Services";
+option java_package = "com.cacti.services.generated";
+option java_multiple_files = true;
+
+package services;
+
+service Files {
+  rpc Save(stream SaveRequest) returns (SaveReply);
+  rpc Load(LoadRequest) returns (stream LoadReply);
+}
+
+message FileData {
+	uint32 size = 1;
+	bytes data = 2;
+}
+
+message SaveRequest {
+    oneof content {
+        string path = 1;
+        FileData data = 2;
+    }
+}
+message SaveReply {
+    string path = 1;
+}
+
+message LoadRequest {
+    string path = 1;
+}
+message LoadReply {
+    FileData data = 1;
+}

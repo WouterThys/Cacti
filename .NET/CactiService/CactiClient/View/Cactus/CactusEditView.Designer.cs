@@ -34,11 +34,13 @@
             bbiSave = new DevExpress.XtraBars.BarButtonItem();
             bbiSaveAndClose = new DevExpress.XtraBars.BarButtonItem();
             bbiReset = new DevExpress.XtraBars.BarButtonItem();
+            bbiDelete = new DevExpress.XtraBars.BarButtonItem();
             ribbonPage1 = new DevExpress.XtraBars.Ribbon.RibbonPage();
             ribbonPageGroup1 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             cactusEditData = new CactusEditData();
             mvvmContext = new DevExpress.Utils.MVVM.MVVMContext(components);
-            bbiDelete = new DevExpress.XtraBars.BarButtonItem();
+            ribbonPageGroup2 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
+            bbiOpenFile = new DevExpress.XtraBars.BarButtonItem();
             ((System.ComponentModel.ISupportInitialize)ribbonControl).BeginInit();
             ((System.ComponentModel.ISupportInitialize)mvvmContext).BeginInit();
             SuspendLayout();
@@ -46,9 +48,9 @@
             // ribbonControl
             // 
             ribbonControl.ExpandCollapseItem.Id = 0;
-            ribbonControl.Items.AddRange(new DevExpress.XtraBars.BarItem[] { ribbonControl.ExpandCollapseItem, bbiSave, bbiSaveAndClose, bbiReset, bbiDelete });
+            ribbonControl.Items.AddRange(new DevExpress.XtraBars.BarItem[] { ribbonControl.ExpandCollapseItem, bbiSave, bbiSaveAndClose, bbiReset, bbiDelete, bbiOpenFile });
             ribbonControl.Location = new System.Drawing.Point(0, 0);
-            ribbonControl.MaxItemId = 5;
+            ribbonControl.MaxItemId = 6;
             ribbonControl.Name = "ribbonControl";
             ribbonControl.Pages.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPage[] { ribbonPage1 });
             ribbonControl.Size = new System.Drawing.Size(412, 150);
@@ -74,9 +76,16 @@
             bbiReset.ImageOptions.SvgImage = (DevExpress.Utils.Svg.SvgImage)resources.GetObject("bbiReset.ImageOptions.SvgImage");
             bbiReset.Name = "bbiReset";
             // 
+            // bbiDelete
+            // 
+            bbiDelete.Caption = "Delete";
+            bbiDelete.Id = 4;
+            bbiDelete.ImageOptions.SvgImage = (DevExpress.Utils.Svg.SvgImage)resources.GetObject("bbiDelete.ImageOptions.SvgImage");
+            bbiDelete.Name = "bbiDelete";
+            // 
             // ribbonPage1
             // 
-            ribbonPage1.Groups.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPageGroup[] { ribbonPageGroup1 });
+            ribbonPage1.Groups.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPageGroup[] { ribbonPageGroup1, ribbonPageGroup2 });
             ribbonPage1.Name = "ribbonPage1";
             ribbonPage1.Text = "Thuis";
             // 
@@ -102,12 +111,18 @@
             mvvmContext.ContainerControl = this;
             mvvmContext.ViewModelType = typeof(ViewModel.Cactus.EditCactusViewModel);
             // 
-            // bbiDelete
+            // ribbonPageGroup2
             // 
-            bbiDelete.Caption = "Delete";
-            bbiDelete.Id = 4;
-            bbiDelete.ImageOptions.SvgImage = (DevExpress.Utils.Svg.SvgImage)resources.GetObject("barButtonItem1.ImageOptions.SvgImage");
-            bbiDelete.Name = "bbiDelete";
+            ribbonPageGroup2.ItemLinks.Add(bbiOpenFile);
+            ribbonPageGroup2.Name = "ribbonPageGroup2";
+            ribbonPageGroup2.Text = "Files";
+            // 
+            // bbiOpenFile
+            // 
+            bbiOpenFile.Caption = "Open";
+            bbiOpenFile.Id = 5;
+            bbiOpenFile.ImageOptions.SvgImage = (DevExpress.Utils.Svg.SvgImage)resources.GetObject("barButtonItem1.ImageOptions.SvgImage");
+            bbiOpenFile.Name = "bbiOpenFile";
             // 
             // CactusEditView
             // 
@@ -134,5 +149,7 @@
         private DevExpress.XtraBars.BarButtonItem bbiReset;
         private DevExpress.Utils.MVVM.MVVMContext mvvmContext;
         private DevExpress.XtraBars.BarButtonItem bbiDelete;
+        private DevExpress.XtraBars.BarButtonItem bbiOpenFile;
+        private DevExpress.XtraBars.Ribbon.RibbonPageGroup ribbonPageGroup2;
     }
 }

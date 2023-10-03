@@ -22,5 +22,17 @@ namespace CactiClient.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("%appdata%\\CactiClient\\Photos\\")]
+        public string LocalBaseDir {
+            get {
+                return ((string)(this["LocalBaseDir"]));
+            }
+            set {
+                this["LocalBaseDir"] = value;
+            }
+        }
     }
 }

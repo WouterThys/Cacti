@@ -8,12 +8,9 @@ option java_multiple_files = true;
 
 package objects;
 
-message Cactus {
+message Photo {
     sint64 id = 1;
     string code = 2;
-    string description = 3;
-    string location = 4;
-    string barcodes = 5;
-    sint64 photo_id = 6;
-    google.protobuf.Timestamp last_modified = 7;
+    string path = 3;
+    google.protobuf.Timestamp last_modified = 4;
 }

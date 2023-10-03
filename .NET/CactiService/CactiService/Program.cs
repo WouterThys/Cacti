@@ -45,6 +45,7 @@ if (dataDb != null)
     builder.Services.AddSingleton(dataDb);
 
     builder.Services.AddSingleton<CactiRepo>();
+    builder.Services.AddSingleton<PhotoRepo>();
     
 }
 
@@ -54,8 +55,9 @@ var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 app.MapGrpcService<CactiService>();
+app.MapGrpcService<PhotoService>();
+app.MapGrpcService<FileService>();
 app.MapGrpcService<CallbackService>();
-
 
 app.MapGet("/", () => "Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
 

@@ -18,6 +18,11 @@ namespace CactiClient.Model
         public string Description { get; set; } = "";
         public string Location { get; set; } = "";
         public string Barcodes { get; set; } = "";
+        public long PhotoId { get; set; }
+
+
+        [JsonIgnore]
+        public Image? Barcode { get; set; } = null;
 
         [JsonIgnore]
         public Image Image { get; set; } = DefaultImage;
@@ -25,6 +30,8 @@ namespace CactiClient.Model
         [JsonIgnore]
         public bool ImageLoading { get; set; }
 
+        [JsonIgnore]
+        public bool HasPhoto => PhotoId > 1;
 
         #region Equals
 

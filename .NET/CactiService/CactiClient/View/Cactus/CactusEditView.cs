@@ -49,6 +49,8 @@ namespace CactiClient.View.Cactus
             fluent.BindCommand(bbiReset, m => m.Reset());
             fluent.BindCommand(bbiDelete, m => m.Delete());
 
+            fluent.BindCommand(bbiOpenFile, m => m.OpenFile());
+
             fluent.ViewModel.Load();
         }
     }

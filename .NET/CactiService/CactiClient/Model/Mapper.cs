@@ -18,6 +18,7 @@ namespace CactiClient.Model
                 Description = cactus.Description,
                 Location = cactus.Location,
                 Barcodes = cactus.Barcodes,
+                PhotoId = cactus.PhotoId,
             };
         }
 
@@ -30,6 +31,7 @@ namespace CactiClient.Model
                 Description = cactus.Description,
                 Location = cactus.Location,
                 Barcodes = cactus.Barcodes,
+                PhotoId = cactus.PhotoId,
             };
         }
 
