@@ -41,6 +41,10 @@ namespace CactiClient.View.Cactus
                 m => m.Selection,
                 e => new List<CactusView>(tileView.GetSelectedRows().Select(r => tileView.GetRow(r) as CactusView)));
 
+            fluent.WithEvent<TileViewItemClickEventArgs>(tileView, "ItemDoubleClick").EventToCommand(
+                m => m.Edit(null),
+                m => m.Selected);
+
             fluent.BindCommand(bbiAdd, m => m.Add());
             fluent.BindCommand(bbiEdit, m => m.Edit(null), m => m.Selected);
             fluent.BindCommand(bbiDelete, m => m.Delete(null), m => m.Selected);

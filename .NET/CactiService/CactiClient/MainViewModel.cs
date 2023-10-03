@@ -23,7 +23,8 @@ namespace CactiClient
     public class MainViewModel : BaseViewModel
     {
         private readonly GrpcChannel _channel;
-        private readonly CactiService _service;
+        private readonly CactiService _CactiService;
+        private readonly CallbackService _CallbackService;
 
 
         public override string Name => "MainViewModel";
@@ -38,7 +39,9 @@ namespace CactiClient
         {
             // TODO: from settings
             _channel = GrpcChannel.ForAddress("http://localhost:5002");
-            _service = CactiService.Initialize(_channel);
+            _CactiService = CactiService.Initialize(_channel);
+            _CallbackService = CallbackService.Initialize(_channel);
+            _CallbackService.Register();
 
             CactusListViewModel = CactusListViewModel.Create();
             CactusListViewModel.SetParentViewModel(this);

@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+import "cactus.proto";
+
+option csharp_namespace = "Common.Services";
+option java_package = "com.cacti.generated";
+option java_multiple_files = true;
+
+package services;
+
+service Callbacks {
+  rpc Subscribe(SubscribeRequest) returns (stream UpdateMessage);
+}
+
+message SubscribeRequest {
+	// ..
+}
+
+enum UpdateAction {
+  Insert = 0;
+  Update = 1;
+  Delete = 2;
+}
+
+message UpdateMessage {
+    UpdateAction action = 1;
+    oneof data {
+        objects.Cactus cactus = 2;
+    }
+}

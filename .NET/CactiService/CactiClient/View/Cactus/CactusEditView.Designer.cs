@@ -38,6 +38,7 @@
             ribbonPageGroup1 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             cactusEditData = new CactusEditData();
             mvvmContext = new DevExpress.Utils.MVVM.MVVMContext(components);
+            bbiDelete = new DevExpress.XtraBars.BarButtonItem();
             ((System.ComponentModel.ISupportInitialize)ribbonControl).BeginInit();
             ((System.ComponentModel.ISupportInitialize)mvvmContext).BeginInit();
             SuspendLayout();
@@ -45,33 +46,33 @@
             // ribbonControl
             // 
             ribbonControl.ExpandCollapseItem.Id = 0;
-            ribbonControl.Items.AddRange(new DevExpress.XtraBars.BarItem[] { ribbonControl.ExpandCollapseItem, bbiSave, bbiSaveAndClose, bbiReset });
+            ribbonControl.Items.AddRange(new DevExpress.XtraBars.BarItem[] { ribbonControl.ExpandCollapseItem, bbiSave, bbiSaveAndClose, bbiReset, bbiDelete });
             ribbonControl.Location = new System.Drawing.Point(0, 0);
-            ribbonControl.MaxItemId = 4;
+            ribbonControl.MaxItemId = 5;
             ribbonControl.Name = "ribbonControl";
             ribbonControl.Pages.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPage[] { ribbonPage1 });
             ribbonControl.Size = new System.Drawing.Size(412, 150);
             // 
-            // barButtonItem1
+            // bbiSave
             // 
             bbiSave.Caption = "Save";
             bbiSave.Id = 1;
-            bbiSave.ImageOptions.SvgImage = (DevExpress.Utils.Svg.SvgImage)resources.GetObject("barButtonItem1.ImageOptions.SvgImage");
-            bbiSave.Name = "barButtonItem1";
+            bbiSave.ImageOptions.SvgImage = (DevExpress.Utils.Svg.SvgImage)resources.GetObject("bbiSave.ImageOptions.SvgImage");
+            bbiSave.Name = "bbiSave";
             // 
-            // barButtonItem2
+            // bbiSaveAndClose
             // 
             bbiSaveAndClose.Caption = "SaveClose";
             bbiSaveAndClose.Id = 2;
-            bbiSaveAndClose.ImageOptions.SvgImage = (DevExpress.Utils.Svg.SvgImage)resources.GetObject("barButtonItem2.ImageOptions.SvgImage");
-            bbiSaveAndClose.Name = "barButtonItem2";
+            bbiSaveAndClose.ImageOptions.SvgImage = (DevExpress.Utils.Svg.SvgImage)resources.GetObject("bbiSaveAndClose.ImageOptions.SvgImage");
+            bbiSaveAndClose.Name = "bbiSaveAndClose";
             // 
-            // barButtonItem3
+            // bbiReset
             // 
             bbiReset.Caption = "Reset";
             bbiReset.Id = 3;
-            bbiReset.ImageOptions.SvgImage = (DevExpress.Utils.Svg.SvgImage)resources.GetObject("barButtonItem3.ImageOptions.SvgImage");
-            bbiReset.Name = "barButtonItem3";
+            bbiReset.ImageOptions.SvgImage = (DevExpress.Utils.Svg.SvgImage)resources.GetObject("bbiReset.ImageOptions.SvgImage");
+            bbiReset.Name = "bbiReset";
             // 
             // ribbonPage1
             // 
@@ -84,6 +85,7 @@
             ribbonPageGroup1.ItemLinks.Add(bbiSave);
             ribbonPageGroup1.ItemLinks.Add(bbiSaveAndClose);
             ribbonPageGroup1.ItemLinks.Add(bbiReset);
+            ribbonPageGroup1.ItemLinks.Add(bbiDelete);
             ribbonPageGroup1.Name = "ribbonPageGroup1";
             ribbonPageGroup1.Text = "Thuis";
             // 
@@ -99,6 +101,13 @@
             // 
             mvvmContext.ContainerControl = this;
             mvvmContext.ViewModelType = typeof(ViewModel.Cactus.EditCactusViewModel);
+            // 
+            // bbiDelete
+            // 
+            bbiDelete.Caption = "Delete";
+            bbiDelete.Id = 4;
+            bbiDelete.ImageOptions.SvgImage = (DevExpress.Utils.Svg.SvgImage)resources.GetObject("barButtonItem1.ImageOptions.SvgImage");
+            bbiDelete.Name = "bbiDelete";
             // 
             // CactusEditView
             // 
@@ -124,5 +133,6 @@
         private DevExpress.XtraBars.BarButtonItem bbiSaveAndClose;
         private DevExpress.XtraBars.BarButtonItem bbiReset;
         private DevExpress.Utils.MVVM.MVVMContext mvvmContext;
+        private DevExpress.XtraBars.BarButtonItem bbiDelete;
     }
 }

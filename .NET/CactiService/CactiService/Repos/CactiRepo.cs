@@ -1,4 +1,5 @@
-﻿using Common.Proto;
+﻿using CactiServer.Managers;
+using Common.Proto;
 using Database;
 using System.Data;
 using System.Data.Common;
@@ -16,11 +17,13 @@ namespace CactiServer.Repos
 
         protected readonly ILogger<CactiRepo> _logger;
         protected readonly IDatabase _db;
+        protected readonly ICallbackManager _callback;
 
-        public CactiRepo(ILogger<CactiRepo> logger, IDatabase db) 
+        public CactiRepo(ILogger<CactiRepo> logger, IDatabase db, ICallbackManager callback) 
         { 
             _logger = logger;
             _db = db;
+            _callback = callback;
         }
 
 
@@ -157,12 +160,12 @@ namespace CactiServer.Repos
 
         private void OnChanged(DbActionType type, Cactus? obj)
         {
-            //_logger.LogTrace("Object changed: {Code} {Type}", obj?.Code, type);
+            _logger.LogTrace("Object changed: {Code} {Type}", obj?.Code, type);
 
-            //if (obj != null)
-            //{
-            //    _callback.OnChanged(type, obj);
-            //}
+            if (obj != null)
+            {
+                _callback.OnChanged(type, obj);
+            }
         }
     }
 }

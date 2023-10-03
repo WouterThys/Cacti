@@ -20,6 +20,9 @@
   <ItemGroup>
     <Protobuf Include="..\..\..\Proto\cactus.proto" Link="Protos\cactus.proto" />
     <Protobuf Include="..\..\..\Proto\cactusservice.proto" Link="Protos\cactusservice.proto" />
+    <Protobuf Include="..\..\..\Proto\callbackservice.proto">
+      <Link>Protos\callbackservice.proto</Link>
+    </Protobuf>
   </ItemGroup>
 
 </Project>

@@ -1,3 +1,4 @@
+using CactiServer.Managers;
 using CactiServer.Repos;
 using CactiServer.Services;
 using Database;
@@ -47,10 +48,15 @@ if (dataDb != null)
     
 }
 
+builder.Services.AddSingleton<ICallbackManager, CallbackManager>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 app.MapGrpcService<CactiService>();
+app.MapGrpcService<CallbackService>();
+
+
 app.MapGet("/", () => "Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
 
 app.Run();

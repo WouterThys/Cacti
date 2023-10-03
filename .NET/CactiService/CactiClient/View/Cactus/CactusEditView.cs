@@ -18,27 +18,27 @@ namespace CactiClient.View.Cactus
         {
             InitializeComponent();
 
-            if (!mvvmContext.IsDesignMode) 
+            if (!mvvmContext.IsDesignMode)
             {
                 InitializeLayouts();
             }
         }
 
-        private void InitializeLayouts() 
-        { 
-        
+        private void InitializeLayouts()
+        {
+
         }
 
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            if (!mvvmContext.IsDesignMode) 
-            { 
+            if (!mvvmContext.IsDesignMode)
+            {
                 InitializeBindings();
             }
         }
 
-        private void InitializeBindings() 
+        private void InitializeBindings()
         {
             var fluent = mvvmContext.OfType<EditCactusViewModel>();
 
@@ -47,6 +47,7 @@ namespace CactiClient.View.Cactus
             fluent.BindCommand(bbiSave, m => m.Save());
             fluent.BindCommand(bbiSaveAndClose, m => m.SaveAndClose());
             fluent.BindCommand(bbiReset, m => m.Reset());
+            fluent.BindCommand(bbiDelete, m => m.Delete());
 
             fluent.ViewModel.Load();
         }

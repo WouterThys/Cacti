@@ -2,11 +2,12 @@
 using DevExpress.Mvvm;
 using DevExpress.Mvvm.DataAnnotations;
 using System;
+using System.ComponentModel;
 
 namespace CactiClient.ViewModel
 {
     [POCOViewModel]
-    public abstract class BaseViewModel
+    public abstract class BaseViewModel : IDocumentContent
     {
         public virtual Guid Guid { get; } = Guid.NewGuid();
         public abstract string Name { get; }
@@ -25,6 +26,9 @@ namespace CactiClient.ViewModel
         [ServiceProperty(Key = "FloatingDocumentService")]
         protected virtual IDocumentManagerService FloatingDocumentManagerService { get { throw new NotImplementedException(); } }
 
+        public IDocumentOwner? DocumentOwner { get; set; }
+
+        object IDocumentContent.Title => Title;
 
         public abstract void Load();
 
@@ -44,7 +48,7 @@ namespace CactiClient.ViewModel
             return document;
         }
 
-        protected IDocument CreateDocument(BaseViewModel viewModel, IDocumentManagerService service)
+        protected static IDocument CreateDocument(BaseViewModel viewModel, IDocumentManagerService service)
         {
             IDocument document = service.CreateDocument(viewModel.ViewName, viewModel);
             string title = viewModel.Title;
@@ -58,6 +62,16 @@ namespace CactiClient.ViewModel
             }
             document.DestroyOnClose = true;
             return document;
+        }
+
+        public virtual void OnClose(CancelEventArgs e)
+        {
+            
+        }
+
+        public virtual void OnDestroy()
+        {
+            
         }
 
         #endregion

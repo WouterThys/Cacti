@@ -1,5 +1,7 @@
 ﻿using CactiClient.Model;
 using CactiClient.WebClient;
+using Common.Proto;
+using Common.Services;
 using DevExpress.Mvvm;
 using DevExpress.Mvvm.DataAnnotations;
 using DevExpress.Mvvm.POCO;
@@ -13,7 +15,7 @@ using System.Threading.Tasks;
 namespace CactiClient.ViewModel.Cactus
 {
     [POCOViewModel]
-    public class CactusListViewModel : BaseViewModel
+    public class CactusListViewModel : BaseViewModel, INotifyChanged
     {
         public static CactusListViewModel Create()
         {
@@ -25,6 +27,7 @@ namespace CactiClient.ViewModel.Cactus
         public override string ViewName => "CactusListView";
 
         private readonly CactiService _service = CactiService.GetInstance();
+        private readonly CallbackService _callback = CallbackService.GetInstance();
 
 
         public virtual BindingList<CactusView> Cacti { get; protected set; } = new();
@@ -32,8 +35,8 @@ namespace CactiClient.ViewModel.Cactus
 
 
         protected CactusListViewModel() 
-        { 
-        
+        {
+            _callback.RegisterCallback(this);
         }
 
 
@@ -135,7 +138,44 @@ namespace CactiClient.ViewModel.Cactus
             if (cactus == null) return;
             if (cactus.Id <= 1) return;
 
+            var res = MessageBoxService.ShowMessage(
+                $"Cactus {cactus.Code} weg doen? :( :(", 
+                "Weg :(", 
+                MessageButton.YesNo, 
+                MessageIcon.Question);
 
+            if (res == MessageResult.Yes) 
+            {
+                Task.Factory.StartNew(async () => { await _service.Delete(cactus.Id); });
+            }
+        }
+
+        #endregion
+
+        #region Callback
+
+        public Task NotifyChanged<T>(UpdateAction type, T data)
+        {
+            if (data is Common.Proto.Cactus cactus) 
+            {
+                var mapped = Mapper.Map(cactus);
+
+                switch (type)
+                {
+                    case UpdateAction.Insert:
+                        Cacti.Add(mapped);
+                        break;
+                    case UpdateAction.Update:
+                        var index = Cacti.IndexOf(mapped);
+                        Cacti[index] = mapped;
+                        Cacti.ResetItem(index);
+                        break;
+                    case UpdateAction.Delete:
+                        Cacti.Remove(mapped);
+                        break;
+                }
+            }
+            return Task.CompletedTask;
         }
 
         #endregion
