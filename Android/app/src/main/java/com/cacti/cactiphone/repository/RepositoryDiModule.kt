@@ -2,6 +2,7 @@ package com.cacti.cactiphone.repository
 
 import android.content.Context
 import android.net.Uri
+import com.cacti.cactiphone.repository.database.CactusDao
 import com.cacti.cactiphone.repository.database.MyDatabase
 import com.cacti.cactiphone.repository.web.CactusService
 import com.cacti.generated.CactusKt
@@ -29,7 +30,7 @@ object RepositoryDiModule {
 
     @Singleton
     @Provides
-    fun provideCactiDao(db: MyDatabase) = db.cactiDao()
+    fun provideCactusDao(db: MyDatabase) = db.cactusDao()
 
     // endregion
 
@@ -64,4 +65,12 @@ object RepositoryDiModule {
 
     // endregion
 
+    // region Repo
+
+    @Singleton
+    @Provides
+    fun provideCactusRepo(remoteSource: CactusService, localSource: CactusDao) =
+        CactusRepo(remoteSource, localSource)
+
+    // endregion
 }

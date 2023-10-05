@@ -16,7 +16,7 @@ import com.cacti.cactiphone.data.Cactus
 @TypeConverters(DataConverters::class)
 abstract class MyDatabase : RoomDatabase() {
 
-    abstract fun cactiDao(): CactiDao
+    abstract fun cactusDao(): CactusDao
 
     companion object {
         @Volatile
