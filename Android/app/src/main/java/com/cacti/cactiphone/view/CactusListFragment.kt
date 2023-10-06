@@ -6,23 +6,30 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.cacti.cactiphone.AppConstants.UNKNOWN_ID
 import com.cacti.cactiphone.R
 import com.cacti.cactiphone.databinding.FragmentCactusListBinding
 import com.cacti.cactiphone.repository.data.Resource
 import com.cacti.cactiphone.view.adapters.CactusAdapter
+import com.cacti.cactiphone.view.utils.RecyclerClickSupport
 import com.cacti.cactiphone.viewmodel.MainViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class CactusListFragment : Fragment() {
 
     private val viewModel: MainViewModel by viewModels({ requireActivity() })
 
     private var _binding: FragmentCactusListBinding? = null
+    private val binding get() = _binding!!
+
     private val cactusAdapter = CactusAdapter().apply {
         setHasStableIds(true)
     }
-    private val binding get() = _binding!!
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,50 +84,18 @@ class CactusListFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-//        RecyclerClickSupport.addTo(binding.rvCacti, true)
-//            .setOnItemClickListener(object : RecyclerClickSupport.OnItemClickListener {
-//                override fun onItemClicked(recyclerView: RecyclerView?, position: Int, v: View?) {
-//                    if (dataAdapter.showCheckBoxes) {
-//                        val id = dataAdapter.getItemId(position)
-//                        dataAdapter.toggleSelection(id)
-//                        viewModel.addToMultiSelect(dataAdapter.getSelection())
-//                    } else {
-//                        launchOnIo {
-//                            val jo = viewModel.getJobOperation(dataAdapter.getItemId(position))
-//                            safeLet(jo, (activity as MainActivity?)) { jobOperation, act ->
-//                                UIUtil.hideKeyboard(act)
-//                                act.moveToJobOperation(jobOperation, 0)
-//                            }
-//                        }
-//                    }
-//                }
-//
-//                override fun onItemDoubleClicked(
-//                    recyclerView: RecyclerView?,
-//                    position: Int,
-//                    v: View?
-//                ) {
-//                    if (!dataAdapter.showCheckBoxes) {
-//                        launchOnIo {
-//                            viewModel.getJobOperation(dataAdapter.getItemId(position))?.let {
-//                                viewModel.setFilters(it)
-//                            }
-//                        }
-//                    } else {
-//                        onItemClicked(recyclerView, position, v)
-//                    }
-//                }
-//
-//                override fun onItemLongClicked(
-//                    recyclerView: RecyclerView?,
-//                    position: Int,
-//                    v: View?
-//                ) {
-//                    // Set state to multi select
-//                    dataAdapter.clearSelection()
-//                    viewModel.switchState(MainViewModel.ListViewState.MultipleJobs)
-//                }
-//            })
+
+        RecyclerClickSupport.addTo(binding.rvCacti).setOnItemClickListener(object : RecyclerClickSupport.OnSingleClickListener{
+            override fun onItemClicked(recyclerView: RecyclerView?, position: Int, v: View?) {
+                val cactusId = cactusAdapter.getItemId(position)
+                if (cactusId > UNKNOWN_ID) {
+//                    val action = CactusListFragmentDirections
+//                        .actionCactusListFragmentToCactusEditFragment(cactusId)
+//                    view?.findNavController()?.navigate(action)
+                    
+                }
+            }
+        })
 
         binding.rvCacti.setHasFixedSize(true)
         binding.rvCacti.layoutManager = LinearLayoutManager(context)

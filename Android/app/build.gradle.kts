@@ -6,6 +6,7 @@ plugins {
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
     id("com.google.protobuf")
+    //id("androidx.navigation.safeargs.kotlin")
 }
 
 android {
@@ -119,7 +120,7 @@ dependencies {
 
     val glideVersion = "4.12.0"
     implementation("com.github.bumptech.glide:glide:$glideVersion")
-    implementation("com.github.bumptech.glide:okhttp3-integration:$glideVersion")
+    //implementation("com.github.bumptech.glide:okhttp3-integration:$glideVersion")
     kapt("com.github.bumptech.glide:compiler:$glideVersion") // This breaks the okhttp interceptor when using ksp
 
 //    // Grpc
@@ -147,6 +148,11 @@ dependencies {
     kapt("com.google.dagger:hilt-android-compiler:$daggerHiltVersion")
     kapt("androidx.hilt:hilt-compiler:$androidxHiltVersion")
 
+
+    // Navigation
+    val navVersion = "2.5.3"
+    implementation("androidx.navigation:navigation-fragment-ktx:$navVersion")
+    implementation("androidx.navigation:navigation-ui-ktx:$navVersion")
 }
 
 // Allow references to generated code

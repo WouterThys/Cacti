@@ -1,6 +1,7 @@
 syntax = "proto3";
 
 import "cactus.proto";
+import "photo.proto";
 
 option csharp_namespace = "Common.Services";
 option java_package = "com.cacti.services.generated";
@@ -26,5 +27,6 @@ message UpdateMessage {
     UpdateAction action = 1;
     oneof data {
         objects.Cactus cactus = 2;
+        objects.Photo photo = 3;
     }
 }

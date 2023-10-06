@@ -9,12 +9,14 @@ import com.cacti.cactiphone.data.Photo
 import com.cacti.cactiphone.repository.CactusRepo
 import com.cacti.cactiphone.repository.PhotoRepo
 import com.cacti.cactiphone.repository.data.Resource
+import com.cacti.cactiphone.repository.web.CallbackService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val app: App,
+    private val callbackService: CallbackService,
     private val cactusRepo: CactusRepo,
     private val photoRepo: PhotoRepo,
 ) : ViewModel() {
@@ -48,10 +50,16 @@ class MainViewModel @Inject constructor(
                     val result = ArrayList<CactusWithPhoto>()
 
                     for (cactus in cacti) {
+                        // Don't show unknown
+                        if (cactus.id <= 1) continue
+
+                        // Check photo
                         var photo: Photo? = null
                         if (cactus.photoId > 1) {
                             photo = photos.first { p -> p.id == cactus.photoId }
                         }
+
+                        // Add to list
                         result.add(CactusWithPhoto(cactus, photo))
                     }
 
@@ -73,5 +81,11 @@ class MainViewModel @Inject constructor(
     suspend fun refresh() {
         cactusRepo.refresh()
         photoRepo.refresh()
+    }
+
+    init {
+        launchOnIo {
+            callbackService.register()
+        }
     }
 }

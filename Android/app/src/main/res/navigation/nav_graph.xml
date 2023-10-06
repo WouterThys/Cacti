@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/cactusListFragment">
+
+    <fragment
+        android:id="@+id/cactusListFragment"
+        android:name="com.cacti.cactiphone.view.CactusListFragment"
+        android:label="fragment_cactus_list"
+        tools:layout="@layout/fragment_cactus_list" >
+        <action
+            android:id="@+id/action_cactusListFragment_to_cactusEditFragment"
+            app:destination="@id/cactusEditFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/cactusEditFragment"
+        android:name="com.cacti.cactiphone.view.CactusEditFragment"
+        android:label="fragment_cactus_edit"
+        tools:layout="@layout/fragment_cactus_edit" >
+        <argument
+            android:name="Constant_Params_CACTUS_ID"
+            app:argType="long"
+            android:defaultValue="0L" />
+    </fragment>
+</navigation>

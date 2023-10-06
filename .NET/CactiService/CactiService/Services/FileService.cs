@@ -33,6 +33,7 @@ namespace CactiServer.Services
 
         public override async Task Load(LoadRequest request, IServerStreamWriter<LoadReply> responseStream, ServerCallContext context)
         {
+            _logger.LogInformation("Load request for {path}", request.Path);
             string path = request.Path;
             if (!File.Exists(path))
             {
@@ -45,29 +46,37 @@ namespace CactiServer.Services
 
             // Set total size in header
             // Write in chunks of xxxx bytes
-            var fileInfo = new FileInfo(path);
-            var meta = new Metadata
+            try
+            {
+                var fileInfo = new FileInfo(path);
+                var meta = new Metadata
             {
                 { "TotalSize", fileInfo.Length.ToString() }
             };
-            await context.WriteResponseHeadersAsync(meta);
+                await context.WriteResponseHeadersAsync(meta);
 
-            // Read file into stream
-            using Stream source = File.OpenRead(path);
-            byte[] buffer = new byte[4096];
-            int bytesRead;
+                // Read file into stream
+                using Stream source = File.OpenRead(path);
+                byte[] buffer = new byte[4096];
+                int bytesRead;
 
-            while ((bytesRead = source.Read(buffer, 0, buffer.Length)) > 0)
-            {
-                FileData fileData = new()
+                while ((bytesRead = source.Read(buffer, 0, buffer.Length)) > 0)
                 {
-                    Size = (uint)bytesRead,
-                    Data = ByteString.CopyFrom(buffer)
+                    FileData fileData = new()
+                    {
+                        Size = (uint)bytesRead,
+                        Data = ByteString.CopyFrom(buffer)
 
-                };
+                    };
 
-                var reply = new LoadReply { Data = fileData };
-                await responseStream.WriteAsync(reply);
+                    var reply = new LoadReply { Data = fileData };
+                    await responseStream.WriteAsync(reply);
+                }
+            } 
+            catch (Exception ex) 
+            {
+                _logger.LogError(ex, "Failed to load file");
+                throw;
             }
         }
 

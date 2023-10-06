@@ -24,42 +24,31 @@ class ImageDataFetcher(private val fileService: FileService, val photo: Photo) :
 
     override fun loadData(priority: Priority, callback: DataFetcher.DataCallback<in ByteBuffer>) {
 
-        val buffer = ByteArrayOutputStream()
-        flow = fileService.load(photo.path)
-
         GlobalScope.launch(Dispatchers.IO) {
-            flow?.collect {
-                buffer.write(it.data, 0, it.size)
+
+            val buffer = ByteArrayOutputStream()
+
+            try {
+                flow = fileService.load(photo.path)
+
+                flow?.collect {
+                    buffer.write(it.data, 0, it.size)
+                }
+
+                callback.onDataReady(ByteBuffer.wrap(buffer.toByteArray()))
+
+            } catch (ex: Exception) {
+                callback.onLoadFailed(ex)
+            } finally {
+                buffer.close()
             }
 
-            callback.onDataReady(ByteBuffer.wrap(buffer.toByteArray()))
         }
-
-//        val imageDataCallback: Callback<ProfileImage> = object : Callback<ProfileImage> {
-//            override fun onResponse(call: Call<ProfileImage>, response: Response<ProfileImage>) {
-//                try {
-//                    val data: ByteArray = Base64.decode(response.body()!!.data, Base64.DEFAULT)
-//                    val byteBuffer: ByteBuffer = ByteBuffer.wrap(data)
-//                    callback.onDataReady(byteBuffer)
-//                } catch (ex: Exception) {
-//                    ex.printStackTrace()
-//                }
-//
-//            }
-//
-//            override fun onFailure(call: Call<ProfileImage>, t: Throwable) {
-//                //callback.onDataReady("")
-//            }
-//
-//        }
-//        ApiManager.getProfilePhoto(imageDataCallback, PrefsHelper.read(AppConstants.TOKEN)!!, picId)
 
     }
 
     override fun cleanup() {
-        // TODO: close InputStream
-        // inputStream?.close()
-        // flow?.cancellable()
+
     }
 
     override fun cancel() {

@@ -6,10 +6,12 @@ import com.cacti.cactiphone.repository.database.CactusDao
 import com.cacti.cactiphone.repository.database.MyDatabase
 import com.cacti.cactiphone.repository.database.PhotoDao
 import com.cacti.cactiphone.repository.web.CactusService
+import com.cacti.cactiphone.repository.web.CallbackService
 import com.cacti.cactiphone.repository.web.FileService
 import com.cacti.cactiphone.repository.web.PhotoService
 import com.cacti.generated.CactusKt
 import com.cacti.services.generated.CactusesGrpcKt
+import com.cacti.services.generated.CallbacksGrpcKt
 import com.cacti.services.generated.FilesGrpcKt
 import com.cacti.services.generated.PhotosGrpcKt
 import dagger.Module
@@ -92,6 +94,21 @@ object RepositoryDiModule {
     @Provides
     fun provideFileService(stub: FilesGrpcKt.FilesCoroutineStub) =
         FileService(stub)
+
+
+    @Singleton
+    @Provides
+    fun provideCallbackCoroutineStub(channel: ManagedChannel) =
+        CallbacksGrpcKt.CallbacksCoroutineStub(channel)
+
+    @Singleton
+    @Provides
+    fun provideCallbackService(
+        stub: CallbacksGrpcKt.CallbacksCoroutineStub,
+        cactusDao: CactusDao,
+        photoDao: PhotoDao,
+    ) =
+        CallbackService(stub, cactusDao, photoDao)
 
     // endregion
 

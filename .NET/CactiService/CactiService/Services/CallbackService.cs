@@ -43,7 +43,14 @@ namespace CactiServer.Services
 
             if (actionType == null) return;
 
-            if (data is Cactus c) await WriteUpdateAsync(_responseStream, new UpdateMessage() { Action = (UpdateAction)actionType, Cactus = c });
+            if (data is Cactus c)
+            {
+                await WriteUpdateAsync(_responseStream, new UpdateMessage() { Action = (UpdateAction)actionType, Cactus = c });
+            }
+            else if (data is Photo p)
+            {
+                await WriteUpdateAsync(_responseStream, new UpdateMessage() { Action = (UpdateAction)actionType, Photo = p });
+            }
 
         }
 

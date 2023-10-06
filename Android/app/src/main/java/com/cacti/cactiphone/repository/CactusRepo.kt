@@ -63,4 +63,7 @@ class CactusRepo @Inject constructor(
         }
         return responseStatus
     }
+
+
+    fun getById(id: Long) = dbSource.getById(id)
 }

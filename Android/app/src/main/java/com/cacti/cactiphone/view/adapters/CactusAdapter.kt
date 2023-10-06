@@ -49,6 +49,11 @@ class CactusAdapter() : RecyclerView.Adapter<CactusAdapter.CactusHolder>() {
         return asyncListDiffer.currentList.size
     }
 
+    override fun getItemId(position: Int): Long {
+        val item = getItem(position)
+        return item?.cactus?.id ?: 0
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CactusHolder {
         val binding: LayoutItemCactusBinding = DataBindingUtil.inflate(
             LayoutInflater.from(parent.context),

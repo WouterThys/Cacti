@@ -15,20 +15,30 @@ class PhotoService @Inject constructor(
 ) {
 
     suspend fun getAll(ids: List<Long>? = null) : Resource<List<Photo>> {
-        val requestBuilder = GetAllPhotoRequest.newBuilder()
-        ids?.let {
-            requestBuilder.addAllIds(ids)
+        return try {
+            val requestBuilder = GetAllPhotoRequest.newBuilder()
+            ids?.let {
+                requestBuilder.addAllIds(ids)
+            }
+            val request = requestBuilder.build()
+            val reply = service.getAll(request)
+            val result = reply.dataList.map { grpc -> map(grpc) }
+            Resource.success(result)
+        } catch (ex: Exception) {
+            Resource.error(ex.message ?: "Error!")
         }
-        val request = requestBuilder.build()
-        val reply = service.getAll(request)
+    }
 
-        val result = reply.dataList.map { grpc -> Photo(
-            id = grpc.id,
-            code = grpc.code,
-            path = grpc.path,
-            lastModified = Date(grpc.lastModified.seconds)
-        ) }
-        return Resource.success(result)
+    companion object {
+
+        fun map(grpc: com.cacti.generated.Photo) =
+            Photo(
+                id = grpc.id,
+                code = grpc.code,
+                path = grpc.path,
+                lastModified = Date(grpc.lastModified.seconds)
+            )
+
     }
 
 }
