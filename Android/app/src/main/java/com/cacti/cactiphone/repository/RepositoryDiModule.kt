@@ -4,9 +4,14 @@ import android.content.Context
 import android.net.Uri
 import com.cacti.cactiphone.repository.database.CactusDao
 import com.cacti.cactiphone.repository.database.MyDatabase
+import com.cacti.cactiphone.repository.database.PhotoDao
 import com.cacti.cactiphone.repository.web.CactusService
+import com.cacti.cactiphone.repository.web.FileService
+import com.cacti.cactiphone.repository.web.PhotoService
 import com.cacti.generated.CactusKt
 import com.cacti.services.generated.CactusesGrpcKt
+import com.cacti.services.generated.FilesGrpcKt
+import com.cacti.services.generated.PhotosGrpcKt
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -32,6 +37,10 @@ object RepositoryDiModule {
     @Provides
     fun provideCactusDao(db: MyDatabase) = db.cactusDao()
 
+    @Singleton
+    @Provides
+    fun providePhotoDao(db: MyDatabase) = db.photoDao()
+
     // endregion
 
     // region Web
@@ -55,13 +64,34 @@ object RepositoryDiModule {
 
     @Singleton
     @Provides
-    fun provideUserCoroutineStub(channel: ManagedChannel) =
+    fun provideCactusCoroutineStub(channel: ManagedChannel) =
         CactusesGrpcKt.CactusesCoroutineStub(channel)
 
     @Singleton
     @Provides
-    fun provideUserService(stub: CactusesGrpcKt.CactusesCoroutineStub) =
+    fun provideCactusService(stub: CactusesGrpcKt.CactusesCoroutineStub) =
         CactusService(stub)
+
+    @Singleton
+    @Provides
+    fun providePhotoCoroutineStub(channel: ManagedChannel) =
+        PhotosGrpcKt.PhotosCoroutineStub(channel)
+
+    @Singleton
+    @Provides
+    fun providePhotoService(stub: PhotosGrpcKt.PhotosCoroutineStub) =
+        PhotoService(stub)
+
+
+    @Singleton
+    @Provides
+    fun provideFileCoroutineStub(channel: ManagedChannel) =
+        FilesGrpcKt.FilesCoroutineStub(channel)
+
+    @Singleton
+    @Provides
+    fun provideFileService(stub: FilesGrpcKt.FilesCoroutineStub) =
+        FileService(stub)
 
     // endregion
 
@@ -71,6 +101,11 @@ object RepositoryDiModule {
     @Provides
     fun provideCactusRepo(remoteSource: CactusService, localSource: CactusDao) =
         CactusRepo(remoteSource, localSource)
+
+    @Singleton
+    @Provides
+    fun providePhotoRepo(remoteSource: PhotoService, localSource: PhotoDao) =
+        PhotoRepo(remoteSource, localSource)
 
     // endregion
 }

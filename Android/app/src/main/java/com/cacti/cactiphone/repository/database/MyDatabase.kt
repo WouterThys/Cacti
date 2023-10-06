@@ -6,17 +6,21 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.cacti.cactiphone.data.Cactus
+import com.cacti.cactiphone.data.Photo
 
 @Database(
-    version = 1,
+    version = 2,
     entities = [
-        Cactus::class
+        Cactus::class,
+        Photo::class
     ]
 )
 @TypeConverters(DataConverters::class)
 abstract class MyDatabase : RoomDatabase() {
 
     abstract fun cactusDao(): CactusDao
+
+    abstract fun photoDao(): PhotoDao
 
     companion object {
         @Volatile

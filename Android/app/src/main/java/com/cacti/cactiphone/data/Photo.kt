@@ -4,14 +4,11 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.util.Date
 
-@Entity(tableName = "cacti")
-data class Cactus(
+@Entity(tableName = "photos")
+data class Photo (
     @PrimaryKey
     val id: Long = 0,
     val code: String = "",
-    val description: String = "",
-    val location: String = "",
-    val barcodes: String = "",
-    val photoId: Long = 0,
+    val path: String = "",
     val lastModified: Date = Date(0),
 )
