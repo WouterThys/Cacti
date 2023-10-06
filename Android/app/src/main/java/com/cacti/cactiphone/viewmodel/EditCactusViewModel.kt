@@ -6,6 +6,7 @@ import androidx.lifecycle.map
 import androidx.lifecycle.switchMap
 import com.cacti.cactiphone.App
 import com.cacti.cactiphone.AppConstants
+import com.cacti.cactiphone.AppConstants.UNKNOWN_ID
 import com.cacti.cactiphone.repository.CactusRepo
 import com.cacti.cactiphone.repository.PhotoRepo
 import com.cacti.cactiphone.repository.web.CallbackService
@@ -23,5 +24,14 @@ class EditCactusViewModel@Inject constructor(
 
     private val cactusId = stateHandle.getLiveData<Long>(AppConstants.KEY_CACTUS_ID)
     val cactus = cactusId.switchMap { cactusRepo.getById(it) }
+
+    val photo = cactus.switchMap { it?.let { cactus ->
+        if (cactus.photoId > UNKNOWN_ID) {
+            photoRepo.getById(cactus.photoId)
+        } else {
+            null
+        }
+    }
+    }
 
 }

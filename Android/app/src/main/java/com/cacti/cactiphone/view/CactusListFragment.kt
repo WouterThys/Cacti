@@ -89,10 +89,11 @@ class CactusListFragment : Fragment() {
             override fun onItemClicked(recyclerView: RecyclerView?, position: Int, v: View?) {
                 val cactusId = cactusAdapter.getItemId(position)
                 if (cactusId > UNKNOWN_ID) {
-//                    val action = CactusListFragmentDirections
-//                        .actionCactusListFragmentToCactusEditFragment(cactusId)
-//                    view?.findNavController()?.navigate(action)
-                    
+                    val action = CactusListFragmentDirections
+                        .actionCactusListFragmentToCactusEditFragment()
+                    action.constantParamsCACTUSID = cactusId
+
+                    view?.findNavController()?.navigate(action)
                 }
             }
         })

@@ -52,6 +52,8 @@ class PhotoRepo @Inject constructor(
         return this::class.java.simpleName
     }
 
+    fun getById(id: Long) = dbSource.getById(id)
+
     suspend fun refresh(): Resource<List<Photo>> {
         val responseStatus = webSource.getAll(null)
         when (responseStatus.status) {

@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import com.bumptech.glide.Glide
 import com.cacti.cactiphone.R
 import com.cacti.cactiphone.databinding.FragmentCactusEditBinding
 import com.cacti.cactiphone.databinding.FragmentCactusListBinding
@@ -40,6 +41,14 @@ class CactusEditFragment : Fragment() {
         viewModel.cactus.observe(viewLifecycleOwner) {
             it?.let { cactus ->
                 binding.cactus = cactus
+            }
+        }
+
+        viewModel.photo.observe(viewLifecycleOwner) {
+            it?.let { photo ->
+                Glide.with(view)
+                    .load(photo)
+                    .into(binding.ivPhoto)
             }
         }
     }
