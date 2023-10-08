@@ -7,9 +7,9 @@ import androidx.lifecycle.switchMap
 import com.cacti.cactiphone.App
 import com.cacti.cactiphone.AppConstants
 import com.cacti.cactiphone.AppConstants.UNKNOWN_ID
+import com.cacti.cactiphone.data.Cactus
 import com.cacti.cactiphone.repository.CactusRepo
 import com.cacti.cactiphone.repository.PhotoRepo
-import com.cacti.cactiphone.repository.web.CallbackService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -34,4 +34,11 @@ class EditCactusViewModel@Inject constructor(
     }
     }
 
+    suspend fun save(cactus: Cactus?) {
+        cactus?.let { cactusRepo.save(it) }
+    }
+
+    suspend fun delete() {
+        cactusId.value?.let { cactusRepo.delete(it) }
+    }
 }

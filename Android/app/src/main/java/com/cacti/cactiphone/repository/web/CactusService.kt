@@ -1,9 +1,12 @@
 package com.cacti.cactiphone.repository.web
 
+import androidx.room.Update
 import com.cacti.cactiphone.data.Cactus
 import com.cacti.cactiphone.repository.data.Resource
 import com.cacti.services.generated.CactusesGrpcKt
+import com.cacti.services.generated.DeleteCactusRequest
 import com.cacti.services.generated.GetAllCactusRequest
+import com.cacti.services.generated.UpdateCactusRequest
 import java.util.Date
 import javax.inject.Inject
 
@@ -22,9 +25,35 @@ class CactusService @Inject constructor(
             val result = reply.dataList.map { grpc -> map(grpc) }
             Resource.success(result)
         } catch (ex: Exception) {
-            Resource.error(ex.message ?: "Error!")
+            Resource.error(ex.message ?: "Load error!")
         }
     }
+
+    suspend fun save(cactus: Cactus) : Resource<Cactus> {
+        return try {
+            val requestBuilder = UpdateCactusRequest.newBuilder()
+            requestBuilder.data = map(cactus)
+            val request = requestBuilder.build()
+            val reply = service.update(request)
+            val result = map(reply.data)
+            Resource.success(result)
+        } catch (ex: Exception) {
+            Resource.error(ex.message ?: "Save error")
+        }
+    }
+
+    suspend fun delete(id: Long) : Resource<Long> {
+        return try {
+            val requestBuilder = DeleteCactusRequest.newBuilder()
+            requestBuilder.id = id
+            val request = requestBuilder.build()
+            val reply = service.delete(request)
+            Resource.success(reply.id)
+        } catch (ex: Exception) {
+            Resource.error(ex.message ?: "Save error")
+        }
+    }
+
 
     companion object {
 
@@ -38,6 +67,19 @@ class CactusService @Inject constructor(
                 photoId = grpc.photoId,
                 lastModified = Date(grpc.lastModified.seconds)
             )
+
+        fun map(grpc: Cactus) : com.cacti.generated.Cactus {
+            val cactus = com.cacti.generated.Cactus.newBuilder()
+            cactus.id = grpc.id
+            cactus.code = grpc.code
+            cactus.description = grpc.description
+            cactus.location = grpc.location
+            cactus.barcodes = grpc.barcodes
+            cactus.photoId = grpc.photoId
+            //cactus.lastModified = Date(grpc.lastModified.seconds)
+
+            return cactus.build()
+        }
 
     }
 

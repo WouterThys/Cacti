@@ -65,5 +65,40 @@ class CactusRepo @Inject constructor(
     }
 
 
+    suspend fun save(cactus: Cactus) {
+        var connected = true
+
+        if (connected) {
+            // Update source
+            val saved = webSource.save(cactus)
+            if (saved.status == Resource.Status.SUCCESS) {
+                saved.data?.let { dbSource.save(listOf(it)) }
+            } else {
+                // TODO
+            }
+
+        } else {
+            // Save to temp db
+        }
+    }
+
+    suspend fun delete(id: Long) {
+        var connected = true
+
+        if (connected) {
+            // Update source
+            val saved = webSource.delete(id)
+            if (saved.status == Resource.Status.SUCCESS) {
+                saved.data?.let { dbSource.delete(listOf(it)) }
+            } else {
+                // TODO
+            }
+
+        } else {
+            // Save to temp db
+        }
+
+    }
+
     fun getById(id: Long) = dbSource.getById(id)
 }
