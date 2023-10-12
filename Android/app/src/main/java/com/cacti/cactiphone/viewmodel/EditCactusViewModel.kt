@@ -41,4 +41,35 @@ class EditCactusViewModel@Inject constructor(
     suspend fun delete() {
         cactusId.value?.let { cactusRepo.delete(it) }
     }
+
+    fun dataChanged(
+            code: String,
+            description: String,
+            location: String,
+            photoPath: String
+    ) : Boolean {
+        this.cactus.value?.let {
+
+            photo.value?.let { photo ->
+                // We have photo, but path has changed
+                if (photo.path != photoPath) {
+                    return true
+                }
+            } ?: kotlin.run {
+                // We don't have photo, and now we have
+                if (photoPath.isNotEmpty()) {
+                    return true
+                }
+            }
+
+
+            return it.code != code ||
+                    it.description != description ||
+                    it.location != location
+
+        } ?: run {
+            return false
+        }
+    }
+
 }

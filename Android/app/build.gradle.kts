@@ -161,9 +161,11 @@ dependencies {
 
     val cameraxVersion = "1.2.3"
     val cameraxViewVersion = "1.2.3"
+    implementation("androidx.camera:camera-core:${cameraxVersion}")
     implementation("androidx.camera:camera-camera2:${cameraxVersion}")
     implementation("androidx.camera:camera-lifecycle:${cameraxVersion}")
     implementation("androidx.camera:camera-view:${cameraxViewVersion}")
+    implementation("androidx.camera:camera-extensions:${cameraxViewVersion}")
 }
 
 // Allow references to generated code

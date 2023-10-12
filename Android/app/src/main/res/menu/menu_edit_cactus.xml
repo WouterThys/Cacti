@@ -5,15 +5,22 @@
     <item
         android:id="@+id/menu_item_save"
         android:icon="@drawable/baseline_save_24"
-        android:orderInCategory="10"
+        android:orderInCategory="30"
         android:title="@string/save"
         app:showAsAction="always"/>
 
     <item
         android:id="@+id/menu_item_delete"
         android:icon="@drawable/baseline_delete_outline_24"
-        android:orderInCategory="10"
+        android:orderInCategory="20"
         android:title="@string/delete"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/menu_item_photo"
+        android:icon="@drawable/baseline_add_a_photo_24"
+        android:orderInCategory="10"
+        android:title="@string/photo"
         app:showAsAction="always"/>
 
 </menu>
