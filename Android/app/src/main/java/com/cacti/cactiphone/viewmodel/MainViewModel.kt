@@ -3,6 +3,7 @@ package com.cacti.cactiphone.viewmodel
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.map
 import com.cacti.cactiphone.App
 import com.cacti.cactiphone.data.Cactus
 import com.cacti.cactiphone.data.CactusWithPhoto
@@ -29,9 +30,16 @@ class MainViewModel @Inject constructor(
 
     val selectedCactusId = MutableLiveData<Long>(0)
 
+    val cactiCount = cactusList.map { it.data?.size ?: 0 }
+
+
     suspend fun refresh() {
         cactusRepo.refresh()
         photoRepo.refresh()
+    }
+
+    fun clearSelected() {
+        selectedCactusId.postValue(0)
     }
 
     fun findBarcode(barcode: String?) {

@@ -14,6 +14,7 @@ import com.bumptech.glide.load.model.ModelLoaderFactory
 import com.bumptech.glide.load.model.MultiModelLoaderFactory
 import com.bumptech.glide.module.AppGlideModule
 import com.bumptech.glide.request.RequestOptions
+import com.cacti.cactiphone.R
 import com.cacti.cactiphone.data.Photo
 import com.cacti.cactiphone.repository.web.FileService
 import dagger.hilt.EntryPoint
@@ -60,7 +61,7 @@ class MyGlideModule : AppGlideModule() {
             val options: RequestOptions = RequestOptions()
                 .placeholder(progressDrawable)
                 .error(android.R.color.transparent)
-                .fallback(android.R.color.transparent)
+                .fallback(R.drawable.cactus_icon_128)
             builder.setDefaultRequestOptions(options)
         }
         super.applyOptions(context, builder)

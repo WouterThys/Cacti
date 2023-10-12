@@ -44,7 +44,7 @@ class CactusEditFragment : Fragment() {
 
     private lateinit var backPressedCallback: OnBackPressedCallback
 
-    private lateinit var currentPhotoPath: String
+    private var currentPhotoPath: String? = null
     private var photoFile: File? = null
     private val CAPTURE_IMAGE_REQUEST = 420
 
@@ -103,10 +103,15 @@ class CactusEditFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         viewModel.cactus.observe(viewLifecycleOwner) {
             it?.let { cactus ->
                 binding.cactus = cactus
+
+                if (cactus.id > UNKNOWN_ID) {
+                    binding.toolbar.title = cactus.code
+                } else {
+                    binding.toolbar.title = getString(R.string.new_)
+                }
             }
         }
 
@@ -116,6 +121,9 @@ class CactusEditFragment : Fragment() {
                 Glide.with(view)
                     .load(photo)
                     .into(binding.ivPhoto)
+            } ?: run {
+                binding.ivPhoto.setImageDrawable(
+                    ContextCompat.getDrawable(requireContext(), R.drawable.cactus_icon_128))
             }
         }
     }
@@ -132,13 +140,13 @@ class CactusEditFragment : Fragment() {
                 binding.etCode.text.toString(),
                 binding.etDescription.text.toString(),
                 binding.etLocation.text.toString(),
-                currentPhotoPath
+                currentPhotoPath ?: ""
             )
         ) {
 
             val dialog = AlertDialog.Builder(requireContext())
-                .setMessage("Cactus aangepast, eerst opslagen?")
-                .setTitle("Aangepast!")
+                .setMessage(getString(R.string.cactus_changed))
+                .setTitle(getString(R.string.changed))
                 .setCancelable(true)
                 .setPositiveButton("Yes") { _, _ ->
                     saveData(true)
@@ -159,9 +167,8 @@ class CactusEditFragment : Fragment() {
 
     private fun saveData(saveOnClose: Boolean) {
         launchOnIo {
-            val photoId = savePhoto()
-            saveCactus(photoId)
-
+            updateCactus()
+            viewModel.save(binding.cactus, photoFile)
         }.invokeOnCompletion {
             if (saveOnClose) {
                 closeFragment()
@@ -176,23 +183,11 @@ class CactusEditFragment : Fragment() {
         }
     }
 
-    private suspend fun saveCactus(photoId: Long?) {
+    private fun updateCactus() {
         binding.cactus?.code = binding.etCode.text.toString()
         binding.cactus?.description = binding.etDescription.text.toString()
         binding.cactus?.location = binding.etLocation.text.toString()
         binding.cactus?.lastModified = Calendar.getInstance().time
-        binding.cactus?.photoId = photoId ?: binding.cactus?.photoId ?: UNKNOWN_ID
-
-        viewModel.save(binding.cactus)
-    }
-
-    private suspend fun savePhoto() : Long? {
-        photoFile?.let {
-            viewModel.save(photoFile)?.let { saved ->
-                return saved.id
-            }
-        }
-        return null
     }
 
     private fun deleteData() {

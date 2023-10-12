@@ -79,7 +79,7 @@ class CactusDataMediator(
                             // Check photo
                             var photo: Photo? = null
                             if (cactus.photoId > 1) {
-                                photo = photos.first { p -> p.id == cactus.photoId }
+                                photo = photos.firstOrNull { p -> p.id == cactus.photoId }
                             }
 
                             // Add to list

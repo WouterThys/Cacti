@@ -12,6 +12,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.cacti.cactiphone.AppConstants.ADD_ID
 import com.cacti.cactiphone.AppConstants.UNKNOWN_ID
 import com.cacti.cactiphone.R
 import com.cacti.cactiphone.databinding.FragmentCactusListBinding
@@ -33,9 +34,7 @@ class CactusListFragment : Fragment() {
     private var _binding: FragmentCactusListBinding? = null
     private val binding get() = _binding!!
 
-    private val cactusAdapter = CactusAdapter().apply {
-        setHasStableIds(true)
-    }
+    private lateinit var cactusAdapter: CactusAdapter
 
     private val scanBarcodeRequest =
         registerForActivityResult(BarcodeRequestContract()) {
@@ -44,7 +43,9 @@ class CactusListFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        cactusAdapter = CactusAdapter(requireContext()).apply {
+            setHasStableIds(true)
+        }
     }
 
     override fun onCreateView(
@@ -53,6 +54,8 @@ class CactusListFragment : Fragment() {
     ): View {
         // Inflate the layout for this fragment
         _binding = FragmentCactusListBinding.inflate(inflater, container, false)
+
+        binding.toolbar.title = getString(R.string.name)
 
         setupSwipeRefresh()
         setupRecyclerView()
@@ -82,8 +85,13 @@ class CactusListFragment : Fragment() {
 
         viewModel.selectedCactusId.observe(viewLifecycleOwner) {
             if (it > UNKNOWN_ID) {
+                viewModel.clearSelected()
                 moveToCactusEdit(it)
             }
+        }
+
+        viewModel.cactiCount.observe(viewLifecycleOwner) {
+            binding.toolbar.subtitle = "$it cacti"
         }
     }
 
@@ -159,7 +167,7 @@ class CactusListFragment : Fragment() {
         binding.toolbar.setOnMenuItemClickListener { item ->
             return@setOnMenuItemClickListener when (item.itemId) {
                 R.id.menu_item_add -> {
-                    // TODO saveData(false)
+                    moveToCactusEdit(ADD_ID)
                     true
                 }
                 R.id.menu_item_scan -> {

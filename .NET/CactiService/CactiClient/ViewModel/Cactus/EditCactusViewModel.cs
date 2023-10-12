@@ -45,7 +45,7 @@ namespace CactiClient.ViewModel.Cactus
 
 
         // Public MVVM variables
-        public virtual CactusView Original { get; set; }
+        private CactusView Original { get; set; }
         public virtual CactusView? Editable { get; set; }
 
 

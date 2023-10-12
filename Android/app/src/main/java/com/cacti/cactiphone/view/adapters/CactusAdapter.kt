@@ -1,8 +1,11 @@
 package com.cacti.cactiphone.view.adapters
 
+import android.content.Context
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
@@ -13,7 +16,13 @@ import com.cacti.cactiphone.data.Cactus
 import com.cacti.cactiphone.data.CactusWithPhoto
 import com.cacti.cactiphone.databinding.LayoutItemCactusBinding
 
-class CactusAdapter() : RecyclerView.Adapter<CactusAdapter.CactusHolder>() {
+class CactusAdapter(context: Context) : RecyclerView.Adapter<CactusAdapter.CactusHolder>() {
+
+    private var emptyIconDrawable: Drawable
+
+    init {
+        emptyIconDrawable = ContextCompat.getDrawable(context, R.drawable.cactus_icon_128)!!
+    }
 
     private val asyncListDiffer by lazy { AsyncListDiffer(this,
         object : DiffUtil.ItemCallback<CactusWithPhoto>() {
@@ -25,7 +34,9 @@ class CactusAdapter() : RecyclerView.Adapter<CactusAdapter.CactusHolder>() {
                 return oldItem.cactus.code == newItem.cactus.code &&
                         oldItem.cactus.description == newItem.cactus.description &&
                         oldItem.cactus.location == newItem.cactus.location &&
-                        oldItem.cactus.photoId == newItem.cactus.photoId
+                        oldItem.cactus.photoId == newItem.cactus.photoId &&
+                        oldItem.photo?.id == newItem.photo?.id &&
+                        oldItem.photo?.path == newItem.photo?.path
             }
         }
     )}
@@ -74,6 +85,7 @@ class CactusAdapter() : RecyclerView.Adapter<CactusAdapter.CactusHolder>() {
                     .into(it.ivPhoto)
             } ?: kotlin.run {
                 // Remove image
+                it.ivPhoto.setImageDrawable(emptyIconDrawable)
             }
         }
     }

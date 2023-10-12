@@ -65,20 +65,21 @@ class CactusRepo @Inject constructor(
     }
 
 
-    suspend fun save(cactus: Cactus) {
+    suspend fun save(cactus: Cactus) : Resource<Cactus?> {
         var connected = true
 
-        if (connected) {
+        return if (connected) {
             // Update source
             val saved = webSource.save(cactus)
             if (saved.status == Resource.Status.SUCCESS) {
                 saved.data?.let { dbSource.save(listOf(it)) }
-            } else {
-                // TODO
             }
+
+            saved
 
         } else {
             // Save to temp db
+            Resource.loading(cactus)
         }
     }
 

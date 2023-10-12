@@ -1,6 +1,7 @@
 package com.cacti.cactiphone.viewmodel
 
 import android.net.Uri
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
@@ -27,9 +28,14 @@ class EditCactusViewModel@Inject constructor(
     private val stateHandle: SavedStateHandle,
 ) : ViewModel() {
 
-
-    private val cactusId = stateHandle.getLiveData<Long>(AppConstants.KEY_CACTUS_ID)
-    val cactus = cactusId.switchMap { cactusRepo.getById(it) }
+    private val cactusId = MutableLiveData(stateHandle.get<Long>(AppConstants.KEY_CACTUS_ID) ?: UNKNOWN_ID)
+    val cactus = cactusId.switchMap {
+        if (it < UNKNOWN_ID) {
+            MutableLiveData(Cactus())
+        } else {
+            cactusRepo.getById(it)
+        }
+    }
 
     val photo = cactus.switchMap { it?.let { cactus ->
         if (cactus.photoId > UNKNOWN_ID) {
@@ -37,14 +43,24 @@ class EditCactusViewModel@Inject constructor(
         } else {
             null
         }
-    }
+    } }
+
+    suspend fun save(cactus: Cactus?, photoFile: File?) {
+        val savedPhoto = save(photoFile)
+        cactus?.photoId = savedPhoto?.id ?: cactus?.photoId ?: UNKNOWN_ID
+        save(cactus)
     }
 
-    suspend fun save(cactus: Cactus?) {
-        cactus?.let { cactusRepo.save(it) }
+    private suspend fun save(cactus: Cactus?) {
+        cactus?.let {
+            val res = cactusRepo.save(it)
+            if (res.status == Resource.Status.SUCCESS) {
+                cactusId.postValue(res.data?.id ?: UNKNOWN_ID)
+            }
+        }
     }
 
-    suspend fun save(photoFile: File?) : Photo? {
+    private suspend fun save(photoFile: File?) : Photo? {
 
         photoFile?.let {
             // Save image
@@ -60,7 +76,7 @@ class EditCactusViewModel@Inject constructor(
                 // New photo, create one
                 val photo = Photo(
                     code = it.name,
-                    path = it.path,
+                    path = path,
                 )
                 res = photoRepo.save(photo)
             }

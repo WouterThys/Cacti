@@ -29,7 +29,7 @@ namespace CactiClient.View.Cactus
         {
             tileView.OptionsFind.AlwaysVisible = true;
             tileView.OptionsBehavior.EditingMode = TileViewEditingMode.Disabled;
-
+            
             cciList.ItemClick += CciList_ItemClick;
         }
 

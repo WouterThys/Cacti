@@ -3,6 +3,7 @@ package com.cacti.cactiphone
 object AppConstants {
 
     const val UNKNOWN_ID = 1L
+    const val ADD_ID = -5L
 
     const val FILE_DATA_SIZE = 4096
 
