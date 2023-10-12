@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.SearchView
 import androidx.camera.core.Camera
 import androidx.camera.view.PreviewView
 import androidx.fragment.app.viewModels
@@ -134,6 +135,27 @@ class CactusListFragment : Fragment() {
 
     private fun setupMenu() {
         binding.toolbar.inflateMenu(R.menu.menu_list_cactus)
+
+        // below line is to get our menu item.
+        val searchItem = binding.toolbar.menu.findItem(R.id.menu_item_search)
+
+        // getting search view of our item.
+        val searchView : SearchView = searchItem.actionView as SearchView
+
+        // below line is to call set on query text listener method.
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String): Boolean {
+                // inside on query text change method we are
+                // calling a method to filter our recycler view.
+                viewModel.filter(newText)
+                return false
+            }
+        })
+
         binding.toolbar.setOnMenuItemClickListener { item ->
             return@setOnMenuItemClickListener when (item.itemId) {
                 R.id.menu_item_add -> {
@@ -151,10 +173,4 @@ class CactusListFragment : Fragment() {
         }
     }
 
-
-    companion object {
-
-        @JvmStatic
-        fun newInstance() = CactusListFragment()
-    }
 }

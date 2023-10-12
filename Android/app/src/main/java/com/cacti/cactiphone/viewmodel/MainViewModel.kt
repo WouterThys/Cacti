@@ -11,6 +11,7 @@ import com.cacti.cactiphone.repository.CactusRepo
 import com.cacti.cactiphone.repository.PhotoRepo
 import com.cacti.cactiphone.repository.data.Resource
 import com.cacti.cactiphone.repository.web.CallbackService
+import com.cacti.cactiphone.view.utils.CactusDataMediator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -22,62 +23,9 @@ class MainViewModel @Inject constructor(
     private val photoRepo: PhotoRepo,
 ) : ViewModel() {
 
-    val cactusList = MediatorLiveData<Resource<List<CactusWithPhoto>>>().apply {
+    private val filterText = MutableLiveData<String?>(null)
 
-        var cactusResource: Resource<List<Cactus>>? = null
-        var photoResource: Resource<List<Photo>>? = null
-
-        fun update() {
-            if (cactusResource?.status == Resource.Status.LOADING) {
-                this.postValue(Resource.loading(this.value?.data))
-                return
-            }
-            if (photoResource?.status == Resource.Status.LOADING) {
-                this.postValue(Resource.loading(this.value?.data))
-                return
-            }
-            if (cactusResource?.status == Resource.Status.ERROR) {
-                this.postValue(Resource.error(this.value?.message ?: ""))
-                return
-            }
-            if (photoResource?.status == Resource.Status.ERROR) {
-                this.postValue(Resource.error(this.value?.message ?: ""))
-                return
-            }
-
-            cactusResource?.data?.let { cacti ->
-                photoResource?.data?.let { photos ->
-
-                    val result = ArrayList<CactusWithPhoto>()
-
-                    for (cactus in cacti) {
-                        // Don't show unknown
-                        if (cactus.id <= 1) continue
-
-                        // Check photo
-                        var photo: Photo? = null
-                        if (cactus.photoId > 1) {
-                            photo = photos.first { p -> p.id == cactus.photoId }
-                        }
-
-                        // Add to list
-                        result.add(CactusWithPhoto(cactus, photo))
-                    }
-
-                    this.postValue(Resource.success(result))
-                }
-            }
-        }
-
-        addSource(cactusRepo.data) {
-            cactusResource = it
-            update()
-        }
-        addSource(photoRepo.data) {
-            photoResource = it
-            update()
-        }
-    }
+    val cactusList = CactusDataMediator(cactusRepo.data, photoRepo.data, filterText)
 
     val selectedCactusId = MutableLiveData<Long>(0)
 
@@ -93,6 +41,10 @@ class MainViewModel @Inject constructor(
                 selectedCactusId.postValue(found?.id ?: 0)
             }
         }
+    }
+
+    fun filter(text: String?) {
+        filterText.postValue(text)
     }
 
     init {

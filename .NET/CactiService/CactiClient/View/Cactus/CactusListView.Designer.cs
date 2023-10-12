@@ -62,7 +62,9 @@
             ribbonPageGroup1 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             ribbonPageGroup2 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             mvvmContext = new DevExpress.Utils.MVVM.MVVMContext(components);
-            barButtonItem1 = new DevExpress.XtraBars.BarButtonItem();
+            ribbonPageGroup3 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
+            barButtonGroup1 = new DevExpress.XtraBars.BarButtonGroup();
+            cciList = new DevExpress.XtraBars.BarCheckItem();
             ((System.ComponentModel.ISupportInitialize)gridControl).BeginInit();
             ((System.ComponentModel.ISupportInitialize)bsCacti).BeginInit();
             ((System.ComponentModel.ISupportInitialize)tileView).BeginInit();
@@ -203,9 +205,9 @@
             // ribbonControl1
             // 
             ribbonControl1.ExpandCollapseItem.Id = 0;
-            ribbonControl1.Items.AddRange(new DevExpress.XtraBars.BarItem[] { ribbonControl1.ExpandCollapseItem, bbiAdd, bbiEdit, bbiDelete, bbiImport, barButtonItem1 });
+            ribbonControl1.Items.AddRange(new DevExpress.XtraBars.BarItem[] { ribbonControl1.ExpandCollapseItem, bbiAdd, bbiEdit, bbiDelete, bbiImport, barButtonGroup1, cciList });
             ribbonControl1.Location = new System.Drawing.Point(0, 0);
-            ribbonControl1.MaxItemId = 6;
+            ribbonControl1.MaxItemId = 12;
             ribbonControl1.Name = "ribbonControl1";
             ribbonControl1.Pages.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPage[] { ribbonPage });
             ribbonControl1.Size = new System.Drawing.Size(914, 150);
@@ -240,7 +242,7 @@
             // 
             // ribbonPage
             // 
-            ribbonPage.Groups.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPageGroup[] { ribbonPageGroup1, ribbonPageGroup2 });
+            ribbonPage.Groups.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPageGroup[] { ribbonPageGroup1, ribbonPageGroup2, ribbonPageGroup3 });
             ribbonPage.Name = "ribbonPage";
             ribbonPage.Text = "Thuis";
             // 
@@ -255,7 +257,6 @@
             // ribbonPageGroup2
             // 
             ribbonPageGroup2.ItemLinks.Add(bbiImport);
-            ribbonPageGroup2.ItemLinks.Add(barButtonItem1);
             ribbonPageGroup2.Name = "ribbonPageGroup2";
             ribbonPageGroup2.Text = "Data";
             // 
@@ -264,11 +265,25 @@
             mvvmContext.ContainerControl = this;
             mvvmContext.ViewModelType = typeof(ViewModel.Cactus.CactusListViewModel);
             // 
-            // barButtonItem1
+            // ribbonPageGroup3
             // 
-            barButtonItem1.Caption = "barButtonItem1";
-            barButtonItem1.Id = 5;
-            barButtonItem1.Name = "barButtonItem1";
+            ribbonPageGroup3.ItemLinks.Add(barButtonGroup1);
+            ribbonPageGroup3.ItemLinks.Add(cciList);
+            ribbonPageGroup3.Name = "ribbonPageGroup3";
+            ribbonPageGroup3.Text = "View";
+            // 
+            // barButtonGroup1
+            // 
+            barButtonGroup1.Caption = "barButtonGroup1";
+            barButtonGroup1.Id = 6;
+            barButtonGroup1.Name = "barButtonGroup1";
+            // 
+            // cciList
+            // 
+            cciList.Caption = "List";
+            cciList.Id = 11;
+            cciList.ImageOptions.SvgImage = (DevExpress.Utils.Svg.SvgImage)resources.GetObject("barCheckItem1.ImageOptions.SvgImage");
+            cciList.Name = "cciList";
             // 
             // CactusListView
             // 
@@ -308,6 +323,8 @@
         private DevExpress.XtraGrid.Columns.TileViewColumn colImageLoading;
         private DevExpress.XtraBars.BarButtonItem bbiImport;
         private DevExpress.XtraBars.Ribbon.RibbonPageGroup ribbonPageGroup2;
-        private DevExpress.XtraBars.BarButtonItem barButtonItem1;
+        private DevExpress.XtraBars.BarButtonGroup barButtonGroup1;
+        private DevExpress.XtraBars.BarCheckItem cciList;
+        private DevExpress.XtraBars.Ribbon.RibbonPageGroup ribbonPageGroup3;
     }
 }

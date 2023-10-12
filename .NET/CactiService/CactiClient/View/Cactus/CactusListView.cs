@@ -11,6 +11,9 @@ namespace CactiClient.View.Cactus
 {
     public partial class CactusListView : DevExpress.XtraEditors.XtraUserControl
     {
+        private bool isListLayout = false;
+
+
         public CactusListView()
         {
             InitializeComponent();
@@ -27,20 +30,20 @@ namespace CactiClient.View.Cactus
             tileView.OptionsFind.AlwaysVisible = true;
             tileView.OptionsBehavior.EditingMode = TileViewEditingMode.Disabled;
 
-            barButtonItem1.ItemClick += BarButtonItem1_ItemClick;
+            cciList.ItemClick += CciList_ItemClick;
         }
 
-        private bool tst = false;
-
-        private void BarButtonItem1_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        private void CciList_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-            if (tst)
+            if (isListLayout)
             {
-                tst = false;
+                isListLayout = false;
+                tileView.OptionsTiles.LayoutMode = TileViewLayoutMode.Default;
             }
             else
             {
-                tst = true;
+                isListLayout = true;
+                tileView.OptionsTiles.LayoutMode = TileViewLayoutMode.List;
             }
         }
 

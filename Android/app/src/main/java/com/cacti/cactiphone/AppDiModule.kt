@@ -19,7 +19,7 @@ object AppDiModule {
     @Provides
     fun provideGrpcUri(app: App/*, settings: AppSettings*/) : Uri {
         //return Uri.parse("http://${settings.getHostFromSettings()}/")
-        return Uri.parse("http://192.168.1.63:5002/")
+        return Uri.parse("http://192.168.1.59:5002/")
     }
 
 }
