@@ -290,10 +290,9 @@ namespace CactiClient.ViewModel.Cactus
         {
             if (Editable == null) return;
 
-            XtraOpenFileDialog openFileDialog = new()
+            OpenFileDialog openFileDialog = new()
             {
                 InitialDirectory = "Pictures",
-                Filter = "png files (*.png)|*.png|jpg files (*.jpg)|*.jpg|All files (*.*)|*.*",
                 Multiselect = false,
                 RestoreDirectory = true
             };
@@ -303,6 +302,12 @@ namespace CactiClient.ViewModel.Cactus
                 // Get the path of specified file.
                 string filePath = openFileDialog.FileName;
                 string code = Path.GetFileName(filePath);
+
+                if (Utils.IsImage(filePath))
+                {
+                    MessageBoxService.ShowMessage($"{filePath} is geen afbeelding. Opnieuw!", "Afbeelding", MessageButton.OK, MessageIcon.Error);
+                    return;
+                }
 
                 // Read the contents of the file into a stream.
                 var fileStream = openFileDialog.OpenFile();

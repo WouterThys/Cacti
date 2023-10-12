@@ -43,6 +43,8 @@ namespace CactiClient
             mvvmContext.RegisterService("FloatingDocumentService", WindowedDocumentManagerService.CreateXtraFormService(this));
             //mvvmContext.RegisterDefaultService("ErrorManagerService", new ErrorManagerService(mvvmContext.GetViewModel<MainViewModel>()));
             //mvvmContext.RegisterService("DisplayMessageService", new DisplayMessageService(this));
+
+            tabbedView1.DocumentGroupProperties.ShowTabHeader = false;
         }
 
         protected virtual void InitializeCultureInfo()

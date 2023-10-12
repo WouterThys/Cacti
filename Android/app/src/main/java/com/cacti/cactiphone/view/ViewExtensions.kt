@@ -21,3 +21,4 @@ fun Fragment.showToast(message: String) =
     launchOnMain {
         Toast.makeText(context, message, Toast.LENGTH_LONG).show()
     }
+

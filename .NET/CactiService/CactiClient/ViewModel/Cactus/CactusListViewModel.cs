@@ -5,6 +5,8 @@ using Common.Services;
 using DevExpress.Mvvm;
 using DevExpress.Mvvm.DataAnnotations;
 using DevExpress.Mvvm.POCO;
+using DevExpress.XtraEditors;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,6 +15,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace CactiClient.ViewModel.Cactus
 {
@@ -80,6 +83,7 @@ namespace CactiClient.ViewModel.Cactus
             this.RaiseCanExecuteChanged(m => m.Add());
             this.RaiseCanExecuteChanged(m => m.Edit(Selected));
             this.RaiseCanExecuteChanged(m => m.Delete(Selected));
+            this.RaiseCanExecuteChanged(m => m.Import());
         }
 
         private void StartLoadingImages()
@@ -191,6 +195,20 @@ namespace CactiClient.ViewModel.Cactus
                 Task.Factory.StartNew(async () => { await _service.Delete(cactus.Id); });
             }
         }
+
+
+        public virtual bool CanImport()
+        {
+            return !IsLoading;
+        }
+        public virtual void Import()
+        {
+            var model = ImportCactiViewModel.Create();
+            model.SetParentViewModel(this);
+            ShowDocument(model);
+        }
+
+        
 
         #endregion
 

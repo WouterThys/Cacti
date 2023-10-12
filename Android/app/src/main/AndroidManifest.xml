@@ -3,7 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
 
     <application
         android:name=".App"
@@ -16,6 +21,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CactiPhone"
         tools:targetApi="31">
+        <activity
+            android:name=".view.ScanBarcodeActivity"
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="true"

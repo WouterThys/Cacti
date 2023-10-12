@@ -1,19 +1,11 @@
 ﻿using CactiClient.Model;
 using CactiClient.ViewModel.Cactus;
-using DevExpress.Utils.MVVM;
-using DevExpress.XtraBars;
-using DevExpress.XtraEditors;
 using DevExpress.XtraGrid.Views.Tile;
 using DevExpress.XtraSplashScreen;
-using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace CactiClient.View.Cactus
 {
@@ -25,7 +17,30 @@ namespace CactiClient.View.Cactus
 
             if (!mvvmContext.IsDesignMode)
             {
+                InitializeLayouts();
                 InitializeBindings();
+            }
+        }
+
+        private void InitializeLayouts()
+        {
+            tileView.OptionsFind.AlwaysVisible = true;
+            tileView.OptionsBehavior.EditingMode = TileViewEditingMode.Disabled;
+
+            barButtonItem1.ItemClick += BarButtonItem1_ItemClick;
+        }
+
+        private bool tst = false;
+
+        private void BarButtonItem1_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            if (tst)
+            {
+                tst = false;
+            }
+            else
+            {
+                tst = true;
             }
         }
 
@@ -48,6 +63,7 @@ namespace CactiClient.View.Cactus
             fluent.BindCommand(bbiAdd, m => m.Add());
             fluent.BindCommand(bbiEdit, m => m.Edit(null), m => m.Selected);
             fluent.BindCommand(bbiDelete, m => m.Delete(null), m => m.Selected);
+            fluent.BindCommand(bbiImport, m => m.Import());
 
         }
 

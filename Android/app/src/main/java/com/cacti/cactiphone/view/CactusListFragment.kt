@@ -5,6 +5,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.camera.core.Camera
+import androidx.camera.view.PreviewView
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,8 +16,12 @@ import com.cacti.cactiphone.R
 import com.cacti.cactiphone.databinding.FragmentCactusListBinding
 import com.cacti.cactiphone.repository.data.Resource
 import com.cacti.cactiphone.view.adapters.CactusAdapter
+import com.cacti.cactiphone.view.utils.BarcodeRequestContract
 import com.cacti.cactiphone.view.utils.RecyclerClickSupport
 import com.cacti.cactiphone.viewmodel.MainViewModel
+import com.google.mlkit.vision.barcode.BarcodeScannerOptions
+import com.google.mlkit.vision.barcode.BarcodeScanning
+import com.google.mlkit.vision.barcode.common.Barcode
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -30,6 +36,10 @@ class CactusListFragment : Fragment() {
         setHasStableIds(true)
     }
 
+    private val scanBarcodeRequest =
+        registerForActivityResult(BarcodeRequestContract()) {
+            handleBarcodeResult(it)
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +55,7 @@ class CactusListFragment : Fragment() {
 
         setupSwipeRefresh()
         setupRecyclerView()
+        setupMenu()
 
         return binding.root
     }
@@ -67,11 +78,33 @@ class CactusListFragment : Fragment() {
                 }
             }
         }
+
+        viewModel.selectedCactusId.observe(viewLifecycleOwner) {
+            if (it > UNKNOWN_ID) {
+                moveToCactusEdit(it)
+            }
+        }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun handleBarcodeResult(result: Result<String>) {
+        if (result.isSuccess) {
+            viewModel.findBarcode(result.getOrNull())
+        } else {
+            showToast("Error: " + result.exceptionOrNull()?.message)
+        }
+    }
+
+    private fun moveToCactusEdit(id: Long) {
+        val action = CactusListFragmentDirections
+            .actionCactusListFragmentToCactusEditFragment()
+        action.constantParamsCACTUSID = id
+
+        view?.findNavController()?.navigate(action)
     }
 
     private fun setupSwipeRefresh() {
@@ -89,11 +122,7 @@ class CactusListFragment : Fragment() {
             override fun onItemClicked(recyclerView: RecyclerView?, position: Int, v: View?) {
                 val cactusId = cactusAdapter.getItemId(position)
                 if (cactusId > UNKNOWN_ID) {
-                    val action = CactusListFragmentDirections
-                        .actionCactusListFragmentToCactusEditFragment()
-                    action.constantParamsCACTUSID = cactusId
-
-                    view?.findNavController()?.navigate(action)
+                    moveToCactusEdit(cactusId)
                 }
             }
         })
@@ -102,6 +131,26 @@ class CactusListFragment : Fragment() {
         binding.rvCacti.layoutManager = LinearLayoutManager(context)
         binding.rvCacti.adapter = cactusAdapter
     }
+
+    private fun setupMenu() {
+        binding.toolbar.inflateMenu(R.menu.menu_list_cactus)
+        binding.toolbar.setOnMenuItemClickListener { item ->
+            return@setOnMenuItemClickListener when (item.itemId) {
+                R.id.menu_item_add -> {
+                    // TODO saveData(false)
+                    true
+                }
+                R.id.menu_item_scan -> {
+                    scanBarcodeRequest.launch(null)
+                    true
+                }
+                else -> {
+                    false
+                }
+            }
+        }
+    }
+
 
     companion object {
 

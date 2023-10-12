@@ -101,4 +101,5 @@ class CactusRepo @Inject constructor(
     }
 
     fun getById(id: Long) = dbSource.getById(id)
+    suspend fun getByIdAsync(id: Long) = dbSource.getByIdAsync(id)
 }

@@ -1,7 +1,6 @@
 ﻿using Common.Services;
 using Google.Protobuf;
 using Grpc.Core;
-using Org.BouncyCastle.Ocsp;
 
 namespace CactiServer.Services
 {

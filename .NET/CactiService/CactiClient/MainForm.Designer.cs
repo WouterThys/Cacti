@@ -100,7 +100,7 @@
             Controls.Add(ribbonControl);
             Name = "MainView";
             Ribbon = ribbonControl;
-            Text = "Form1";
+            Text = "MainForm";
             ((System.ComponentModel.ISupportInitialize)ribbonControl).EndInit();
             ((System.ComponentModel.ISupportInitialize)mvvmContext).EndInit();
             ((System.ComponentModel.ISupportInitialize)documentManager).EndInit();

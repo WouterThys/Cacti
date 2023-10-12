@@ -153,6 +153,17 @@ dependencies {
     val navVersion = "2.5.3"
     implementation("androidx.navigation:navigation-fragment-ktx:$navVersion")
     implementation("androidx.navigation:navigation-ui-ktx:$navVersion")
+
+    // Scanning
+    val scanningVersion = "17.2.0"
+    implementation("com.google.mlkit:barcode-scanning:$scanningVersion")
+    implementation("com.google.android.gms:play-services-mlkit-barcode-scanning:18.3.0")
+
+    val cameraxVersion = "1.2.3"
+    val cameraxViewVersion = "1.2.3"
+    implementation("androidx.camera:camera-camera2:${cameraxVersion}")
+    implementation("androidx.camera:camera-lifecycle:${cameraxVersion}")
+    implementation("androidx.camera:camera-view:${cameraxViewVersion}")
 }
 
 // Allow references to generated code

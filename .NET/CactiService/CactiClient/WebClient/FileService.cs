@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using static DevExpress.Xpo.Helpers.AssociatedCollectionCriteriaHelper;
 
 namespace CactiClient.WebClient
 {
@@ -86,7 +87,6 @@ namespace CactiClient.WebClient
                 var responseStream = _FilesClient.Load(request);
                 var totalSize = 0;
                 var totalWritten = 0;
-                var percent = 0;
 
                 var meta = await responseStream.ResponseHeadersAsync;
                 if (meta != null)
@@ -105,7 +105,7 @@ namespace CactiClient.WebClient
                         if (totalSize > 0 && progressCallback != null)
                         {
                             totalWritten += (int)result.Data.Size;
-                            percent = (int)((int)(totalWritten * 100) / totalSize);
+                            int percent = (int)((int)(totalWritten * 100) / totalSize);
                             progressCallback.Invoke(percent);
                         }
                     }
@@ -121,7 +121,7 @@ namespace CactiClient.WebClient
         }
  
     
-        public async Task<string> Save(string path) 
+        public async Task<string> Save(string path, Action<int>? progressCallback = null) 
         {
             if (!File.Exists(path)) return "";
 
@@ -144,6 +144,8 @@ namespace CactiClient.WebClient
             using Stream source = File.OpenRead(path);
             byte[] buffer = new byte[4096];
             int bytesRead;
+            var totalSize = fileInfo.Length;
+            var totalWritten = 0;
 
             while ((bytesRead = source.Read(buffer, 0, buffer.Length)) > 0)
             {
@@ -151,10 +153,18 @@ namespace CactiClient.WebClient
                 {
                     Size = (uint)bytesRead,
                     Data = ByteString.CopyFrom(buffer)
-
                 };
                 request.Data = fileData;
                 await streamingCall.RequestStream.WriteAsync(request);
+
+                // Progress
+                if (totalSize > 0 && progressCallback != null)
+                {
+                    totalWritten += bytesRead;
+                    int percent = (int)((int)(totalWritten * 100) / totalSize);
+                    progressCallback.Invoke(percent);
+                }
+
             }
             await streamingCall.RequestStream.CompleteAsync();
 
