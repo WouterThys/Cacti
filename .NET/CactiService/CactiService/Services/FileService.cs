@@ -6,10 +6,13 @@ namespace CactiServer.Services
 {
     public class FileService : Files.FilesBase
     {
+        private const int FILE_DATA_SIZE = 4096;
+
         private readonly ILogger<FileService> _logger;
 
         // TODO: from configuration
         private readonly string _basePath;
+
 
         public FileService(ILogger<FileService> logger, IConfiguration configuration)
         {
@@ -56,7 +59,7 @@ namespace CactiServer.Services
 
                 // Read file into stream
                 using Stream source = File.OpenRead(path);
-                byte[] buffer = new byte[4096];
+                byte[] buffer = new byte[FILE_DATA_SIZE];
                 int bytesRead;
 
                 while ((bytesRead = source.Read(buffer, 0, buffer.Length)) > 0)

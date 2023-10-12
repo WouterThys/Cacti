@@ -12,6 +12,6 @@ data class Cactus(
     var description: String = "",
     var location: String = "",
     val barcodes: String = "",
-    val photoId: Long = 0,
+    var photoId: Long = 0,
     var lastModified: Date = Date(0),
 )

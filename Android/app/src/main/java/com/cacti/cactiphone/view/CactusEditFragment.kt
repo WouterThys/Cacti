@@ -22,6 +22,7 @@ import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
+import com.cacti.cactiphone.AppConstants.UNKNOWN_ID
 import com.cacti.cactiphone.R
 import com.cacti.cactiphone.databinding.FragmentCactusEditBinding
 import com.cacti.cactiphone.viewmodel.EditCactusViewModel
@@ -144,42 +145,61 @@ class CactusEditFragment : Fragment() {
                 }
                 .setNegativeButton("No") { dialog, _ ->
                     dialog.cancel()
-                    backPressedCallback.isEnabled = false
-                    activity?.onBackPressedDispatcher?.onBackPressed()
+                    closeFragment()
                 }
                 .create()
 
             // Show the Alert Dialog box
             dialog.show()
+        } else {
+            // Go back
+            closeFragment()
         }
     }
 
     private fun saveData(saveOnClose: Boolean) {
         launchOnIo {
-            binding.cactus?.code = binding.etCode.text.toString()
-            binding.cactus?.description = binding.etDescription.text.toString()
-            binding.cactus?.location = binding.etLocation.text.toString()
-            binding.cactus?.lastModified = Calendar.getInstance().time
+            val photoId = savePhoto()
+            saveCactus(photoId)
 
-            viewModel.save(binding.cactus)
         }.invokeOnCompletion {
             if (saveOnClose) {
-                launchOnMain {
-                    backPressedCallback.isEnabled = false
-                    activity?.onBackPressedDispatcher?.onBackPressed()
-                }
+                closeFragment()
             }
         }
+    }
+
+    private fun closeFragment() {
+        launchOnMain {
+            backPressedCallback.isEnabled = false
+            activity?.onBackPressedDispatcher?.onBackPressed()
+        }
+    }
+
+    private suspend fun saveCactus(photoId: Long?) {
+        binding.cactus?.code = binding.etCode.text.toString()
+        binding.cactus?.description = binding.etDescription.text.toString()
+        binding.cactus?.location = binding.etLocation.text.toString()
+        binding.cactus?.lastModified = Calendar.getInstance().time
+        binding.cactus?.photoId = photoId ?: binding.cactus?.photoId ?: UNKNOWN_ID
+
+        viewModel.save(binding.cactus)
+    }
+
+    private suspend fun savePhoto() : Long? {
+        photoFile?.let {
+            viewModel.save(photoFile)?.let { saved ->
+                return saved.id
+            }
+        }
+        return null
     }
 
     private fun deleteData() {
         launchOnIo {
             viewModel.delete()
         }.invokeOnCompletion {
-            launchOnMain {
-                backPressedCallback.isEnabled = false
-                activity?.onBackPressedDispatcher?.onBackPressed()
-            }
+            closeFragment()
         }
     }
 

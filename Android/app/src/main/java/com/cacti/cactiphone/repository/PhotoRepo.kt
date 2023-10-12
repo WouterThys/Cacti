@@ -68,4 +68,39 @@ class PhotoRepo @Inject constructor(
         }
         return responseStatus
     }
+
+    suspend fun save(photo: Photo) : Resource<Photo> {
+        var connected = true
+
+        return if (connected) {
+            // Update source
+            val saved = webSource.save(photo)
+            if (saved.status == Resource.Status.SUCCESS) {
+                saved.data?.let { dbSource.save(listOf(it)) }
+            }
+            saved
+        } else {
+            // Save to temp db
+
+            Resource.loading(photo)
+        }
+    }
+
+    suspend fun delete(id: Long) {
+        var connected = true
+
+        if (connected) {
+            // Update source
+            val saved = webSource.delete(id)
+            if (saved.status == Resource.Status.SUCCESS) {
+                saved.data?.let { dbSource.delete(listOf(it)) }
+            } else {
+                // TODO
+            }
+
+        } else {
+            // Save to temp db
+        }
+
+    }
 }

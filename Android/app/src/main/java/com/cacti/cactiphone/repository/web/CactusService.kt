@@ -50,7 +50,7 @@ class CactusService @Inject constructor(
             val reply = service.delete(request)
             Resource.success(reply.id)
         } catch (ex: Exception) {
-            Resource.error(ex.message ?: "Save error")
+            Resource.error(ex.message ?: "Delete error")
         }
     }
 

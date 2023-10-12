@@ -1,16 +1,30 @@
 package com.cacti.cactiphone.repository.web
 
-import com.cacti.cactiphone.data.Cactus
+import com.cacti.cactiphone.AppConstants.FILE_DATA_SIZE
 import com.cacti.cactiphone.data.FileData
-import com.cacti.cactiphone.repository.data.Resource
-import com.cacti.services.generated.CactusesGrpcKt
 import com.cacti.services.generated.FilesGrpcKt
-import com.cacti.services.generated.GetAllCactusRequest
 import com.cacti.services.generated.LoadRequest
+import com.cacti.services.generated.SaveRequest
+import com.google.protobuf.ByteString
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.flatMapConcat
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
-import java.util.Date
+import kotlinx.coroutines.flow.merge
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.withContext
+import java.io.BufferedReader
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileReader
 import javax.inject.Inject
+
 
 class FileService @Inject constructor(
     private val service: FilesGrpcKt.FilesCoroutineStub
@@ -30,8 +44,57 @@ class FileService @Inject constructor(
 
     }
 
-    fun save(fileName: String) {
+    suspend fun save(file: File) : String {
+
+        // First create path flow
+        var requestBuilder = SaveRequest.newBuilder()
+        requestBuilder.path = file.name
+        val pathFlow = flowOf(requestBuilder.build())
+
+        // Data flow
+        val dataFlow = fileAsFileDataFlow(file).map { fileData ->
+            requestBuilder = SaveRequest.newBuilder()
+            requestBuilder.data = fileData
+            requestBuilder.build()
+        }
+
+        // Combine flows
+        val flow = pathFlow.onCompletion { emitAll(dataFlow) }
+
+        // Go!
+        val reply = service.save(flow)
+
+        return reply.path
 
     }
+
+
+    private fun fileAsFileDataFlow(file: File) = flow<com.cacti.services.generated.FileData> {
+        var inputStream: FileInputStream? = null
+
+        try {
+
+            inputStream = FileInputStream(file)
+
+            val buffer = ByteArray(FILE_DATA_SIZE)
+            var rc = inputStream.read(buffer)
+            while (rc != -1) {
+
+                val fileDataBuilder = com.cacti.services.generated.FileData.newBuilder()
+                fileDataBuilder.size = rc
+                fileDataBuilder.data = ByteString.copyFrom(buffer)
+
+                emit(fileDataBuilder.build())
+
+                rc = inputStream.read(buffer)
+            }
+            inputStream.close()
+        } catch (ex: Exception) {
+            ex.printStackTrace()
+        } finally {
+            inputStream?.close()
+        }
+
+    }.flowOn(Dispatchers.IO)
 
 }

@@ -9,6 +9,6 @@ data class Photo (
     @PrimaryKey
     val id: Long = 0,
     val code: String = "",
-    val path: String = "",
+    var path: String = "",
     val lastModified: Date = Date(0),
 )
