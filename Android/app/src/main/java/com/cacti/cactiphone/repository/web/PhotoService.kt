@@ -65,7 +65,8 @@ class PhotoService @Inject constructor(
                 id = grpc.id,
                 code = grpc.code,
                 path = grpc.path,
-                lastModified = Date(grpc.lastModified.seconds)
+                lastModified = Date(grpc.lastModified.seconds),
+                needsSave = false,
             )
 
         fun map(grpc: Photo) : com.cacti.generated.Photo {

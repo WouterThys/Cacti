@@ -6,13 +6,15 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.cacti.cactiphone.data.Cactus
+import com.cacti.cactiphone.data.PendingSaveAction
 import com.cacti.cactiphone.data.Photo
 
 @Database(
-    version = 3,
+    version = 4,
     entities = [
         Cactus::class,
-        Photo::class
+        Photo::class,
+        PendingSaveAction::class,
     ]
 )
 @TypeConverters(DataConverters::class)
@@ -21,6 +23,8 @@ abstract class MyDatabase : RoomDatabase() {
     abstract fun cactusDao(): CactusDao
 
     abstract fun photoDao(): PhotoDao
+
+    abstract fun pendingDao() : PendingDao
 
     companion object {
         @Volatile

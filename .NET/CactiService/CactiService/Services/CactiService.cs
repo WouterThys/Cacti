@@ -16,6 +16,17 @@ namespace CactiServer.Services
             _repo = repo;
         }
 
+        public override Task<TestConnectionReply> TestConnection(TestConnectionRequest request, ServerCallContext context)
+        {
+            _logger.LogDebug("TestConnection");
+            var reply = new TestConnectionReply
+            {
+                Test = request.Test
+            };
+            return Task.FromResult(reply);
+        }
+
+
         public override async Task<GetAllCactusReply> GetAll(GetAllCactusRequest request, ServerCallContext context)
         {
             _logger.LogDebug("GetAll");

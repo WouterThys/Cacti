@@ -18,6 +18,11 @@ data class Resource<out T>(val status: Status, val data: T?, var message: String
         return data != null && status >= Status.SUCCESS
     }
 
+    fun isSuccess() : Boolean {
+        return status == Status.SUCCESS
+    }
+
+
     private fun toHumanReadableString(camelCaseString: String): String {
         val regex = Regex("([a-z])([A-Z]+)")
         return regex.replace(camelCaseString, "$1 $2")

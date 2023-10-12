@@ -9,6 +9,7 @@ import com.cacti.cactiphone.data.Cactus
 import com.cacti.cactiphone.data.CactusWithPhoto
 import com.cacti.cactiphone.data.Photo
 import com.cacti.cactiphone.repository.CactusRepo
+import com.cacti.cactiphone.repository.PendingRepo
 import com.cacti.cactiphone.repository.PhotoRepo
 import com.cacti.cactiphone.repository.data.Resource
 import com.cacti.cactiphone.repository.web.CallbackService
@@ -22,6 +23,7 @@ class MainViewModel @Inject constructor(
     private val callbackService: CallbackService,
     private val cactusRepo: CactusRepo,
     private val photoRepo: PhotoRepo,
+    private val pendingRepo: PendingRepo,
 ) : ViewModel() {
 
     private val filterText = MutableLiveData<String?>(null)
@@ -34,6 +36,9 @@ class MainViewModel @Inject constructor(
 
 
     suspend fun refresh() {
+
+        pendingRepo.clearPendingData()
+
         cactusRepo.refresh()
         photoRepo.refresh()
     }

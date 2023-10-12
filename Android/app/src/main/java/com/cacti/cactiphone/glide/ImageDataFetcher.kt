@@ -9,12 +9,10 @@ import com.cacti.cactiphone.repository.web.FileService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.cancellable
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
-import java.io.InputStream
-import java.io.OutputStream
+import java.io.File
+import java.io.FileInputStream
 import java.nio.ByteBuffer
 
 class ImageDataFetcher(private val fileService: FileService, val photo: Photo) : DataFetcher<ByteBuffer> {
@@ -23,6 +21,24 @@ class ImageDataFetcher(private val fileService: FileService, val photo: Photo) :
     private var flow : Flow<FileData>? = null
 
     override fun loadData(priority: Priority, callback: DataFetcher.DataCallback<in ByteBuffer>) {
+
+        if (photo.path.startsWith("/storage")) {
+            val file = File(photo.path)
+            if (file.exists()) {
+                val inStream = FileInputStream(file)
+                val buffer = ByteArray(DEFAULT_BUFFER_SIZE)
+                val outStream = ByteArrayOutputStream(DEFAULT_BUFFER_SIZE)
+                var read: Int
+                while (true) {
+                    read = inStream.read(buffer)
+                    if (read == -1) break
+                    outStream.write(buffer, 0, read)
+                }
+                callback.onDataReady(ByteBuffer.wrap(outStream.toByteArray()))
+                return
+            }
+        }
+
 
         GlobalScope.launch(Dispatchers.IO) {
 

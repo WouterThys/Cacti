@@ -34,7 +34,6 @@ class CactusRepo @Inject constructor(
             Resource.Status.SUCCESS -> {
                 // Save to database
                 res.data?.let { dbSource.refreshAll(it) }
-                println("REPO: ${getRepoName()} SV - Loaded ${res.data?.size} form")
             }
             Resource.Status.ERROR -> {
                 emit(Resource.error(res.message!!))
@@ -48,6 +47,8 @@ class CactusRepo @Inject constructor(
     private fun getRepoName() : String {
         return this::class.java.simpleName
     }
+
+    suspend fun isConnected() = webSource.isConnected()
 
     suspend fun refresh(): Resource<List<Cactus>> {
         val responseStatus = webSource.getAll(null)
@@ -66,39 +67,24 @@ class CactusRepo @Inject constructor(
 
 
     suspend fun save(cactus: Cactus) : Resource<Cactus?> {
-        var connected = true
-
-        return if (connected) {
-            // Update source
-            val saved = webSource.save(cactus)
-            if (saved.status == Resource.Status.SUCCESS) {
-                saved.data?.let { dbSource.save(listOf(it)) }
+        // Update source
+        val saved = webSource.save(cactus)
+        if (saved.status == Resource.Status.SUCCESS) {
+            saved.data?.let {
+                it.needsSave = false
+                dbSource.save(listOf(it))
             }
-
-            saved
-
-        } else {
-            // Save to temp db
-            Resource.loading(cactus)
         }
+
+        return saved
     }
 
     suspend fun delete(id: Long) {
-        var connected = true
-
-        if (connected) {
-            // Update source
-            val saved = webSource.delete(id)
-            if (saved.status == Resource.Status.SUCCESS) {
-                saved.data?.let { dbSource.delete(listOf(it)) }
-            } else {
-                // TODO
-            }
-
-        } else {
-            // Save to temp db
+        // Update source
+        val deleted = webSource.delete(id)
+        if (deleted.status == Resource.Status.SUCCESS) {
+            deleted.data?.let { dbSource.delete(listOf(it)) }
         }
-
     }
 
     fun getById(id: Long) = dbSource.getById(id)

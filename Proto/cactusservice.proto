@@ -9,9 +9,18 @@ option java_multiple_files = true;
 package services.cactuses;
 
 service Cactuses {
+  rpc TestConnection(TestConnectionRequest) returns (TestConnectionReply);
   rpc GetAll(GetAllCactusRequest) returns (GetAllCactusReply);
   rpc Update(UpdateCactusRequest) returns (UpdateCactusReply);
   rpc Delete(DeleteCactusRequest) returns (DeleteCactusReply);
+}
+
+message TestConnectionRequest {
+	string test = 1;
+}
+
+message TestConnectionReply {
+	string test = 1;
 }
 
 message GetAllCactusRequest {

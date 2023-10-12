@@ -6,9 +6,10 @@ import java.util.Date
 
 @Entity(tableName = "photos")
 data class Photo (
-    @PrimaryKey
-    val id: Long = 0,
+    @PrimaryKey (autoGenerate = true)
+    var id: Long = 0,
     val code: String = "",
     var path: String = "",
     val lastModified: Date = Date(0),
+    var needsSave: Boolean = false,
 )

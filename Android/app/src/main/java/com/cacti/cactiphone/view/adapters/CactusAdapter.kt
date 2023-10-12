@@ -35,6 +35,7 @@ class CactusAdapter(context: Context) : RecyclerView.Adapter<CactusAdapter.Cactu
                         oldItem.cactus.description == newItem.cactus.description &&
                         oldItem.cactus.location == newItem.cactus.location &&
                         oldItem.cactus.photoId == newItem.cactus.photoId &&
+                        oldItem.cactus.needsSave == newItem.cactus.needsSave &&
                         oldItem.photo?.id == newItem.photo?.id &&
                         oldItem.photo?.path == newItem.photo?.path
             }

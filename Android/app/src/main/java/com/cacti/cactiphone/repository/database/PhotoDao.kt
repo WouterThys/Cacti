@@ -25,6 +25,9 @@ abstract class PhotoDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract suspend fun save(ts: Iterable<Photo>)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    abstract suspend fun save(photo: Photo) : Long
+
     @Query("DELETE FROM photos")
     abstract suspend fun deleteAll()
 

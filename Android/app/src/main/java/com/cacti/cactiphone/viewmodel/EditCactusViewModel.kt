@@ -10,8 +10,10 @@ import com.cacti.cactiphone.App
 import com.cacti.cactiphone.AppConstants
 import com.cacti.cactiphone.AppConstants.UNKNOWN_ID
 import com.cacti.cactiphone.data.Cactus
+import com.cacti.cactiphone.data.PendingSaveAction
 import com.cacti.cactiphone.data.Photo
 import com.cacti.cactiphone.repository.CactusRepo
+import com.cacti.cactiphone.repository.PendingRepo
 import com.cacti.cactiphone.repository.PhotoRepo
 import com.cacti.cactiphone.repository.data.Resource
 import com.cacti.cactiphone.repository.web.FileService
@@ -25,6 +27,7 @@ class EditCactusViewModel@Inject constructor(
     private val cactusRepo: CactusRepo,
     private val photoRepo: PhotoRepo,
     private val fileService: FileService,
+    private val pendingRepo: PendingRepo,
     private val stateHandle: SavedStateHandle,
 ) : ViewModel() {
 
@@ -46,9 +49,15 @@ class EditCactusViewModel@Inject constructor(
     } }
 
     suspend fun save(cactus: Cactus?, photoFile: File?) {
-        val savedPhoto = save(photoFile)
-        cactus?.photoId = savedPhoto?.id ?: cactus?.photoId ?: UNKNOWN_ID
-        save(cactus)
+        val test = cactusRepo.isConnected()
+        if (test.isSuccess()) {
+            val savedPhoto = save(photoFile)
+            cactus?.photoId = savedPhoto?.id ?: cactus?.photoId ?: UNKNOWN_ID
+            save(cactus)
+        } else {
+            // Save to temp db
+            pendingRepo.addPending(cactus, photo.value, photoFile, PendingSaveAction.ACTION_UPDATE)
+        }
     }
 
     private suspend fun save(cactus: Cactus?) {
@@ -91,7 +100,17 @@ class EditCactusViewModel@Inject constructor(
     }
 
     suspend fun delete() {
-        cactusId.value?.let { cactusRepo.delete(it) }
+        val test = cactusRepo.isConnected()
+        if (test.isSuccess()) {
+            cactusId.value?.let { cactusRepo.delete(it) }
+        } else {
+            // Save to pending
+            cactus.value?.let { cactusToDelete ->
+                if (cactusToDelete.id > UNKNOWN_ID) {
+                    pendingRepo.addPending(cactusToDelete, null, null, PendingSaveAction.ACTION_DELETE)
+                }
+            }
+        }
     }
 
     fun dataChanged(

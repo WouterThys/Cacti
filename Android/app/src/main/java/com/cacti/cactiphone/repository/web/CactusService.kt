@@ -6,6 +6,7 @@ import com.cacti.cactiphone.repository.data.Resource
 import com.cacti.services.generated.CactusesGrpcKt
 import com.cacti.services.generated.DeleteCactusRequest
 import com.cacti.services.generated.GetAllCactusRequest
+import com.cacti.services.generated.TestConnectionRequest
 import com.cacti.services.generated.UpdateCactusRequest
 import java.util.Date
 import javax.inject.Inject
@@ -13,6 +14,18 @@ import javax.inject.Inject
 class CactusService @Inject constructor(
     private val service: CactusesGrpcKt.CactusesCoroutineStub
 ) {
+
+    suspend fun isConnected() : Resource<Boolean> {
+        return try {
+            val requestBuilder = TestConnectionRequest.newBuilder()
+            requestBuilder.test = "Hello there"
+            val request = requestBuilder.build()
+            val reply = service.testConnection(request)
+            Resource.success(reply.test == request.test)
+        } catch (ex: Exception) {
+            Resource.error(ex.message ?: "Test error!")
+        }
+    }
 
     suspend fun getAll(ids: List<Long>? = null) : Resource<List<Cactus>> {
         return try {
@@ -65,7 +78,8 @@ class CactusService @Inject constructor(
                 location = grpc.location,
                 barcodes = grpc.barcodes,
                 photoId = grpc.photoId,
-                lastModified = Date(grpc.lastModified.seconds)
+                lastModified = Date(grpc.lastModified.seconds),
+                needsSave = false,
             )
 
         fun map(grpc: Cactus) : com.cacti.generated.Cactus {

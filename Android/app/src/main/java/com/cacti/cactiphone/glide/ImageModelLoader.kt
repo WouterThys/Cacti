@@ -19,7 +19,6 @@ class ImageModelLoader(private val fileService: FileService) : ModelLoader<Photo
         if (model.id <= 1
             || model.path.isEmpty()
             || model.path.startsWith("/data")
-            || model.path.startsWith("/storage")
             ) {
             return false
         }

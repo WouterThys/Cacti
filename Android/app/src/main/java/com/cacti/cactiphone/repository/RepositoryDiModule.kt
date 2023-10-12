@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.Uri
 import com.cacti.cactiphone.repository.database.CactusDao
 import com.cacti.cactiphone.repository.database.MyDatabase
+import com.cacti.cactiphone.repository.database.PendingDao
 import com.cacti.cactiphone.repository.database.PhotoDao
 import com.cacti.cactiphone.repository.web.CactusService
 import com.cacti.cactiphone.repository.web.CallbackService
@@ -32,8 +33,8 @@ object RepositoryDiModule {
     // region Database
     @Singleton
     @Provides
-    fun provideDatabase(@ApplicationContext appContext: Context)
-            = MyDatabase.getDatabase(appContext)
+    fun provideDatabase(@ApplicationContext appContext: Context) =
+        MyDatabase.getDatabase(appContext)
 
     @Singleton
     @Provides
@@ -42,6 +43,10 @@ object RepositoryDiModule {
     @Singleton
     @Provides
     fun providePhotoDao(db: MyDatabase) = db.photoDao()
+
+    @Singleton
+    @Provides
+    fun providePendingDao(db: MyDatabase) = db.pendingDao()
 
     // endregion
 
@@ -123,6 +128,19 @@ object RepositoryDiModule {
     @Provides
     fun providePhotoRepo(remoteSource: PhotoService, localSource: PhotoDao) =
         PhotoRepo(remoteSource, localSource)
+
+    @Singleton
+    @Provides
+    fun providePendingRepo(
+        cactusRepo: CactusRepo,
+        photoRepo: PhotoRepo,
+        cactusDao: CactusDao,
+        photoDao: PhotoDao,
+        pendingDao: PendingDao,
+        fileService: FileService,
+    ) =
+        PendingRepo(cactusRepo, photoRepo, cactusDao, photoDao, pendingDao, fileService)
+
 
     // endregion
 }

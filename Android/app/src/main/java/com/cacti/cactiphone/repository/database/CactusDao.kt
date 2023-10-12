@@ -24,6 +24,9 @@ abstract class CactusDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract suspend fun save(ts: Iterable<Cactus>)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    abstract suspend fun save(cactus: Cactus) : Long
+
     @Query("DELETE FROM cacti")
     abstract suspend fun deleteAll()
 
