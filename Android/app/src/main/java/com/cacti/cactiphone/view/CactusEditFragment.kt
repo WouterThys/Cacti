@@ -4,19 +4,15 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
-import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toolbar
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
-import androidx.camera.core.ImageCapture
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
@@ -124,6 +120,12 @@ class CactusEditFragment : Fragment() {
             } ?: run {
                 binding.ivPhoto.setImageDrawable(
                     ContextCompat.getDrawable(requireContext(), R.drawable.cactus_icon_128))
+            }
+        }
+
+        viewModel.pendingCount.observe(viewLifecycleOwner) {
+            if (it > 0) {
+                viewModel.newPending(it)
             }
         }
     }

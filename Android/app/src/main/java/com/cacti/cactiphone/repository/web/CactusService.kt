@@ -2,6 +2,7 @@ package com.cacti.cactiphone.repository.web
 
 import androidx.room.Update
 import com.cacti.cactiphone.data.Cactus
+import com.cacti.cactiphone.data.PendingCactus
 import com.cacti.cactiphone.repository.data.Resource
 import com.cacti.services.generated.CactusesGrpcKt
 import com.cacti.services.generated.DeleteCactusRequest
@@ -42,7 +43,7 @@ class CactusService @Inject constructor(
         }
     }
 
-    suspend fun save(cactus: Cactus) : Resource<Cactus> {
+    suspend fun save(cactus: PendingCactus) : Resource<Cactus> {
         return try {
             val requestBuilder = UpdateCactusRequest.newBuilder()
             requestBuilder.data = map(cactus)
@@ -79,20 +80,19 @@ class CactusService @Inject constructor(
                 barcodes = grpc.barcodes,
                 photoId = grpc.photoId,
                 lastModified = Date(grpc.lastModified.seconds),
-                needsSave = false,
             )
 
-        fun map(grpc: Cactus) : com.cacti.generated.Cactus {
-            val cactus = com.cacti.generated.Cactus.newBuilder()
-            cactus.id = grpc.id
-            cactus.code = grpc.code
-            cactus.description = grpc.description
-            cactus.location = grpc.location
-            cactus.barcodes = grpc.barcodes
-            cactus.photoId = grpc.photoId
+        fun map(cactus: PendingCactus) : com.cacti.generated.Cactus {
+            val grpc = com.cacti.generated.Cactus.newBuilder()
+            grpc.id = cactus.id
+            grpc.code = cactus.code
+            grpc.description = cactus.description
+            grpc.location = cactus.location
+            grpc.barcodes = cactus.barcodes
+            grpc.photoId = cactus.photoId
             //cactus.lastModified = Date(grpc.lastModified.seconds)
 
-            return cactus.build()
+            return grpc.build()
         }
 
     }

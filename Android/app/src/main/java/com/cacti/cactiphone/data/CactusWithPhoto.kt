@@ -1,6 +1,6 @@
 package com.cacti.cactiphone.data
 
 data class CactusWithPhoto(
-    val cactus: Cactus,
+    val cactus: BaseCactus,
     val photo: Photo? = null,
 )

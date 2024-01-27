@@ -10,7 +10,7 @@
 
         <variable
             name="cactus"
-            type="com.cacti.cactiphone.data.Cactus" />
+            type="com.cacti.cactiphone.data.BaseCactus" />
 
     </data>
 
@@ -31,11 +31,10 @@
             android:transitionGroup="true">
 
             <View
-                android:id="@+id/v_needs_save"
+                android:id="@+id/v_pending_action"
                 android:layout_width="5dp"
                 android:layout_height="0dp"
                 android:background="@android:color/holo_blue_bright"
-                android:visibility="@{cactus.needsSave ? View.VISIBLE : View.GONE }"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"/>

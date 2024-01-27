@@ -93,6 +93,17 @@ class CactusListFragment : Fragment() {
         viewModel.cactiCount.observe(viewLifecycleOwner) {
             binding.toolbar.subtitle = "$it cacti"
         }
+
+        viewModel.pendingCount.observe(viewLifecycleOwner) {
+            viewModel.newPending(it)
+            if (it > 0) {
+                binding.fabRefresh.show()
+            } else {
+                binding.fabRefresh.hide()
+            }
+        }
+
+        binding.fabRefresh.hide()
     }
 
     override fun onDestroyView() {

@@ -7,12 +7,11 @@ import java.util.Date
 @Entity(tableName = "cacti")
 data class Cactus(
     @PrimaryKey (autoGenerate = true)
-    var id: Long = 0,
-    var code: String = "",
-    var description: String = "",
-    var location: String = "",
-    val barcodes: String = "",
-    var photoId: Long = 0,
-    var lastModified: Date = Date(0),
-    var needsSave: Boolean = false,
-)
+    override var id: Long = 0,
+    override var code: String = "",
+    override var description: String = "",
+    override var location: String = "",
+    override var barcodes: String = "",
+    override var photoId: Long = 0,
+    override var lastModified: Date = Date(0)
+) : BaseCactus(id)

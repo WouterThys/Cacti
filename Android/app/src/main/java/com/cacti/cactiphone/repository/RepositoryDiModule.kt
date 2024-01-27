@@ -4,13 +4,12 @@ import android.content.Context
 import android.net.Uri
 import com.cacti.cactiphone.repository.database.CactusDao
 import com.cacti.cactiphone.repository.database.MyDatabase
-import com.cacti.cactiphone.repository.database.PendingDao
+import com.cacti.cactiphone.repository.database.PendingCactusDao
 import com.cacti.cactiphone.repository.database.PhotoDao
 import com.cacti.cactiphone.repository.web.CactusService
 import com.cacti.cactiphone.repository.web.CallbackService
 import com.cacti.cactiphone.repository.web.FileService
 import com.cacti.cactiphone.repository.web.PhotoService
-import com.cacti.generated.CactusKt
 import com.cacti.services.generated.CactusesGrpcKt
 import com.cacti.services.generated.CallbacksGrpcKt
 import com.cacti.services.generated.FilesGrpcKt
@@ -121,25 +120,19 @@ object RepositoryDiModule {
 
     @Singleton
     @Provides
-    fun provideCactusRepo(remoteSource: CactusService, localSource: CactusDao) =
-        CactusRepo(remoteSource, localSource)
+    fun provideCactusRepo(
+        remoteSource: CactusService,
+        localSource: CactusDao,
+        pendingSource: PendingCactusDao,
+        photoRepo: PhotoRepo,
+        fileService: FileService,
+    ) =
+        CactusRepo(remoteSource, localSource, pendingSource, photoRepo, fileService)
 
     @Singleton
     @Provides
     fun providePhotoRepo(remoteSource: PhotoService, localSource: PhotoDao) =
         PhotoRepo(remoteSource, localSource)
-
-    @Singleton
-    @Provides
-    fun providePendingRepo(
-        cactusRepo: CactusRepo,
-        photoRepo: PhotoRepo,
-        cactusDao: CactusDao,
-        photoDao: PhotoDao,
-        pendingDao: PendingDao,
-        fileService: FileService,
-    ) =
-        PendingRepo(cactusRepo, photoRepo, cactusDao, photoDao, pendingDao, fileService)
 
 
     // endregion
