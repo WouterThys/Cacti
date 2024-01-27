@@ -10,7 +10,7 @@
 !define ICON "cactus-icon-vector.ico"
 !define COMMAND_LINE_PARAMS ""
 
-!getdllversion "${SOURCE_DIRECTORY}\CactiServer\Release\net7.0\${EXECUTABLE}" version_
+!getdllversion "${SOURCE_DIRECTORY}\server\Release\net7.0\${EXECUTABLE}" version_
 !define OUTPUT_FILE "..\Release\client\${BASE_NAME}_${PRODUCT_VERSION}_${BUILD_TYPE}_${UPGRADE_CODE}_${CLIENT}.exe"
 !define PRODUCT_VERSION "${version_1}.${version_2}.${version_3}"
 !define PRODUCT_PUBLISHER "WouterThys"
@@ -125,12 +125,12 @@ Section "MainSection" SEC01
   ; Server files
   SetOverwrite on
   SetOutPath "$INSTDIR\server\"
-  File /r "${SOURCE_DIRECTORY}\CactiServer\Release\net7.0\*"
+  File /r "${SOURCE_DIRECTORY}\server\Release\net7.0\*"
 
   ; Config files
-  SetOverwrite try
-  SetOutPath "$INSTDIR\server\"
-  File /r "${CONFIG_DIRECTORY}\Server\*"
+  ; SetOverwrite try
+  ; SetOutPath "$INSTDIR\server\"
+  ; File /r "${CONFIG_DIRECTORY}\Server\*"
 
   ; Execute database scripts
   SetOverwrite on

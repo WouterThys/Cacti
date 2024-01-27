@@ -56,19 +56,56 @@ update_version:
 # Build 
 build: DatabaseFiles CactiClient.exe app-release.apk build_server CactiService.exe
 
-DatabaseFiles:
+DatabaseFiles: database_dir create_db.sql updatescripts.sql
+	xcopy /s $(PROCEDURES_SOURCES)\_*.sql "$(DATABASE_BUILD_DIR)" /Y
+
+database_dir:
+	if not exist "$(DATABASE_BUILD_DIR)" mkdir $(DATABASE_BUILD_DIR)
+
+create_db.sql:
+	cd Database\helper  && \
+	$(PATRICK) CREATE_DATABASE ..\config.json --crOut=..\..\$(DATABASE_BUILD_DIR)\output\create_db.sql crAdd=..\additional_create_script\additional_create_script.sql
+
+updatescripts.sql:
+	cd Database\helper  && \
+	$(PATRICK) UPDATESCRIPTS_CREATE ..\config.json --updOut=..\..\$(DATABASE_BUILD_DIR)\output\updatescripts.sql
 
 CactiClient.exe:
+	if not exist "$(CLIENT_BUILD_DIR)" mkdir $(CLIENT_BUILD_DIR)
+	$(MSBUILD) $(SOLUTION) /Build "Release|x86" /Project CactiClient
+#$(NSISBUILD) /DUPGRADE_CODE=$(UPGRADE_CODE) Installers/CactiClient.nsi
 
 app-release.apk:
+	cd Android  && \
+	$(ANDROIDBUILD) :app:assembleRelease
+	xcopy "Android\app\build\outputs\apk\release\app-release*.apk" "$(CLIENT_BUILD_DIR)\CactiPhone_$(VERSION)_Release_$(UPGRADE_CODE).apk"* /Y
 
 build_server:
+	if not exist "$(SERVER_BUILD_DIR)" mkdir $(SERVER_BUILD_DIR)
+	$(MSBUILD) $(SOLUTION) /Build "Release|x64" /Project CactiServer
 
-CactiService.exe:
+CactiService.exe: #build_server
+	$(NSISBUILD) /DUPGRADE_CODE=$(UPGRADE_CODE) Installers/ServerInstaller.nsi
 
 # Stage
 stage:
 
 back_up_release:
+	if not exist "$(BACK_UP_DIR)\Release" mkdir $(BACK_UP_DIR)\Release
+	xcopy /s /e "$(RELEASE_DIR)" "$(BACK_UP_DIR)\Release" /Y
 
-git:
+# Git
+git: git_tag git_update_master
+
+git_tag:
+	$(GIT) commit -am "Update to version $(VERSION) - $(UPGRADE_CODE)"
+	$(GIT) tag -a V$(VERSION)_$(UPGRADE_CODE) -m "Release version $(NOW)-$(VERSION) - $(UPGRADE_CODE)"
+	$(GIT) push origin
+	$(GIT) push origin --tags
+	
+git_update_master:	
+	$(GIT) checkout master
+	$(GIT) pull origin
+	$(GIT) merge -s ours $(BRANCH)
+	$(GIT) push origin
+	$(GIT) checkout $(BRANCH)
