@@ -58,13 +58,13 @@
             bbiEdit = new DevExpress.XtraBars.BarButtonItem();
             bbiDelete = new DevExpress.XtraBars.BarButtonItem();
             bbiImport = new DevExpress.XtraBars.BarButtonItem();
+            barButtonGroup1 = new DevExpress.XtraBars.BarButtonGroup();
+            cciList = new DevExpress.XtraBars.BarCheckItem();
             ribbonPage = new DevExpress.XtraBars.Ribbon.RibbonPage();
             ribbonPageGroup1 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             ribbonPageGroup2 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
-            mvvmContext = new DevExpress.Utils.MVVM.MVVMContext(components);
             ribbonPageGroup3 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
-            barButtonGroup1 = new DevExpress.XtraBars.BarButtonGroup();
-            cciList = new DevExpress.XtraBars.BarCheckItem();
+            mvvmContext = new DevExpress.Utils.MVVM.MVVMContext(components);
             ((System.ComponentModel.ISupportInitialize)gridControl).BeginInit();
             ((System.ComponentModel.ISupportInitialize)bsCacti).BeginInit();
             ((System.ComponentModel.ISupportInitialize)tileView).BeginInit();
@@ -240,11 +240,24 @@
             bbiImport.ImageOptions.SvgImage = (DevExpress.Utils.Svg.SvgImage)resources.GetObject("bbiImport.ImageOptions.SvgImage");
             bbiImport.Name = "bbiImport";
             // 
+            // barButtonGroup1
+            // 
+            barButtonGroup1.Caption = "barButtonGroup1";
+            barButtonGroup1.Id = 6;
+            barButtonGroup1.Name = "barButtonGroup1";
+            // 
+            // cciList
+            // 
+            cciList.Caption = "List";
+            cciList.Id = 11;
+            cciList.ImageOptions.SvgImage = (DevExpress.Utils.Svg.SvgImage)resources.GetObject("cciList.ImageOptions.SvgImage");
+            cciList.Name = "cciList";
+            // 
             // ribbonPage
             // 
             ribbonPage.Groups.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPageGroup[] { ribbonPageGroup1, ribbonPageGroup2, ribbonPageGroup3 });
             ribbonPage.Name = "ribbonPage";
-            ribbonPage.Text = "Thuis";
+            ribbonPage.Text = "Cacti";
             // 
             // ribbonPageGroup1
             // 
@@ -260,11 +273,6 @@
             ribbonPageGroup2.Name = "ribbonPageGroup2";
             ribbonPageGroup2.Text = "Data";
             // 
-            // mvvmContext
-            // 
-            mvvmContext.ContainerControl = this;
-            mvvmContext.ViewModelType = typeof(ViewModel.Cactus.CactusListViewModel);
-            // 
             // ribbonPageGroup3
             // 
             ribbonPageGroup3.ItemLinks.Add(barButtonGroup1);
@@ -272,18 +280,10 @@
             ribbonPageGroup3.Name = "ribbonPageGroup3";
             ribbonPageGroup3.Text = "View";
             // 
-            // barButtonGroup1
+            // mvvmContext
             // 
-            barButtonGroup1.Caption = "barButtonGroup1";
-            barButtonGroup1.Id = 6;
-            barButtonGroup1.Name = "barButtonGroup1";
-            // 
-            // cciList
-            // 
-            cciList.Caption = "List";
-            cciList.Id = 11;
-            cciList.ImageOptions.SvgImage = (DevExpress.Utils.Svg.SvgImage)resources.GetObject("barCheckItem1.ImageOptions.SvgImage");
-            cciList.Name = "cciList";
+            mvvmContext.ContainerControl = this;
+            mvvmContext.ViewModelType = typeof(ViewModel.Cactus.CactusListViewModel);
             // 
             // CactusListView
             // 

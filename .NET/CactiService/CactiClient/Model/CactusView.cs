@@ -14,6 +14,7 @@ namespace CactiClient.Model
 
 
         public long Id { get; set; } = NextInsertId--;
+        public string AndroidId { get; set; } = "";
         public string Code { get; set; } = "";
         public string Description { get; set; } = "";
         public string Location { get; set; } = "";
@@ -41,7 +42,7 @@ namespace CactiClient.Model
             {
                 if (Id > 1)
                 {
-                    return $"{Id} - {LastModified:dd/MM/yyyy HH:mm}";
+                    return $"{Id} ({AndroidId}) - {LastModified:dd/MM/yyyy HH:mm}";
                 }
                 else
                 {

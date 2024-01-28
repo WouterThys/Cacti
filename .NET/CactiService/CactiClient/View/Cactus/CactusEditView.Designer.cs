@@ -35,12 +35,12 @@
             bbiSaveAndClose = new DevExpress.XtraBars.BarButtonItem();
             bbiReset = new DevExpress.XtraBars.BarButtonItem();
             bbiDelete = new DevExpress.XtraBars.BarButtonItem();
+            bbiOpenFile = new DevExpress.XtraBars.BarButtonItem();
             ribbonPage1 = new DevExpress.XtraBars.Ribbon.RibbonPage();
             ribbonPageGroup1 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
+            ribbonPageGroup2 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             cactusEditData = new CactusEditData();
             mvvmContext = new DevExpress.Utils.MVVM.MVVMContext(components);
-            ribbonPageGroup2 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
-            bbiOpenFile = new DevExpress.XtraBars.BarButtonItem();
             ((System.ComponentModel.ISupportInitialize)ribbonControl).BeginInit();
             ((System.ComponentModel.ISupportInitialize)mvvmContext).BeginInit();
             SuspendLayout();
@@ -53,7 +53,7 @@
             ribbonControl.MaxItemId = 6;
             ribbonControl.Name = "ribbonControl";
             ribbonControl.Pages.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPage[] { ribbonPage1 });
-            ribbonControl.Size = new System.Drawing.Size(412, 150);
+            ribbonControl.Size = new System.Drawing.Size(616, 150);
             // 
             // bbiSave
             // 
@@ -83,6 +83,13 @@
             bbiDelete.ImageOptions.SvgImage = (DevExpress.Utils.Svg.SvgImage)resources.GetObject("bbiDelete.ImageOptions.SvgImage");
             bbiDelete.Name = "bbiDelete";
             // 
+            // bbiOpenFile
+            // 
+            bbiOpenFile.Caption = "Open";
+            bbiOpenFile.Id = 5;
+            bbiOpenFile.ImageOptions.SvgImage = (DevExpress.Utils.Svg.SvgImage)resources.GetObject("bbiOpenFile.ImageOptions.SvgImage");
+            bbiOpenFile.Name = "bbiOpenFile";
+            // 
             // ribbonPage1
             // 
             ribbonPage1.Groups.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPageGroup[] { ribbonPageGroup1, ribbonPageGroup2 });
@@ -98,31 +105,24 @@
             ribbonPageGroup1.Name = "ribbonPageGroup1";
             ribbonPageGroup1.Text = "Thuis";
             // 
-            // cactusEditData
-            // 
-            cactusEditData.Dock = System.Windows.Forms.DockStyle.Fill;
-            cactusEditData.Location = new System.Drawing.Point(0, 150);
-            cactusEditData.Name = "cactusEditData";
-            cactusEditData.Size = new System.Drawing.Size(412, 255);
-            cactusEditData.TabIndex = 1;
-            // 
-            // mvvmContext
-            // 
-            mvvmContext.ContainerControl = this;
-            mvvmContext.ViewModelType = typeof(ViewModel.Cactus.EditCactusViewModel);
-            // 
             // ribbonPageGroup2
             // 
             ribbonPageGroup2.ItemLinks.Add(bbiOpenFile);
             ribbonPageGroup2.Name = "ribbonPageGroup2";
             ribbonPageGroup2.Text = "Files";
             // 
-            // bbiOpenFile
+            // cactusEditData
             // 
-            bbiOpenFile.Caption = "Open";
-            bbiOpenFile.Id = 5;
-            bbiOpenFile.ImageOptions.SvgImage = (DevExpress.Utils.Svg.SvgImage)resources.GetObject("barButtonItem1.ImageOptions.SvgImage");
-            bbiOpenFile.Name = "bbiOpenFile";
+            cactusEditData.Dock = System.Windows.Forms.DockStyle.Fill;
+            cactusEditData.Location = new System.Drawing.Point(0, 150);
+            cactusEditData.Name = "cactusEditData";
+            cactusEditData.Size = new System.Drawing.Size(616, 431);
+            cactusEditData.TabIndex = 1;
+            // 
+            // mvvmContext
+            // 
+            mvvmContext.ContainerControl = this;
+            mvvmContext.ViewModelType = typeof(ViewModel.Cactus.EditCactusViewModel);
             // 
             // CactusEditView
             // 
@@ -131,7 +131,7 @@
             Controls.Add(cactusEditData);
             Controls.Add(ribbonControl);
             Name = "CactusEditView";
-            Size = new System.Drawing.Size(412, 405);
+            Size = new System.Drawing.Size(616, 581);
             ((System.ComponentModel.ISupportInitialize)ribbonControl).EndInit();
             ((System.ComponentModel.ISupportInitialize)mvvmContext).EndInit();
             ResumeLayout(false);

@@ -1,14 +1,9 @@
-﻿using CactiClient.Model;
+﻿using DevExpress.LookAndFeel;
 using DevExpress.Utils.MVVM.Services;
 using DevExpress.XtraBars.Docking2010.Views;
 using DevExpress.XtraBars.Ribbon;
-using DevExpress.XtraGrid.Views.Tile;
-using DevExpress.XtraSplashScreen;
-using DevExpress.XtraVerticalGrid.Rows;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 
 namespace CactiClient
 {
@@ -78,7 +73,21 @@ namespace CactiClient
             var fluent = mvvmContext.OfType<MainViewModel>();
 
 
+            // Layout
+            UserLookAndFeel.Default.StyleChanged += Default_StyleChanged;
+            string skin = Properties.Settings.Default.Theme;
+            if (!string.IsNullOrEmpty(skin))
+            {
+                UserLookAndFeel defaultLF = UserLookAndFeel.Default;
+                defaultLF.SkinName = skin;
+            }
+        }
 
+        private void Default_StyleChanged(object? sender, EventArgs e)
+        {
+            UserLookAndFeel defaultLF = UserLookAndFeel.Default;
+            Properties.Settings.Default.Theme = defaultLF.SkinName;
+            Properties.Settings.Default.Save();
         }
 
 

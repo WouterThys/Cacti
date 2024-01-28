@@ -76,6 +76,7 @@ class CactusService @Inject constructor(
                 id = grpc.id,
                 code = grpc.code,
                 description = grpc.description,
+                androidId = grpc.androidId,
                 location = grpc.location,
                 barcodes = grpc.barcodes,
                 photoId = grpc.photoId,
@@ -87,6 +88,7 @@ class CactusService @Inject constructor(
             grpc.id = cactus.id
             grpc.code = cactus.code
             grpc.description = cactus.description
+            grpc.androidId = cactus.androidId
             grpc.location = cactus.location
             grpc.barcodes = cactus.barcodes
             grpc.photoId = cactus.photoId

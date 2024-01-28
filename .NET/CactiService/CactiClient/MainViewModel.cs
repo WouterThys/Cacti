@@ -41,7 +41,7 @@ namespace CactiClient
         public MainViewModel()
         {
             // TODO: from settings
-            _channel = GrpcChannel.ForAddress("http://localhost:5002");
+            _channel = GrpcChannel.ForAddress(Properties.Settings.Default.Address);
             _CactiService = CactiService.Initialize(_channel);
             _CallbackService = CallbackService.Initialize(_channel);
             _PhotoService = PhotoService.Initialize(_channel);

@@ -128,6 +128,11 @@ class CactusEditFragment : Fragment() {
                 viewModel.newPending(it)
             }
         }
+
+        // Watcher for updates!!
+        viewModel.watcher.observe(viewLifecycleOwner) {it?.let { savedCactus ->
+            showToast("Saved ${savedCactus.code}")
+        } }
     }
 
     override fun onDestroyView() {

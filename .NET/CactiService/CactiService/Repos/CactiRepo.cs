@@ -15,7 +15,7 @@ namespace CactiServer.Repos
         }
 
 
-        protected override void InitializeFromReader(DbDataReader reader, DbConnection conn, Cactus obj) 
+        protected override void InitializeFromReader(DbDataReader reader, DbConnection conn, Cactus obj)
         {
             obj.Id = DatabaseAccess.RGetLong(reader, "id");
             obj.Code = DatabaseAccess.RGetString(reader, "code");
@@ -23,6 +23,7 @@ namespace CactiServer.Repos
             obj.Location = DatabaseAccess.RGetString(reader, "location");
             obj.Barcodes = DatabaseAccess.RGetString(reader, "barcodes");
             obj.PhotoId = DatabaseAccess.RGetLong(reader, "photoId");
+            obj.AndroidId = DatabaseAccess.RGetString(reader, "androidId");
             obj.LastModified = GRPCUtils.ConvertDate(DatabaseAccess.RGetDateTime(reader, "lastModified"));
         }
 
@@ -33,6 +34,7 @@ namespace CactiServer.Repos
             DatabaseAccess.AddDbValue(cmd, "description", obj.Description);
             DatabaseAccess.AddDbValue(cmd, "location", obj.Location);
             DatabaseAccess.AddDbValue(cmd, "barcodes", obj.Barcodes);
+            DatabaseAccess.AddDbValue(cmd, "androidId", obj.AndroidId);
             DatabaseAccess.AddDbValue(cmd, "lastModified", GRPCUtils.ConvertDate(obj.LastModified));
 
             long photoId = 1;

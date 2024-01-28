@@ -8,6 +8,7 @@ import java.util.Date
 data class Cactus(
     @PrimaryKey (autoGenerate = true)
     override var id: Long = 0,
+    override var androidId: String = "",
     override var code: String = "",
     override var description: String = "",
     override var location: String = "",

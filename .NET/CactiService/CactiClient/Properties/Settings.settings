@@ -5,5 +5,11 @@
     <Setting Name="LocalBaseDir" Type="System.String" Scope="User">
       <Value Profile="(Default)">%appdata%\CactiClient\Photos\</Value>
     </Setting>
+    <Setting Name="Address" Type="System.String" Scope="User">
+      <Value Profile="(Default)">http://localhost:5002</Value>
+    </Setting>
+    <Setting Name="Theme" Type="System.String" Scope="User">
+      <Value Profile="(Default)">WXI</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

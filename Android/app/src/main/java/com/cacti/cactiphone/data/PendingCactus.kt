@@ -9,6 +9,7 @@ import java.util.Date
 data class PendingCactus(
     @PrimaryKey(autoGenerate = true)
     override var id: Long = 0,
+    override var androidId: String = "",
     override var code: String = "",
     override var description: String = "",
     override var location: String = "",
@@ -31,6 +32,7 @@ data class PendingCactus(
             pendingCactus.id = cactus.id
             pendingCactus.code = cactus.code
             pendingCactus.description = cactus.description
+            pendingCactus.androidId = cactus.androidId
             pendingCactus.location = cactus.location
             pendingCactus.barcodes = cactus.barcodes
             pendingCactus.photoId = cactus.photoId

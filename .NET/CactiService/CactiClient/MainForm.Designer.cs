@@ -38,6 +38,8 @@
             mvvmContext = new DevExpress.Utils.MVVM.MVVMContext(components);
             documentManager = new DevExpress.XtraBars.Docking2010.DocumentManager(components);
             tabbedView1 = new DevExpress.XtraBars.Docking2010.Views.Tabbed.TabbedView(components);
+            ribbonPageGroup1 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
+            skinRibbonGalleryBarItem1 = new DevExpress.XtraBars.SkinRibbonGalleryBarItem();
             ((System.ComponentModel.ISupportInitialize)ribbonControl).BeginInit();
             ((System.ComponentModel.ISupportInitialize)mvvmContext).BeginInit();
             ((System.ComponentModel.ISupportInitialize)documentManager).BeginInit();
@@ -47,9 +49,9 @@
             // ribbonControl
             // 
             ribbonControl.ExpandCollapseItem.Id = 0;
-            ribbonControl.Items.AddRange(new DevExpress.XtraBars.BarItem[] { ribbonControl.ExpandCollapseItem, barButtonItem1, barButtonItem2, barButtonItem3 });
+            ribbonControl.Items.AddRange(new DevExpress.XtraBars.BarItem[] { ribbonControl.ExpandCollapseItem, barButtonItem1, barButtonItem2, barButtonItem3, skinRibbonGalleryBarItem1 });
             ribbonControl.Location = new System.Drawing.Point(0, 0);
-            ribbonControl.MaxItemId = 4;
+            ribbonControl.MaxItemId = 5;
             ribbonControl.Name = "ribbonControl";
             ribbonControl.Pages.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPage[] { ribbonPage1 });
             ribbonControl.Size = new System.Drawing.Size(1182, 158);
@@ -77,8 +79,9 @@
             // 
             // ribbonPage1
             // 
+            ribbonPage1.Groups.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPageGroup[] { ribbonPageGroup1 });
             ribbonPage1.Name = "ribbonPage1";
-            ribbonPage1.Text = "ribbonPage1";
+            ribbonPage1.Text = "Thuis";
             // 
             // mvvmContext
             // 
@@ -91,6 +94,18 @@
             documentManager.MenuManager = ribbonControl;
             documentManager.View = tabbedView1;
             documentManager.ViewCollection.AddRange(new DevExpress.XtraBars.Docking2010.Views.BaseView[] { tabbedView1 });
+            // 
+            // ribbonPageGroup1
+            // 
+            ribbonPageGroup1.ItemLinks.Add(skinRibbonGalleryBarItem1);
+            ribbonPageGroup1.Name = "ribbonPageGroup1";
+            ribbonPageGroup1.Text = "Layout";
+            // 
+            // skinRibbonGalleryBarItem1
+            // 
+            skinRibbonGalleryBarItem1.Caption = "skinRibbonGalleryBarItem1";
+            skinRibbonGalleryBarItem1.Id = 4;
+            skinRibbonGalleryBarItem1.Name = "skinRibbonGalleryBarItem1";
             // 
             // MainView
             // 
@@ -119,6 +134,8 @@
         private DevExpress.XtraBars.BarButtonItem barButtonItem3;
         private DevExpress.XtraBars.Docking2010.DocumentManager documentManager;
         private DevExpress.XtraBars.Docking2010.Views.Tabbed.TabbedView tabbedView1;
+        private DevExpress.XtraBars.SkinRibbonGalleryBarItem skinRibbonGalleryBarItem1;
+        private DevExpress.XtraBars.Ribbon.RibbonPageGroup ribbonPageGroup1;
     }
 }
 

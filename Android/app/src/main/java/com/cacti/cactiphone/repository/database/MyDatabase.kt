@@ -10,7 +10,7 @@ import com.cacti.cactiphone.data.PendingCactus
 import com.cacti.cactiphone.data.Photo
 
 @Database(
-    version = 5,
+    version = 7,
     entities = [
         Cactus::class,
         Photo::class,

@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
+import androidx.lifecycle.map
 import androidx.lifecycle.switchMap
 import com.cacti.cactiphone.App
 import com.cacti.cactiphone.AppConstants
@@ -19,6 +20,7 @@ import com.cacti.cactiphone.repository.web.FileService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import java.io.File
+import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
@@ -32,6 +34,7 @@ class EditCactusViewModel@Inject constructor(
 
     private val cactusId = MutableLiveData(stateHandle.get<Long>(AppConstants.KEY_CACTUS_ID) ?: UNKNOWN_ID)
     private var isInsert: Boolean = false
+    private var androidId: String = ""
 
     val pendingCount = cactusRepo.pendingCount
 
@@ -39,14 +42,32 @@ class EditCactusViewModel@Inject constructor(
         val result = if (id < UNKNOWN_ID) {
             // Create new cactus
             isInsert = true
-            Cactus()
+            androidId = UUID.randomUUID().toString()
+            Cactus(androidId = androidId)
         } else {
             // Load from repo
             isInsert = false
-            cactusRepo.getByIdAsync(id) ?: Cactus()
+            val found = cactusRepo.getByIdAsync(id) ?: Cactus()
+            androidId = found.androidId
+            found
         }
+
+        println("XXX EDIT: id= ${result.id} AndroidId = $androidId -> insert=${isInsert}")
+
         emit(result)
     } }
+
+    val watcher = cactusRepo.data.map { resource ->
+        var updatedCactus: Cactus? = null
+        if (resource.isSuccess() && resource.data != null && androidId.isNotEmpty()) {
+            resource.data.firstOrNull { c -> c.androidId == androidId }?.let { found ->
+                println("XXX Found update for ${found.code} (androidId = $androidId)")
+                cactusId.postValue(found.id)
+                updatedCactus = found
+            }
+        }
+        updatedCactus
+    }
 
     val photo = cactus.switchMap {
         it.let { cactus ->

@@ -15,5 +15,6 @@ message Cactus {
     string location = 4;
     string barcodes = 5;
     sint64 photo_id = 6;
-    google.protobuf.Timestamp last_modified = 7;
+    string android_id = 7;
+    google.protobuf.Timestamp last_modified = 8;
 }

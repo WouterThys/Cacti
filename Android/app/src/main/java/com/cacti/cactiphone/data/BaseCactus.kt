@@ -6,6 +6,7 @@ import java.util.Date
 
 abstract class BaseCactus(
     open var id: Long,
+    open var androidId: String = "",
     open var code: String = "",
     open var description: String = "",
     open var location: String = "",
