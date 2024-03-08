@@ -83,6 +83,7 @@ app-release.apk:
 build_server:
 	if not exist "$(SERVER_BUILD_DIR)" mkdir $(SERVER_BUILD_DIR)
 	$(MSBUILD) $(SOLUTION) /Build "Release|x64" /Project CactiServer
+	xcopy ".NET\CactiService\CactiService\bin\Release\net7.0\*" $(SERVER_BUILD_DIR) /Y
 
 CactiService.exe: #build_server
 	$(NSISBUILD) /DUPGRADE_CODE=$(UPGRADE_CODE) Installers/ServerInstaller.nsi

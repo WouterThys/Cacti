@@ -10,8 +10,8 @@
 !define ICON "cactus-icon-vector.ico"
 !define COMMAND_LINE_PARAMS ""
 
-!getdllversion "${SOURCE_DIRECTORY}\server\Release\net7.0\${EXECUTABLE}" version_
-!define OUTPUT_FILE "..\Release\client\${BASE_NAME}_${PRODUCT_VERSION}_${BUILD_TYPE}_${UPGRADE_CODE}_${CLIENT}.exe"
+!getdllversion "${SOURCE_DIRECTORY}\server\${EXECUTABLE}" version_
+!define OUTPUT_FILE "..\Release\client\${BASE_NAME}_${PRODUCT_VERSION}_${BUILD_TYPE}_${UPGRADE_CODE}.exe"
 !define PRODUCT_VERSION "${version_1}.${version_2}.${version_3}"
 !define PRODUCT_PUBLISHER "WouterThys"
 !define PRODUCT_WEB_SITE "http://www.WouterThys.be/"
@@ -41,7 +41,7 @@ SetCompressor /SOLID lzma
 ; Welcome page
 !define MUI_HEADERIMAGE
 !define MUI_HEADERIMAGE_BITMAP ${MUI_ICON}
-!define MUI_WELCOMEFINISHPAGE_BITMAP "${ICON}"
+!define MUI_WELCOMEFINISHPAGE_BITMAP "cactus-icon-vector.bmp"
 !insertmacro MUI_PAGE_WELCOME
 ; Directory page
 !insertmacro MUI_PAGE_DIRECTORY
@@ -108,13 +108,9 @@ Section "MainSection" SEC01
   ; Clean up server
   SetOutPath "$INSTDIR\"
   Delete "$INSTDIR\client\*.exe" ; Remove all executable from client folder
+  Delete "$INSTDIR\client\*.apk" ; Remove all android apps from client folder
   Delete "$INSTDIR\database\*.*" ; Remove all from database folder
   RMDir /r "$INSTDIR\server\" ; Remove all files from server folder
-
-  ;Documentation
-  SetOverwrite ifnewer
-  SetOutPath "$INSTDIR\documentation\"
-  File /nonfatal /r "${SOURCE_DIRECTORY}\documentation\*"
 
   ; Copy all source files
   SetOverwrite try
@@ -125,7 +121,7 @@ Section "MainSection" SEC01
   ; Server files
   SetOverwrite on
   SetOutPath "$INSTDIR\server\"
-  File /r "${SOURCE_DIRECTORY}\server\Release\net7.0\*"
+  File /r "${SOURCE_DIRECTORY}\server\*"
 
   ; Config files
   ; SetOverwrite try
