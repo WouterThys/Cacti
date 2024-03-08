@@ -49,7 +49,7 @@ clean:
 	$(MSBUILD) $(SOLUTION) /Clean "Release|x86"
 
 # Release files
-release: clean update_version build #stage back_up_release git
+release: clean update_version build stage back_up_release git
 
 # Update version files
 update_version:
