@@ -11,7 +11,7 @@
 !define COMMAND_LINE_PARAMS ""
 
 !getdllversion "${SOURCE_DIRECTORY}\server\${EXECUTABLE}" version_
-!define OUTPUT_FILE "..\Release\client\${BASE_NAME}_${PRODUCT_VERSION}_${BUILD_TYPE}_${UPGRADE_CODE}.exe"
+!define OUTPUT_FILE "..\Release\installers\${BASE_NAME}_${PRODUCT_VERSION}_${BUILD_TYPE}_${UPGRADE_CODE}.exe"
 !define PRODUCT_VERSION "${version_1}.${version_2}.${version_3}"
 !define PRODUCT_PUBLISHER "WouterThys"
 !define PRODUCT_WEB_SITE "http://www.WouterThys.be/"
@@ -107,16 +107,16 @@ Section "MainSection" SEC01
 
   ; Clean up server
   SetOutPath "$INSTDIR\"
-  Delete "$INSTDIR\client\*.exe" ; Remove all executable from client folder
-  Delete "$INSTDIR\client\*.apk" ; Remove all android apps from client folder
+  Delete "$INSTDIR\installers\*.exe" ; Remove all executable from installers folder
+  Delete "$INSTDIR\installers\*.apk" ; Remove all android apps from installers folder
   Delete "$INSTDIR\database\*.*" ; Remove all from database folder
   RMDir /r "$INSTDIR\server\" ; Remove all files from server folder
 
   ; Copy all source files
   SetOverwrite try
-  SetOutPath "$INSTDIR\client\"
-  File /nonfatal /r "${SOURCE_DIRECTORY}\client\*${UPGRADE_CODE}.exe"
-  File /nonfatal /r "${SOURCE_DIRECTORY}\client\*${UPGRADE_CODE}.apk"
+  SetOutPath "$INSTDIR\installers\"
+  File /nonfatal /r "${SOURCE_DIRECTORY}\installers\*${UPGRADE_CODE}.exe"
+  File /nonfatal /r "${SOURCE_DIRECTORY}\installers\*${UPGRADE_CODE}.apk"
 
   ; Server files
   SetOverwrite on
