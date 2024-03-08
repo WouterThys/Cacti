@@ -3,6 +3,7 @@ using CactiServer.Repos;
 using CactiServer.Services;
 using Database;
 using Google.Api;
+using Microsoft.Extensions.Hosting.WindowsServices;
 using NLog;
 using NLog.Web;
 
@@ -14,9 +15,18 @@ try
 
     var builder = WebApplication.CreateBuilder(args);
 
+    //var builder = WebApplication.CreateBuilder(new WebApplicationOptions
+    //{
+    //    Args = args,
+    //    ContentRootPath = WindowsServiceHelpers.IsWindowsService()
+    //    ? AppContext.BaseDirectory
+    //    : default
+    //});
+
     // NLog: Setup NLog for Dependency injection
     builder.Logging.ClearProviders();
     builder.Host.UseNLog();
+    builder.Host.UseWindowsService();
 
     // Additional configuration is required to successfully run gRPC on macOS.
     // For instructions on how to configure Kestrel and gRPC clients on macOS, visit https://go.microsoft.com/fwlink/?linkid=2099682
@@ -56,8 +66,6 @@ try
     }
 
     builder.Services.AddSingleton<ICallbackManager, CallbackManager>();
-
-    builder.Services.AddWindowsService();
 
     var app = builder.Build();
 
