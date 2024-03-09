@@ -96,6 +96,7 @@ Section "MainSection" SEC01
   ; Main files
   SetOverwrite try
   File /r "${SOURCE_DIRIRECTORY}\*"
+  File "${ICON}"
 
   ; Directories and links
   CreateDirectory "$SMPROGRAMS\Cacti"

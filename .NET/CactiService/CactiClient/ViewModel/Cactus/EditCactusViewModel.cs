@@ -4,12 +4,13 @@ using Common.Proto;
 using DevExpress.Mvvm;
 using DevExpress.Mvvm.DataAnnotations;
 using DevExpress.Mvvm.POCO;
-using IronBarCode;
+using DevExpress.BarCodes;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.IO;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -190,8 +191,23 @@ namespace CactiClient.ViewModel.Cactus
             if (Editable == null) return;
             if (Editable.Id <= 1) return;
 
-            GeneratedBarcode qrCode = QRCodeWriter.CreateQrCode(Editable.Id.ToString());
-            Editable.Barcode = qrCode.ToImage();
+            // GeneratedBarcode qrCode = QRCodeWriter.CreateQrCode(Editable.Id.ToString());
+
+            BarCode barCode = new()
+            {
+                Symbology = Symbology.QRCode,
+                CodeText = Editable.Id.ToString(),
+                BackColor = Color.White,
+                ForeColor = Color.Black,
+                RotationAngle = 0,
+                DpiX = 72,
+                DpiY = 72,
+                Module = 2f
+            };
+            barCode.CodeBinaryData = Encoding.Default.GetBytes(barCode.CodeText);
+
+
+            Editable.Barcode = barCode.BarCodeImage;
         }
 
         #region Commands
