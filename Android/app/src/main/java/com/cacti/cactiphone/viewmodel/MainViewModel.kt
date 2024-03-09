@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 import com.cacti.cactiphone.App
+import com.cacti.cactiphone.AppSettings
 import com.cacti.cactiphone.repository.CactusRepo
 import com.cacti.cactiphone.repository.PhotoRepo
 import com.cacti.cactiphone.repository.web.CallbackService
@@ -14,6 +15,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val app: App,
+    private val settings: AppSettings,
     private val callbackService: CallbackService,
     private val cactusRepo: CactusRepo,
     private val photoRepo: PhotoRepo,
@@ -29,6 +31,14 @@ class MainViewModel @Inject constructor(
 
     val pendingCount = cactusRepo.pendingCount
 
+
+    fun hasHost() : Boolean {
+        return settings.getHost().isNotBlank()
+    }
+
+    fun setHost(host: String) {
+        settings.setHost(host)
+    }
 
     suspend fun refresh() {
         cactusRepo.refresh()

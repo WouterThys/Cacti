@@ -10,4 +10,6 @@ object AppConstants {
     const val KEY_CACTUS_ID = "Constant_Params_CACTUS_ID"
     const val KEY_PHOTO_ID = "Constant_Params_PHOTO_ID"
 
+    const val PREF_SESSION_Address = "PREF_SESSION_Address"
+
 }

@@ -17,9 +17,21 @@ object AppDiModule {
 
     @Singleton
     @Provides
-    fun provideGrpcUri(app: App/*, settings: AppSettings*/) : Uri {
-        //return Uri.parse("http://${settings.getHostFromSettings()}/")
-        return Uri.parse("http://192.168.1.58:5002/")
+    fun provideAppSettings(app: App): AppSettings = AppSettings(app)
+
+    @Singleton
+    @Provides
+    fun provideGrpcUri(settings: AppSettings) : Uri {
+
+        var host = settings.getHost()
+
+        //return "http://192.168.1.58:5002/"
+
+        if (host.isBlank()) {
+           host = "http://192.168.1.58:5002/"
+        }
+
+        return Uri.parse(host)
     }
 
 }
