@@ -17,7 +17,7 @@ if %errorlevel% neq 0 (
     exit /b 1
 ) else ( echo MySQL80 service exists! )
 
-sc create "%service_name%" binPath='%exe_path%' DisplayName=%display_name% start=auto depend=MySQL80
+sc create "%service_name%" binPath="%exe_path%" DisplayName=%display_name% start=auto depend=MySQL80
 if %errorlevel% neq 0 (
     echo Failed to create service "%service_name%". Error code: %errorlevel%
     exit /b %errorlevel%
