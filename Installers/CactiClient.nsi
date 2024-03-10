@@ -151,7 +151,7 @@ Section Uninstall
   Delete "$SMPROGRAMS\Cacti\${LINK_NAME}"
   Delete "$DESKTOP\${LINK_NAME}"
 
-  RMDir /r "$APPDATA\CactiClient\${PRODUCT_NAME}\"
+  RMDir /r "$APPDATA\CactiClient\"
   RMDir /r "$INSTDIR"
 
   DeleteRegKey ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}"

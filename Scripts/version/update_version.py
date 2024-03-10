@@ -17,6 +17,30 @@ def update_assembly_info_version_string(file_name, major, minor, build):
                 else:
                     print(line, end='')
 
+# <AssemblyVersion>2.0.6.0</AssemblyVersion>
+# <FileVersion>2.0.6.0</FileVersion>
+def update_csproj_version_string(file_name, major, minor, build):
+    if os.path.exists(file_name):
+        with fileinput.FileInput(file_name, inplace=True) as assembly_file:
+            for line in assembly_file:
+                assembly_code_match = re.match(r'\s*<AssemblyVersion>\d+\.\d+\.\d+\.\d+</AssemblyVersion>', line)
+                file_code_match = re.match(r'\s*<FileVersion>\d+\.\d+\.\d+\.\d+</FileVersion>', line)
+                product_code_match = re.match(r'\s*<ProductVersion>\d+\.\d+\.\d+\.\d+</ProductVersion>', line)
+                if assembly_code_match:
+                    old_version = re.search(r'\d+\.\d+\.\d+\.\d+', assembly_code_match.group(0)).group(0)
+                    new_version = str(major) + '.' + str(minor) + '.' + str(build) + '.0'
+                    print(line.replace(old_version, new_version), end='')
+                elif file_code_match:
+                    old_version = re.search(r'\d+\.\d+\.\d+\.\d+', file_code_match.group(0)).group(0)
+                    new_version = str(major) + '.' + str(minor) + '.' + str(build) + '.0'
+                    print(line.replace(old_version, new_version), end='')
+                elif product_code_match:
+                    old_version = re.search(r'\d+\.\d+\.\d+\.\d+', product_code_match.group(0)).group(0)
+                    new_version = str(major) + '.' + str(minor) + '.' + str(build) + '.0'
+                    print(line.replace(old_version, new_version), end='')
+                else:
+                    print(line, end='')
+
 
 # "ProductCode" = "8:{639C12D3-A206-4CA0-BB33-011FB5227A50}"
 # "PackageCode" = "8:{E246BA9F-CBC9-4D3D-A3E1-8AD505E7896C}"
@@ -94,10 +118,17 @@ if __name__ == '__main__':
     print('UPDATING TO VERSION ' + str(major) + '.' + str(minor) + '.' + str(build) + ' UPGRADE CODE: ' + upgrade_code)
 
     # .Net AssemblyInfo.cs files
-    files = glob.glob(base_dir + '.NET\\**\\AssemblyInfo.cs', recursive=True)
+    # files = glob.glob(base_dir + '.NET\\**\\AssemblyInfo.cs', recursive=True)
+    # if files:
+    #     for file in files:
+    #         update_assembly_info_version_string(file, major, minor, build)
+    #         print('replaced version in ' + file)
+
+    # .Net csproj files
+    files = glob.glob(base_dir + '.NET\\**\\*.csproj', recursive=True)
     if files:
         for file in files:
-            update_assembly_info_version_string(file, major, minor, build)
+            update_csproj_version_string(file, major, minor, build)
             print('replaced version in ' + file)
 
     # Setup project .vdproj files
