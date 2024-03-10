@@ -55,7 +55,7 @@ class MainViewModel @Inject constructor(
         settings.setHost(host)
 
         launchOnIo {
-            mainEvents.post(MainEvent.AddressChanged(host))
+            mainEvents.post(MainEvent.AddressChanged(settings.getHost()))
         }
     }
 

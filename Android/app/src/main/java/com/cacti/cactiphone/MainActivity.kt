@@ -62,7 +62,8 @@ class MainActivity : AppCompatActivity() {
         val mgr : AlarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
         mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 500, pendingIntent)
 
-        exitProcess(0)
+        //exitProcess(0)
+        System.exit(0)
     }
 
     fun showHostDialog() {

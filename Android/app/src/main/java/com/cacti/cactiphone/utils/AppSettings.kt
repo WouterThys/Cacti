@@ -24,6 +24,7 @@ class AppSettings(val app: App) {
         getPreferences().edit().apply {
             putString(AppConstants.PREF_SESSION_Address, value)
             apply()
+            commit()
         }
     }
 }

@@ -29,7 +29,7 @@ object AppDiModule {
         var host = settings.getHost()
 
         if (host.isBlank()) {
-            host = "http://192.168.1.58:5002/"
+            host = "http://8.8.8.8:1234/"
         }
 
         if (!host.startsWith("http")) {
