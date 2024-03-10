@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.cacti.cactiphone.AppConstants.ADD_ID
 import com.cacti.cactiphone.AppConstants.UNKNOWN_ID
+import com.cacti.cactiphone.MainActivity
 import com.cacti.cactiphone.R
 import com.cacti.cactiphone.databinding.FragmentCactusListBinding
 import com.cacti.cactiphone.repository.data.Resource
@@ -60,6 +61,7 @@ class CactusListFragment : Fragment() {
         setupSwipeRefresh()
         setupRecyclerView()
         setupMenu()
+        setupFabs()
 
         return binding.root
     }
@@ -96,14 +98,14 @@ class CactusListFragment : Fragment() {
 
         viewModel.pendingCount.observe(viewLifecycleOwner) {
             viewModel.newPending(it)
-            if (it > 0) {
-                binding.fabRefresh.show()
-            } else {
-                binding.fabRefresh.hide()
-            }
+//            if (it > 0) {
+//                binding.fabRefresh.show()
+//            } else {
+//                binding.fabRefresh.hide()
+//            }
         }
 
-        binding.fabRefresh.hide()
+        //binding.fabRefresh.hide()
     }
 
     override fun onDestroyView() {
@@ -177,12 +179,16 @@ class CactusListFragment : Fragment() {
 
         binding.toolbar.setOnMenuItemClickListener { item ->
             return@setOnMenuItemClickListener when (item.itemId) {
-                R.id.menu_item_add -> {
-                    moveToCactusEdit(ADD_ID)
-                    true
-                }
-                R.id.menu_item_scan -> {
-                    scanBarcodeRequest.launch(null)
+//                R.id.menu_item_add -> {
+//                    moveToCactusEdit(ADD_ID)
+//                    true
+//                }
+//                R.id.menu_item_scan -> {
+//                    scanBarcodeRequest.launch(null)
+//                    true
+//                }
+                R.id.menu_item_settings -> {
+                    (activity as? MainActivity)?.showHostDialog()
                     true
                 }
                 else -> {
@@ -190,6 +196,18 @@ class CactusListFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun setupFabs() {
+
+        binding.fabAdd.setOnClickListener {
+            moveToCactusEdit(ADD_ID)
+        }
+
+        binding.fabBarcode.setOnClickListener {
+            scanBarcodeRequest.launch(null)
+        }
+
     }
 
 }

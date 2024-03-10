@@ -13,15 +13,15 @@ logger.Debug("init main");
 try
 {
 
-    var builder = WebApplication.CreateBuilder(args);
+    //var builder = WebApplication.CreateBuilder(args);
 
-    //var builder = WebApplication.CreateBuilder(new WebApplicationOptions
-    //{
-    //    Args = args,
-    //    ContentRootPath = WindowsServiceHelpers.IsWindowsService()
-    //    ? AppContext.BaseDirectory
-    //    : default
-    //});
+    var builder = WebApplication.CreateBuilder(new WebApplicationOptions
+    {
+        Args = args,
+        ContentRootPath = WindowsServiceHelpers.IsWindowsService()
+        ? AppContext.BaseDirectory
+        : default
+    });
 
     // NLog: Setup NLog for Dependency injection
     builder.Logging.ClearProviders();

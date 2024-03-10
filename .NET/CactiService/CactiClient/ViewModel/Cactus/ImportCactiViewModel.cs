@@ -1,17 +1,13 @@
 ﻿using CactiClient.Model;
 using CactiClient.WebClient;
 using Common.Proto;
-using Common.Services;
 using DevExpress.Mvvm;
 using DevExpress.Mvvm.DataAnnotations;
 using DevExpress.Mvvm.POCO;
-using DevExpress.XtraEditors;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -32,7 +28,6 @@ namespace CactiClient.ViewModel.Cactus
         private readonly CactiService _cactiService = CactiService.GetInstance();
         private readonly PhotoService _photoService = PhotoService.GetInstance();
         private readonly FileService _fileService = FileService.GetInstance();
-        private readonly CallbackService _callback = CallbackService.GetInstance();
 
 
         public virtual string Step { get; set; } = "Selecteer afbeeldingen";
@@ -61,7 +56,7 @@ namespace CactiClient.ViewModel.Cactus
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
                 // Get the path of specified file.
-                CreateFromFiles(openFileDialog.FileNames);
+                _ = CreateFromFiles(openFileDialog.FileNames);
             }
         }
 
@@ -170,7 +165,7 @@ namespace CactiClient.ViewModel.Cactus
 
                 var photo = await _photoService.Save(new Photo() 
                 { 
-                    Code = Path.GetFileName(filePath),
+                    Code = Path.GetFileNameWithoutExtension(filePath),
                     Path = filePath,
                 });
 

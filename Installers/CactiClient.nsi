@@ -100,9 +100,9 @@ Section "MainSection" SEC01
 
   ; Directories and links
   CreateDirectory "$SMPROGRAMS\Cacti"
-  CreateShortCut "$INSTDIR\${LINK_NAME}" "$INSTDIR\${EXECUTABLE}" "${COMMAND_LINE_PARAMS}" "${ICON}"
-  CreateShortCut "$SMPROGRAMS\Cacti\${LINK_NAME}" "$INSTDIR\${EXECUTABLE}" "${COMMAND_LINE_PARAMS}" "${ICON}"
-  CreateShortCut "$DESKTOP\${LINK_NAME}" "$INSTDIR\${EXECUTABLE}" "${COMMAND_LINE_PARAMS}" "${ICON}"
+  CreateShortCut "$INSTDIR\${LINK_NAME}" "$INSTDIR\${EXECUTABLE}" "${COMMAND_LINE_PARAMS}" "$INSTDIR\${ICON}"
+  CreateShortCut "$SMPROGRAMS\Cacti\${LINK_NAME}" "$INSTDIR\${EXECUTABLE}" "${COMMAND_LINE_PARAMS}" "$INSTDIR\${ICON}"
+  CreateShortCut "$DESKTOP\${LINK_NAME}" "$INSTDIR\${EXECUTABLE}" "${COMMAND_LINE_PARAMS}" "$INSTDIR\${ICON}"
 
 
   FileOpen $9 '.\Logs\installation.log' a ;Opens a Empty File and fills it

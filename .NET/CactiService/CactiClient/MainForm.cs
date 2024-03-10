@@ -7,11 +7,12 @@ using System.Globalization;
 
 namespace CactiClient
 {
-    public partial class MainView : DevExpress.XtraBars.Ribbon.RibbonForm
+    public partial class MainView : RibbonForm
     {
         public MainView()
         {
             InitializeComponent();
+            DevExpress.UserSkins.BonusSkins.Register();
             DevExpress.Utils.Drawing.Helpers.Win32SubclasserException.Allow = false;
             if (!mvvmContext.IsDesignMode)
             {
@@ -72,6 +73,7 @@ namespace CactiClient
         {
             var fluent = mvvmContext.OfType<MainViewModel>();
 
+            fluent.BindCommand(bbiInfo, m => m.ShowInfo());
 
             // Layout
             UserLookAndFeel.Default.StyleChanged += Default_StyleChanged;

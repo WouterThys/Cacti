@@ -40,6 +40,7 @@
             mvvmContext = new DevExpress.Utils.MVVM.MVVMContext(components);
             documentManager = new DevExpress.XtraBars.Docking2010.DocumentManager(components);
             tabbedView1 = new DevExpress.XtraBars.Docking2010.Views.Tabbed.TabbedView(components);
+            bbiInfo = new DevExpress.XtraBars.BarButtonItem();
             ((System.ComponentModel.ISupportInitialize)ribbonControl).BeginInit();
             ((System.ComponentModel.ISupportInitialize)mvvmContext).BeginInit();
             ((System.ComponentModel.ISupportInitialize)documentManager).BeginInit();
@@ -49,9 +50,9 @@
             // ribbonControl
             // 
             ribbonControl.ExpandCollapseItem.Id = 0;
-            ribbonControl.Items.AddRange(new DevExpress.XtraBars.BarItem[] { ribbonControl.ExpandCollapseItem, barButtonItem1, barButtonItem2, barButtonItem3, skinRibbonGalleryBarItem1 });
+            ribbonControl.Items.AddRange(new DevExpress.XtraBars.BarItem[] { ribbonControl.ExpandCollapseItem, barButtonItem1, barButtonItem2, barButtonItem3, skinRibbonGalleryBarItem1, bbiInfo });
             ribbonControl.Location = new System.Drawing.Point(0, 0);
-            ribbonControl.MaxItemId = 5;
+            ribbonControl.MaxItemId = 6;
             ribbonControl.Name = "ribbonControl";
             ribbonControl.Pages.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPage[] { ribbonPage1 });
             ribbonControl.Size = new System.Drawing.Size(1182, 158);
@@ -92,6 +93,7 @@
             // ribbonPageGroup1
             // 
             ribbonPageGroup1.ItemLinks.Add(skinRibbonGalleryBarItem1);
+            ribbonPageGroup1.ItemLinks.Add(bbiInfo);
             ribbonPageGroup1.Name = "ribbonPageGroup1";
             ribbonPageGroup1.Text = "Layout";
             // 
@@ -106,6 +108,13 @@
             documentManager.MenuManager = ribbonControl;
             documentManager.View = tabbedView1;
             documentManager.ViewCollection.AddRange(new DevExpress.XtraBars.Docking2010.Views.BaseView[] { tabbedView1 });
+            // 
+            // bbiInfo
+            // 
+            bbiInfo.Caption = "Info";
+            bbiInfo.Id = 5;
+            bbiInfo.ImageOptions.SvgImage = (DevExpress.Utils.Svg.SvgImage)resources.GetObject("bbiInfo.ImageOptions.SvgImage");
+            bbiInfo.Name = "bbiInfo";
             // 
             // MainView
             // 
@@ -137,6 +146,7 @@
         private DevExpress.XtraBars.Docking2010.Views.Tabbed.TabbedView tabbedView1;
         private DevExpress.XtraBars.SkinRibbonGalleryBarItem skinRibbonGalleryBarItem1;
         private DevExpress.XtraBars.Ribbon.RibbonPageGroup ribbonPageGroup1;
+        private DevExpress.XtraBars.BarButtonItem bbiInfo;
     }
 }
 

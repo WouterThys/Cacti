@@ -1,4 +1,10 @@
-package com.cacti.cactiphone
+package com.cacti.cactiphone.utils
+
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import kotlinx.coroutines.launch
 
 inline fun <T1: Any, T2: Any, R: Any> safeLet(p1: T1?, p2: T2?, block: (T1, T2)->R?): R? {
     return if (p1 != null && p2 != null) block(p1, p2) else null

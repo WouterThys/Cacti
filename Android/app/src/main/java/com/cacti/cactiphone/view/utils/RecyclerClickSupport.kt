@@ -3,7 +3,7 @@ package com.cacti.cactiphone.view.utils
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.cacti.cactiphone.R
-import com.cacti.cactiphone.safeLet
+import com.cacti.cactiphone.utils.safeLet
 
 class RecyclerClickSupport private constructor(
     private val recyclerView: RecyclerView,

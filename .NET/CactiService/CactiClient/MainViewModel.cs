@@ -1,8 +1,10 @@
 ﻿using CactiClient.Model;
 using CactiClient.ViewModel;
 using CactiClient.ViewModel.Cactus;
+using CactiClient.ViewModel.Info;
 using CactiClient.WebClient;
 using Common.Proto;
+using DevExpress.Dialogs.Core.View;
 using DevExpress.Mvvm;
 using DevExpress.Mvvm.DataAnnotations;
 using DevExpress.Mvvm.POCO;
@@ -68,7 +70,19 @@ namespace CactiClient
 
         #region Commands
 
-        
+        public virtual bool CanShowInfo()
+        {
+            return true;
+        }
+
+        public virtual void ShowInfo()
+        {
+            var model = InfoViewModel.Create();
+            DialogService.ShowDialog(MessageButton.OKCancel, model.Title, model.ViewName, model);
+        }
+
+
+
 
         #endregion
 

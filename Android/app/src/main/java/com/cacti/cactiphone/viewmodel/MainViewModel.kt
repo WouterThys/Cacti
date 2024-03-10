@@ -4,12 +4,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 import com.cacti.cactiphone.App
-import com.cacti.cactiphone.AppSettings
+import com.cacti.cactiphone.utils.AppSettings
 import com.cacti.cactiphone.repository.CactusRepo
 import com.cacti.cactiphone.repository.PhotoRepo
 import com.cacti.cactiphone.repository.web.CallbackService
+import com.cacti.cactiphone.view.utils.EventBus
 import com.cacti.cactiphone.view.utils.CactusDataMediator
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.grpc.internal.SharedResourceHolder.Resource
 import javax.inject.Inject
 
 @HiltViewModel
@@ -31,13 +33,40 @@ class MainViewModel @Inject constructor(
 
     val pendingCount = cactusRepo.pendingCount
 
+    // Events
+    val mainEvents = EventBus()
+
+    sealed class MainEvent {
+        class ErrorEvent(val data: String) : MainEvent()
+        class AddressChanged(val data: String) : MainEvent()
+
+    }
+
 
     fun hasHost() : Boolean {
         return settings.getHost().isNotBlank()
     }
 
+    fun getHost() : String {
+        return settings.getHost()
+    }
+
     fun setHost(host: String) {
         settings.setHost(host)
+
+        launchOnIo {
+            mainEvents.post(MainEvent.AddressChanged(host))
+        }
+    }
+
+    fun testHost() {
+        launchOnIo {
+            val res = cactusRepo.isConnected()
+
+            if (res.status != com.cacti.cactiphone.repository.data.Resource.Status.SUCCESS) {
+                mainEvents.post(MainEvent.ErrorEvent("Not connected"))
+            }
+        }
     }
 
     suspend fun refresh() {

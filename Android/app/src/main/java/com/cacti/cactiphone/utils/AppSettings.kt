@@ -1,6 +1,8 @@
-package com.cacti.cactiphone
+package com.cacti.cactiphone.utils
 
 import androidx.preference.PreferenceManager
+import com.cacti.cactiphone.App
+import com.cacti.cactiphone.AppConstants
 
 class AppSettings(val app: App) {
 

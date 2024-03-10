@@ -26,7 +26,7 @@ namespace CactiClient.WebClient
         }
 
 
-        private readonly Files.FilesClient _FilesClient;
+        private readonly Files.FilesClient _client;
         private readonly object _locker = new();
         private readonly Dictionary<string, string> tempFiles = new();
 
@@ -34,7 +34,7 @@ namespace CactiClient.WebClient
 
         private FileService(GrpcChannel channel)
         {
-            _FilesClient = new Files.FilesClient(channel);
+            _client = new Files.FilesClient(channel);
 
             _baseDir = Properties.Settings.Default.LocalBaseDir;
 
@@ -58,6 +58,11 @@ namespace CactiClient.WebClient
             {
                 tempFiles.Clear();
             }
+        }
+
+        public string GetBasePath()
+        {
+            return _baseDir;
         }
 
         public async Task<string> Load(string path, Action<int>? progressCallback = null)
@@ -84,7 +89,7 @@ namespace CactiClient.WebClient
 
                 // Load from server
                 var request = new LoadRequest() { Path = path };
-                var responseStream = _FilesClient.Load(request);
+                var responseStream = _client.Load(request);
                 var totalSize = 0;
                 var totalWritten = 0;
 
@@ -136,7 +141,7 @@ namespace CactiClient.WebClient
                 Path = fileInfo.Name
             };
 
-            using var streamingCall = _FilesClient.Save(meta);
+            using var streamingCall = _client.Save(meta);
            
             await streamingCall.RequestStream.WriteAsync(request);
 
