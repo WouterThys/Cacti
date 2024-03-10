@@ -45,8 +45,8 @@
             ItemForLocation = new DevExpress.XtraLayout.LayoutControlItem();
             ItemForImage = new DevExpress.XtraLayout.LayoutControlItem();
             emptySpaceItem1 = new DevExpress.XtraLayout.EmptySpaceItem();
-            ItemForBarcode = new DevExpress.XtraLayout.LayoutControlItem();
             ItemForInfo = new DevExpress.XtraLayout.LayoutControlItem();
+            ItemForBarcode = new DevExpress.XtraLayout.LayoutControlItem();
             emptySpaceItem4 = new DevExpress.XtraLayout.EmptySpaceItem();
             ((System.ComponentModel.ISupportInitialize)mvvmContext).BeginInit();
             ((System.ComponentModel.ISupportInitialize)bsCactus).BeginInit();
@@ -65,8 +65,8 @@
             ((System.ComponentModel.ISupportInitialize)ItemForLocation).BeginInit();
             ((System.ComponentModel.ISupportInitialize)ItemForImage).BeginInit();
             ((System.ComponentModel.ISupportInitialize)emptySpaceItem1).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)ItemForBarcode).BeginInit();
             ((System.ComponentModel.ISupportInitialize)ItemForInfo).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)ItemForBarcode).BeginInit();
             ((System.ComponentModel.ISupportInitialize)emptySpaceItem4).BeginInit();
             SuspendLayout();
             // 
@@ -141,7 +141,6 @@
             BarcodePictureEdit.Location = new System.Drawing.Point(305, 178);
             BarcodePictureEdit.Name = "BarcodePictureEdit";
             BarcodePictureEdit.Properties.ShowEditMenuItem = DevExpress.Utils.DefaultBoolean.False;
-            BarcodePictureEdit.Properties.ShowMenu = false;
             BarcodePictureEdit.Properties.ShowZoomSubMenu = DevExpress.Utils.DefaultBoolean.False;
             BarcodePictureEdit.Properties.SizeMode = DevExpress.XtraEditors.Controls.PictureSizeMode.Squeeze;
             BarcodePictureEdit.Size = new System.Drawing.Size(122, 118);
@@ -226,6 +225,16 @@
             emptySpaceItem1.Size = new System.Drawing.Size(183, 94);
             emptySpaceItem1.TextSize = new System.Drawing.Size(0, 0);
             // 
+            // ItemForInfo
+            // 
+            ItemForInfo.Control = InfoTextEdit;
+            ItemForInfo.Location = new System.Drawing.Point(0, 288);
+            ItemForInfo.Name = "ItemForInfo";
+            ItemForInfo.Size = new System.Drawing.Size(419, 22);
+            ItemForInfo.Text = "Info";
+            ItemForInfo.TextSize = new System.Drawing.Size(0, 0);
+            ItemForInfo.TextVisible = false;
+            // 
             // ItemForBarcode
             // 
             ItemForBarcode.Control = BarcodePictureEdit;
@@ -236,16 +245,6 @@
             ItemForBarcode.Text = "Barcode";
             ItemForBarcode.TextSize = new System.Drawing.Size(0, 0);
             ItemForBarcode.TextVisible = false;
-            // 
-            // ItemForInfo
-            // 
-            ItemForInfo.Control = InfoTextEdit;
-            ItemForInfo.Location = new System.Drawing.Point(0, 288);
-            ItemForInfo.Name = "ItemForInfo";
-            ItemForInfo.Size = new System.Drawing.Size(419, 22);
-            ItemForInfo.Text = "Info";
-            ItemForInfo.TextSize = new System.Drawing.Size(0, 0);
-            ItemForInfo.TextVisible = false;
             // 
             // emptySpaceItem4
             // 
@@ -279,8 +278,8 @@
             ((System.ComponentModel.ISupportInitialize)ItemForLocation).EndInit();
             ((System.ComponentModel.ISupportInitialize)ItemForImage).EndInit();
             ((System.ComponentModel.ISupportInitialize)emptySpaceItem1).EndInit();
-            ((System.ComponentModel.ISupportInitialize)ItemForBarcode).EndInit();
             ((System.ComponentModel.ISupportInitialize)ItemForInfo).EndInit();
+            ((System.ComponentModel.ISupportInitialize)ItemForBarcode).EndInit();
             ((System.ComponentModel.ISupportInitialize)emptySpaceItem4).EndInit();
             ResumeLayout(false);
         }

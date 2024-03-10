@@ -315,7 +315,7 @@ namespace CactiClient.ViewModel.Cactus
                 string filePath = openFileDialog.FileName;
                 string code = Path.GetFileName(filePath);
 
-                if (Utils.IsImage(filePath))
+                if (!Utils.IsImage(filePath))
                 {
                     MessageBoxService.ShowMessage($"{filePath} is geen afbeelding. Opnieuw!", "Afbeelding", MessageButton.OK, MessageIcon.Error);
                     return;

@@ -26,7 +26,7 @@ namespace CactiClient.View.Cactus
 
         private void InitializeLayouts()
         {
-
+            bbiSaveAndClose.Visibility = DevExpress.XtraBars.BarItemVisibility.Never;
         }
 
         protected override void OnLoad(EventArgs e)
