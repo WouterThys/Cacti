@@ -25,7 +25,16 @@ namespace CactiServer.Services
             }
             if (string.IsNullOrEmpty(_basePath)) 
             {
-                _basePath = Path.Combine(Environment.CurrentDirectory, "Photos");
+                var strExeFilePath = System.Reflection.Assembly.GetExecutingAssembly().Location;
+                var currentDir = Path.GetDirectoryName(strExeFilePath);
+                if (!string.IsNullOrEmpty(currentDir))
+                {
+                    _basePath = Path.Combine(currentDir, "Photos");
+                }
+                else
+                {
+                    _basePath = "Photos";
+                }
             }
 
             Directory.CreateDirectory(_basePath);
