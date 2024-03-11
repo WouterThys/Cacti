@@ -98,14 +98,14 @@ class CactusListFragment : Fragment() {
 
         viewModel.pendingCount.observe(viewLifecycleOwner) {
             viewModel.newPending(it)
-//            if (it > 0) {
-//                binding.fabRefresh.show()
-//            } else {
-//                binding.fabRefresh.hide()
-//            }
+            if (it > 0) {
+                binding.fabRefresh.show()
+            } else {
+                binding.fabRefresh.hide()
+            }
         }
 
-        //binding.fabRefresh.hide()
+        binding.fabRefresh.hide()
     }
 
     override fun onDestroyView() {
@@ -135,7 +135,7 @@ class CactusListFragment : Fragment() {
                 viewModel.refresh()
             }
         }
-        //binding.swipeContainer.setColorSchemeResources(R.color.colorAccent)
+        binding.swipeContainer.setColorSchemeResources(R.color.primary_accent)
     }
 
     private fun setupRecyclerView() {
@@ -206,6 +206,10 @@ class CactusListFragment : Fragment() {
 
         binding.fabBarcode.setOnClickListener {
             scanBarcodeRequest.launch(null)
+        }
+
+        binding.fabRefresh.setOnClickListener {
+            viewModel.trySendPending()
         }
 
     }

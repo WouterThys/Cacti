@@ -93,8 +93,19 @@ class MainViewModel @Inject constructor(
 
     fun newPending(count: Int) {
         if (count > 0) {
-            launchOnIo {
+            trySendPending()
+        }
+    }
+
+    fun trySendPending() {
+        launchOnIo {
+            try {
+                cactusList.forceLoading()
                 cactusRepo.trySendPending()
+            } catch (ex: Exception) {
+                ex.printStackTrace()
+            } finally {
+                refresh()
             }
         }
     }

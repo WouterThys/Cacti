@@ -89,7 +89,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_code"
                 tools:text="DESCRIPTION"
-                app:drawableStartCompat="@drawable/baseline_info_24" />
+                app:drawableStartCompat="@drawable/baseline_info_24_black" />
 
             <TextView
                 android:id="@+id/tv_location"
@@ -104,7 +104,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_description"
                 tools:text="DESCRIPTION"
-                app:drawableStartCompat="@drawable/baseline_location_on_24" />
+                app:drawableStartCompat="@drawable/baseline_location_on_24_black" />
 
 
 

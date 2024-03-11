@@ -93,31 +93,85 @@ namespace CactiServer.Services
 
         public override async Task<SaveReply> Save(IAsyncStreamReader<SaveRequest> requestStream, ServerCallContext context)
         {
-            await requestStream.MoveNext();
+            string path = "";
+            Stream? dest = null;
 
-            string? fileName;
-            if (requestStream.Current.ContentCase == SaveRequest.ContentOneofCase.Path)
+            try
             {
-                fileName = requestStream.Current.Path;
-            }
-            else
-            {
-                throw new Exception("Invalid save request..");
-            }
-
-            var filePath = Path.Combine(_basePath, fileName);
-            using Stream dest = File.OpenWrite(filePath);
-            
-            await foreach (var req in requestStream.ReadAllAsync())
-            {
-                FileData? fileData = req.Data;
-                if (fileData != null)
+                await foreach (var request in requestStream.ReadAllAsync())
                 {
-                    dest.Write(fileData.Data.ToByteArray(), 0, (int)fileData.Size);
+                    if (request.ContentCase == SaveRequest.ContentOneofCase.Path)
+                    {
+                        path = Path.Combine(_basePath, request.Path);
+                        if (File.Exists(path))
+                        {
+                            _logger.LogWarning("File already exists: {path}. Deleting it first..", path);
+                            File.Delete(path);
+                        }
+                        dest = File.OpenWrite(path);
+                    }
+                    else
+                    {
+                        if (dest != null)
+                        {
+                            var chunk = request.Data;
+                            dest.Write(chunk.Data.ToByteArray(), 0, (int)chunk.Size);
+                        }
+                        else
+                        {
+                            throw new Exception("FileData should come first");
+                        }
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Request: save failed");
+            }
+            finally
+            {
+                dest?.Close();
+            }
 
-            return new SaveReply() { Path = fileName };
+            _logger.LogInformation("Request: save -> '{path}' saved", path);
+
+            return new SaveReply() { Path = path };
+
+
+            //await requestStream.MoveNext();
+
+            //string? fileName;
+            //if (requestStream.Current.ContentCase == SaveRequest.ContentOneofCase.Path)
+            //{
+            //    fileName = requestStream.Current.Path;
+            //}
+            //else
+            //{
+            //    throw new Exception("Invalid save request..");
+            //}
+
+            //var filePath = Path.Combine(_basePath, fileName);
+
+            //if (File.Exists(filePath)) 
+            //{ 
+            //    File.Delete(filePath);
+            //}
+
+            //using Stream dest = File.OpenWrite(filePath);
+
+            //await foreach (var req in requestStream.ReadAllAsync())
+            //{
+            //    FileData? fileData = req.Data;
+            //    if (fileData != null)
+            //    {
+            //        dest.Write(fileData.Data.ToByteArray(), 0, (int)fileData.Size);
+            //    }
+            //}
+
+            //dest.Flush();
+            //dest.Close();
+
+            //return new SaveReply() { Path = fileName };
         }
 
 

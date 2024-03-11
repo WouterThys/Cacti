@@ -22,6 +22,10 @@ class CactusDataMediator(
     private var photoResource: Resource<List<Photo>>? = null
     private var filterText: String? = null
 
+    fun forceLoading() {
+        postValue(Resource.loading(value?.data))
+    }
+
     private fun checkStatus(resource: Resource<*>?) : Boolean {
         if (resource == null) {
             this.postValue(Resource.loading(this.value?.data))

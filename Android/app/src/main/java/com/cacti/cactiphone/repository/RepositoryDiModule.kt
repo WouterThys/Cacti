@@ -126,8 +126,9 @@ object RepositoryDiModule {
         pendingSource: PendingCactusDao,
         photoRepo: PhotoRepo,
         fileService: FileService,
+        callbackService: CallbackService,
     ) =
-        CactusRepo(remoteSource, localSource, pendingSource, photoRepo, fileService)
+        CactusRepo(remoteSource, localSource, pendingSource, photoRepo, fileService, callbackService)
 
     @Singleton
     @Provides

@@ -73,7 +73,7 @@ class CactusEditFragment : Fragment() {
         binding.toolbar.setOnMenuItemClickListener { item ->
             return@setOnMenuItemClickListener when (item.itemId) {
                 R.id.menu_item_save -> {
-                    saveData(false)
+                    saveData()
                     true
                 }
 
@@ -156,7 +156,7 @@ class CactusEditFragment : Fragment() {
                 .setTitle(getString(R.string.changed))
                 .setCancelable(true)
                 .setPositiveButton("Yes") { _, _ ->
-                    saveData(true)
+                    saveData()
                 }
                 .setNegativeButton("No") { dialog, _ ->
                     dialog.cancel()
@@ -172,7 +172,7 @@ class CactusEditFragment : Fragment() {
         }
     }
 
-    private fun saveData(saveOnClose: Boolean) {
+    private fun saveData(saveOnClose: Boolean = true) {
         launchOnIo {
             updateCactus()
             viewModel.save(binding.cactus, photoFile)

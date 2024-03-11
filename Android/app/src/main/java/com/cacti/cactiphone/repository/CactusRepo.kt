@@ -11,6 +11,7 @@ import com.cacti.cactiphone.repository.data.Resource
 import com.cacti.cactiphone.repository.database.CactusDao
 import com.cacti.cactiphone.repository.database.PendingCactusDao
 import com.cacti.cactiphone.repository.web.CactusService
+import com.cacti.cactiphone.repository.web.CallbackService
 import com.cacti.cactiphone.repository.web.FileService
 import kotlinx.coroutines.Dispatchers
 import java.io.File
@@ -22,6 +23,7 @@ class CactusRepo @Inject constructor(
     private val pendingSource: PendingCactusDao,
     private val photoRepo: PhotoRepo,
     private val fileService: FileService,
+    private val callbackService: CallbackService,
 ) {
 
     val data: LiveData<Resource<List<Cactus>>> = liveData(Dispatchers.IO) {
@@ -123,36 +125,55 @@ class CactusRepo @Inject constructor(
         return result
     }
 
+    private var isSendingPending = false
+
     suspend fun trySendPending() {
-        val test = isConnected()
-        if (test.isSuccess()) {
-            // Load 1 from db
-            val pendingCactus: PendingCactus? = pendingSource.getOne()
-            if (test.isSuccess() && pendingCactus != null) {
 
-                val idToDelete = pendingCactus.id
+        if (!isSendingPending) {
+            isSendingPending = true
 
-                when (pendingCactus.pendingAction) {
-                    PendingCactus.ACTION_INSERT -> {
+            try {
+                val test = isConnected()
+                if (test.isSuccess()) {
 
-                        pendingCactus.id = 0
-                        updatePendingCactus(pendingCactus)
+                    callbackService.setEnabled(false)
 
-                    }
-                    PendingCactus.ACTION_UPDATE -> {
+                    // Load 1 from db
+                    val pendingCactus: PendingCactus? = pendingSource.getOne()
+                    if (test.isSuccess() && pendingCactus != null) {
 
-                        updatePendingCactus(pendingCactus)
+                        val idToDelete = pendingCactus.id
 
-                    }
-                    PendingCactus.ACTION_DELETE -> {
+                        when (pendingCactus.pendingAction) {
+                            PendingCactus.ACTION_INSERT -> {
 
-                        deletePendingCactus(pendingCactus)
+                                pendingCactus.id = 0
+                                updatePendingCactus(pendingCactus)
 
+                            }
+
+                            PendingCactus.ACTION_UPDATE -> {
+
+                                updatePendingCactus(pendingCactus)
+
+                            }
+
+                            PendingCactus.ACTION_DELETE -> {
+
+                                deletePendingCactus(pendingCactus)
+
+                            }
+                        }
+
+                        // TODO: check if success
+                        pendingSource.delete(listOf(idToDelete))
                     }
                 }
-
-                // TODO: check if success
-                pendingSource.delete(listOf(idToDelete))
+            } catch (ex: Exception) {
+                ex.printStackTrace()
+            } finally {
+                callbackService.setEnabled(true)
+                isSendingPending = false
             }
         }
     }
@@ -173,10 +194,13 @@ class CactusRepo @Inject constructor(
 
         // Save cactus
         val saved = webSource.save(pendingCactus)
-        if (saved.status == Resource.Status.SUCCESS) {
-            saved.data?.let {
-                dbSource.save(listOf(it))
-            }
+        if (saved.status != Resource.Status.SUCCESS) {
+            println("WARNING: failed to save pending $pendingCactus")
+
+            // Don't update db here because it gives problems when loading data when still busy
+//            saved.data?.let {
+//                dbSource.save(listOf(it))
+//            }
         }
     }
 
@@ -185,10 +209,13 @@ class CactusRepo @Inject constructor(
 
         // Delete cactus
         val deleted = webSource.delete(pendingCactus.id)
-        if (deleted.status == Resource.Status.SUCCESS) {
-            deleted.data?.let {
-                dbSource.delete(listOf(it))
-            }
+        if (deleted.status != Resource.Status.SUCCESS) {
+            println("WARNING Failed to delete pending $pendingCactus")
+
+            // Don't update db here because it gives problems when loading data when still busy
+//            deleted.data?.let {
+//                dbSource.delete(listOf(it))
+//            }
         }
     }
 

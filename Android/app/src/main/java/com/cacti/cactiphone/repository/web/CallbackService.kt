@@ -15,27 +15,43 @@ class CallbackService @Inject constructor(
     private val cactusDao: CactusDao,
     private val photoDao: PhotoDao,
 ) {
+
+    private var enabled = false
+
+    fun setEnabled(enabled: Boolean) {
+        this.enabled = enabled
+    }
+
     suspend fun register() {
         val request = SubscribeRequest.newBuilder().build()
         try {
             val flow = service.subscribe(request)
             flow.collectLatest {
-                when (it.dataCase) {
-                    UpdateMessage.DataCase.CACTUS -> {
-                        if (it.action == UpdateAction.Insert || it.action == UpdateAction.Update) {
-                            cactusDao.save(listOf(CactusService.map(it.cactus)))
-                        } else {
-                            cactusDao.delete(listOf( it.cactus.id))
+
+                if (enabled) {
+
+                    when (it.dataCase) {
+                        UpdateMessage.DataCase.CACTUS -> {
+                            if (it.action == UpdateAction.Insert || it.action == UpdateAction.Update) {
+                                cactusDao.save(listOf(CactusService.map(it.cactus)))
+                            } else {
+                                cactusDao.delete(listOf(it.cactus.id))
+                            }
+                        }
+
+                        UpdateMessage.DataCase.PHOTO -> {
+                            if (it.action == UpdateAction.Insert || it.action == UpdateAction.Update) {
+                                photoDao.save(listOf(PhotoService.map(it.photo)))
+                            } else {
+                                photoDao.delete(listOf(it.photo.id))
+                            }
+                        }
+
+                        else -> { /* Do nothing.. */
                         }
                     }
-                    UpdateMessage.DataCase.PHOTO -> {
-                        if (it.action == UpdateAction.Insert || it.action == UpdateAction.Update) {
-                            photoDao.save(listOf(PhotoService.map(it.photo)))
-                        } else {
-                            photoDao.delete(listOf( it.photo.id))
-                        }
-                    }
-                    else -> { /* Do nothing.. */ }
+                } else {
+                    println("WARNING: callbacks are disabled")
                 }
             }
         } catch (se: StatusException) {
