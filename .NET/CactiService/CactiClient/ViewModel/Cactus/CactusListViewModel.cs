@@ -113,7 +113,7 @@ namespace CactiClient.ViewModel.Cactus
                 var path = await _fileService.Load(photo.Path);
                 if (File.Exists(path)) 
                 { 
-                    cactus.Image = Image.FromFile(path);
+                    cactus.SetImage(path);
 
                     if (disp == null) return;
 

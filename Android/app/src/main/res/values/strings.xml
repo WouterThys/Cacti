@@ -4,10 +4,13 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
-    <string name="code">Code</string>
-    <string name="description">Description</string>
-    <string name="location">Location</string>
-    <string name="photo">Photo</string>
+    <string name="code">Naam</string>
+    <string name="description">Omschrijving</string>
+    <string name="location">Lokatie</string>
+    <string name="father">Naam Vader</string>
+    <string name="mother">Naam Moeder</string>
+    <string name="crossing">Kruisings Nr</string>
+    <string name="photo">Foto</string>
 
 
     <string name="save">Save</string>

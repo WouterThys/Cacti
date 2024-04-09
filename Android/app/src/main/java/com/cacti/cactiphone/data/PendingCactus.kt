@@ -16,6 +16,9 @@ data class PendingCactus(
     override var barcodes: String = "",
     override var photoId: Long = 0,
     override var lastModified: Date = Date(0),
+    override var fathersCode: String = "",
+    override var mothersCode: String = "",
+    override var crossingsNumber: String = "",
     var filePath: String = "",
     var pendingAction: Int = 0,
 ) : BaseCactus(id) {
@@ -37,6 +40,9 @@ data class PendingCactus(
             pendingCactus.barcodes = cactus.barcodes
             pendingCactus.photoId = cactus.photoId
             pendingCactus.lastModified = cactus.lastModified
+            pendingCactus.fathersCode = cactus.fathersCode
+            pendingCactus.mothersCode = cactus.mothersCode
+            pendingCactus.crossingsNumber = cactus.crossingsNumber
 
             return pendingCactus
         }

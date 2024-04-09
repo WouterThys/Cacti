@@ -15,18 +15,18 @@ namespace CactiServer.Repos
 
         protected override void InitializeFromReader(DbDataReader reader, DbConnection conn, Photo obj) 
         {
-            obj.Id = DatabaseAccess.RGetLong(reader, "id");
-            obj.Code = DatabaseAccess.RGetString(reader, "code");
-            obj.Path = DatabaseAccess.RGetString(reader, "path");
-            obj.LastModified = GRPCUtils.ConvertDate(DatabaseAccess.RGetDateTime(reader, "lastModified"));
+            obj.Id = reader.RGetLong("id");
+            obj.Code = reader.RGetString("code");
+            obj.Path = reader.RGetString("path");
+            obj.LastModified = GRPCUtils.ConvertDate(reader.RGetDateTime("lastModified"));
         }
 
         protected override void AddSqlParameters(DbCommand cmd, Photo obj)
         {
-            DatabaseAccess.AddDbValue(cmd, "id", obj.Id);
-            DatabaseAccess.AddDbValue(cmd, "code", obj.Code);
-            DatabaseAccess.AddDbValue(cmd, "path", obj.Path);
-            DatabaseAccess.AddDbValue(cmd, "lastModified", GRPCUtils.ConvertDate(obj.LastModified));
+            cmd.AddDbValue("id", obj.Id);
+            cmd.AddDbValue("code", obj.Code);
+            cmd.AddDbValue("path", obj.Path);
+            cmd.AddDbValue("lastModified", GRPCUtils.ConvertDate(obj.LastModified));
         }
 
         protected override void SetId(Photo obj, long id) => obj.Id = id;

@@ -1,9 +1,4 @@
 ﻿using Shared.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CactiClient.Model
 {
@@ -22,6 +17,10 @@ namespace CactiClient.Model
                 Barcodes = cactus.Barcodes,
                 PhotoId = cactus.PhotoId,
                 LastModified = GRPCUtils.ConvertDate(cactus.LastModified),
+
+                FathersCode = cactus.FathersCode,
+                MothersCode = cactus.MothersCode,
+                CrossingNumber = cactus.CrossingNumber,
             };
         }
 
@@ -37,6 +36,10 @@ namespace CactiClient.Model
                 Barcodes = cactus.Barcodes,
                 PhotoId = cactus.PhotoId,
                 LastModified = GRPCUtils.ConvertDate(cactus.LastModified),
+
+                FathersCode = cactus.FathersCode,
+                MothersCode = cactus.MothersCode,
+                CrossingNumber = cactus.CrossingNumber,
             };
         }
 

@@ -153,7 +153,7 @@ namespace CactiClient.ViewModel.Cactus
 
                 var path = await _fileService.Load(photo.Path);
 
-                Editable.Image = Image.FromFile(path);
+                Editable.SetImage(path);
 
                 if (disp == null) return;
                 await ((IDispatcherService)disp).BeginInvoke(() => 
@@ -323,7 +323,7 @@ namespace CactiClient.ViewModel.Cactus
 
                 // Read the contents of the file into a stream.
                 var fileStream = openFileDialog.OpenFile();
-                Editable.Image = Image.FromStream(fileStream);
+                Editable.SetImage(fileStream);
 
                 // For now only 1 photo allowed
                 _photosToSave.Clear();

@@ -66,7 +66,7 @@ namespace CactiServer.Repos
 
                 if (ids != null && ids.Any()) 
                 {
-                    DatabaseAccess.AddDbValue(cmd, "id", ids.FirstOrDefault());
+                    cmd.AddDbValue("id", ids.FirstOrDefault());
                 }
 
                 using DbDataReader reader = cmd.ExecuteReader();
@@ -133,7 +133,7 @@ namespace CactiServer.Repos
                 await RepoUtils.ExecuteNonQuery(conn, SqlUpdate, (cmd) =>
                 {
                     AddSqlParameters(cmd, obj);
-                    DatabaseAccess.AddDbValue(cmd, "updateId", GetId(obj));
+                    cmd.AddDbValue("updateId", GetId(obj));
                 });
 
                 transation.Commit();
@@ -157,7 +157,7 @@ namespace CactiServer.Repos
 
                     await RepoUtils.ExecuteNonQuery(conn, SqlDelete, (cmd) =>
                     {
-                        DatabaseAccess.AddDbValue(cmd, "deleteId", id);
+                        cmd.AddDbValue("deleteId", id);
                     });
 
                     transation.Commit();

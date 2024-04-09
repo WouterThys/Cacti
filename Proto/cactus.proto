@@ -17,4 +17,7 @@ message Cactus {
     sint64 photo_id = 6;
     string android_id = 7;
     google.protobuf.Timestamp last_modified = 8;
+    string fathers_code = 9;
+    string mothers_code = 10;
+    string crossing_number = 11;
 }

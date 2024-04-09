@@ -195,6 +195,9 @@ class CactusEditFragment : Fragment() {
         binding.cactus?.description = binding.etDescription.text.toString()
         binding.cactus?.location = binding.etLocation.text.toString()
         binding.cactus?.lastModified = Calendar.getInstance().time
+        binding.cactus?.fathersCode = binding.etFather.text.toString()
+        binding.cactus?.mothersCode = binding.etMother.text.toString()
+        binding.cactus?.crossingsNumber = binding.etCrossing.text.toString()
     }
 
     private fun deleteData() {

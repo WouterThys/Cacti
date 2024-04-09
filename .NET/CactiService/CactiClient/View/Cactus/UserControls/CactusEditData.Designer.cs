@@ -48,6 +48,12 @@
             ItemForInfo = new DevExpress.XtraLayout.LayoutControlItem();
             ItemForBarcode = new DevExpress.XtraLayout.LayoutControlItem();
             emptySpaceItem4 = new DevExpress.XtraLayout.EmptySpaceItem();
+            FathersCodeTextEdit = new DevExpress.XtraEditors.TextEdit();
+            ItemForFathersCode = new DevExpress.XtraLayout.LayoutControlItem();
+            MothersCodeTextEdit = new DevExpress.XtraEditors.TextEdit();
+            ItemForMothersCode = new DevExpress.XtraLayout.LayoutControlItem();
+            CrossingNumberTextEdit = new DevExpress.XtraEditors.TextEdit();
+            ItemForCrossingNumber = new DevExpress.XtraLayout.LayoutControlItem();
             ((System.ComponentModel.ISupportInitialize)mvvmContext).BeginInit();
             ((System.ComponentModel.ISupportInitialize)bsCactus).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dataLayoutControl1).BeginInit();
@@ -68,6 +74,12 @@
             ((System.ComponentModel.ISupportInitialize)ItemForInfo).BeginInit();
             ((System.ComponentModel.ISupportInitialize)ItemForBarcode).BeginInit();
             ((System.ComponentModel.ISupportInitialize)emptySpaceItem4).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)FathersCodeTextEdit.Properties).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)ItemForFathersCode).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)MothersCodeTextEdit.Properties).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)ItemForMothersCode).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)CrossingNumberTextEdit.Properties).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)ItemForCrossingNumber).BeginInit();
             SuspendLayout();
             // 
             // mvvmContext
@@ -86,6 +98,9 @@
             dataLayoutControl1.Controls.Add(ImagePictureEdit);
             dataLayoutControl1.Controls.Add(BarcodePictureEdit);
             dataLayoutControl1.Controls.Add(InfoTextEdit);
+            dataLayoutControl1.Controls.Add(FathersCodeTextEdit);
+            dataLayoutControl1.Controls.Add(MothersCodeTextEdit);
+            dataLayoutControl1.Controls.Add(CrossingNumberTextEdit);
             dataLayoutControl1.DataSource = bsCactus;
             dataLayoutControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             dataLayoutControl1.Location = new System.Drawing.Point(0, 0);
@@ -98,27 +113,27 @@
             // CodeTextEdit
             // 
             CodeTextEdit.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", bsCactus, "Code", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            CodeTextEdit.Location = new System.Drawing.Point(313, 12);
+            CodeTextEdit.Location = new System.Drawing.Point(280, 12);
             CodeTextEdit.Name = "CodeTextEdit";
-            CodeTextEdit.Size = new System.Drawing.Size(114, 20);
+            CodeTextEdit.Size = new System.Drawing.Size(147, 20);
             CodeTextEdit.StyleController = dataLayoutControl1;
             CodeTextEdit.TabIndex = 0;
             // 
             // DescriptionTextEdit
             // 
             DescriptionTextEdit.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", bsCactus, "Description", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            DescriptionTextEdit.Location = new System.Drawing.Point(313, 36);
+            DescriptionTextEdit.Location = new System.Drawing.Point(280, 36);
             DescriptionTextEdit.Name = "DescriptionTextEdit";
-            DescriptionTextEdit.Size = new System.Drawing.Size(114, 20);
+            DescriptionTextEdit.Size = new System.Drawing.Size(147, 20);
             DescriptionTextEdit.StyleController = dataLayoutControl1;
             DescriptionTextEdit.TabIndex = 2;
             // 
             // LocationTextEdit
             // 
             LocationTextEdit.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", bsCactus, "Location", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            LocationTextEdit.Location = new System.Drawing.Point(313, 60);
+            LocationTextEdit.Location = new System.Drawing.Point(280, 60);
             LocationTextEdit.Name = "LocationTextEdit";
-            LocationTextEdit.Size = new System.Drawing.Size(114, 20);
+            LocationTextEdit.Size = new System.Drawing.Size(147, 20);
             LocationTextEdit.StyleController = dataLayoutControl1;
             LocationTextEdit.TabIndex = 3;
             // 
@@ -131,19 +146,19 @@
             ImagePictureEdit.Properties.ShowMenu = false;
             ImagePictureEdit.Properties.ShowZoomSubMenu = DevExpress.Utils.DefaultBoolean.False;
             ImagePictureEdit.Properties.SizeMode = DevExpress.XtraEditors.Controls.PictureSizeMode.Squeeze;
-            ImagePictureEdit.Size = new System.Drawing.Size(232, 284);
+            ImagePictureEdit.Size = new System.Drawing.Size(168, 284);
             ImagePictureEdit.StyleController = dataLayoutControl1;
             ImagePictureEdit.TabIndex = 1;
             // 
             // BarcodePictureEdit
             // 
             BarcodePictureEdit.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", bsCactus, "Barcode", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            BarcodePictureEdit.Location = new System.Drawing.Point(305, 178);
+            BarcodePictureEdit.Location = new System.Drawing.Point(353, 225);
             BarcodePictureEdit.Name = "BarcodePictureEdit";
             BarcodePictureEdit.Properties.ShowEditMenuItem = DevExpress.Utils.DefaultBoolean.False;
             BarcodePictureEdit.Properties.ShowZoomSubMenu = DevExpress.Utils.DefaultBoolean.False;
             BarcodePictureEdit.Properties.SizeMode = DevExpress.XtraEditors.Controls.PictureSizeMode.Squeeze;
-            BarcodePictureEdit.Size = new System.Drawing.Size(122, 118);
+            BarcodePictureEdit.Size = new System.Drawing.Size(74, 71);
             BarcodePictureEdit.StyleController = dataLayoutControl1;
             BarcodePictureEdit.TabIndex = 1;
             // 
@@ -159,7 +174,7 @@
             InfoTextEdit.Properties.ReadOnly = true;
             InfoTextEdit.Size = new System.Drawing.Size(415, 18);
             InfoTextEdit.StyleController = dataLayoutControl1;
-            InfoTextEdit.TabIndex = 4;
+            InfoTextEdit.TabIndex = 7;
             // 
             // Root
             // 
@@ -174,7 +189,7 @@
             // 
             layoutControlGroup1.AllowDrawBackground = false;
             layoutControlGroup1.GroupBordersVisible = false;
-            layoutControlGroup1.Items.AddRange(new DevExpress.XtraLayout.BaseLayoutItem[] { ItemForCode, ItemForDescription, ItemForLocation, ItemForImage, emptySpaceItem1, ItemForInfo, ItemForBarcode, emptySpaceItem4 });
+            layoutControlGroup1.Items.AddRange(new DevExpress.XtraLayout.BaseLayoutItem[] { ItemForCode, ItemForDescription, ItemForLocation, ItemForImage, emptySpaceItem1, ItemForInfo, ItemForBarcode, emptySpaceItem4, ItemForFathersCode, ItemForMothersCode, ItemForCrossingNumber });
             layoutControlGroup1.Location = new System.Drawing.Point(0, 0);
             layoutControlGroup1.Name = "autoGeneratedGroup0";
             layoutControlGroup1.Size = new System.Drawing.Size(419, 310);
@@ -182,36 +197,36 @@
             // ItemForCode
             // 
             ItemForCode.Control = CodeTextEdit;
-            ItemForCode.Location = new System.Drawing.Point(236, 0);
+            ItemForCode.Location = new System.Drawing.Point(172, 0);
             ItemForCode.Name = "ItemForCode";
-            ItemForCode.Size = new System.Drawing.Size(183, 24);
-            ItemForCode.Text = "Code";
-            ItemForCode.TextSize = new System.Drawing.Size(53, 13);
+            ItemForCode.Size = new System.Drawing.Size(247, 24);
+            ItemForCode.Text = "Naam";
+            ItemForCode.TextSize = new System.Drawing.Size(84, 13);
             // 
             // ItemForDescription
             // 
             ItemForDescription.Control = DescriptionTextEdit;
-            ItemForDescription.Location = new System.Drawing.Point(236, 24);
+            ItemForDescription.Location = new System.Drawing.Point(172, 24);
             ItemForDescription.Name = "ItemForDescription";
-            ItemForDescription.Size = new System.Drawing.Size(183, 24);
-            ItemForDescription.Text = "Description";
-            ItemForDescription.TextSize = new System.Drawing.Size(53, 13);
+            ItemForDescription.Size = new System.Drawing.Size(247, 24);
+            ItemForDescription.Text = "Omschrijving";
+            ItemForDescription.TextSize = new System.Drawing.Size(84, 13);
             // 
             // ItemForLocation
             // 
             ItemForLocation.Control = LocationTextEdit;
-            ItemForLocation.Location = new System.Drawing.Point(236, 48);
+            ItemForLocation.Location = new System.Drawing.Point(172, 48);
             ItemForLocation.Name = "ItemForLocation";
-            ItemForLocation.Size = new System.Drawing.Size(183, 24);
-            ItemForLocation.Text = "Location";
-            ItemForLocation.TextSize = new System.Drawing.Size(53, 13);
+            ItemForLocation.Size = new System.Drawing.Size(247, 24);
+            ItemForLocation.Text = "Lokatie";
+            ItemForLocation.TextSize = new System.Drawing.Size(84, 13);
             // 
             // ItemForImage
             // 
             ItemForImage.Control = ImagePictureEdit;
             ItemForImage.Location = new System.Drawing.Point(0, 0);
             ItemForImage.Name = "ItemForImage";
-            ItemForImage.Size = new System.Drawing.Size(236, 288);
+            ItemForImage.Size = new System.Drawing.Size(172, 288);
             ItemForImage.StartNewLine = true;
             ItemForImage.Text = "Image";
             ItemForImage.TextSize = new System.Drawing.Size(0, 0);
@@ -220,9 +235,9 @@
             // emptySpaceItem1
             // 
             emptySpaceItem1.AllowHotTrack = false;
-            emptySpaceItem1.Location = new System.Drawing.Point(236, 72);
+            emptySpaceItem1.Location = new System.Drawing.Point(172, 144);
             emptySpaceItem1.Name = "emptySpaceItem1";
-            emptySpaceItem1.Size = new System.Drawing.Size(183, 94);
+            emptySpaceItem1.Size = new System.Drawing.Size(247, 69);
             emptySpaceItem1.TextSize = new System.Drawing.Size(0, 0);
             // 
             // ItemForInfo
@@ -238,9 +253,9 @@
             // ItemForBarcode
             // 
             ItemForBarcode.Control = BarcodePictureEdit;
-            ItemForBarcode.Location = new System.Drawing.Point(293, 166);
+            ItemForBarcode.Location = new System.Drawing.Point(341, 213);
             ItemForBarcode.Name = "ItemForBarcode";
-            ItemForBarcode.Size = new System.Drawing.Size(126, 122);
+            ItemForBarcode.Size = new System.Drawing.Size(78, 75);
             ItemForBarcode.StartNewLine = true;
             ItemForBarcode.Text = "Barcode";
             ItemForBarcode.TextSize = new System.Drawing.Size(0, 0);
@@ -249,10 +264,64 @@
             // emptySpaceItem4
             // 
             emptySpaceItem4.AllowHotTrack = false;
-            emptySpaceItem4.Location = new System.Drawing.Point(236, 166);
+            emptySpaceItem4.Location = new System.Drawing.Point(172, 213);
             emptySpaceItem4.Name = "emptySpaceItem4";
-            emptySpaceItem4.Size = new System.Drawing.Size(57, 122);
+            emptySpaceItem4.Size = new System.Drawing.Size(169, 75);
             emptySpaceItem4.TextSize = new System.Drawing.Size(0, 0);
+            // 
+            // FathersCodeTextEdit
+            // 
+            FathersCodeTextEdit.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", bsCactus, "FathersCode", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            FathersCodeTextEdit.Location = new System.Drawing.Point(280, 84);
+            FathersCodeTextEdit.Name = "FathersCodeTextEdit";
+            FathersCodeTextEdit.Size = new System.Drawing.Size(147, 20);
+            FathersCodeTextEdit.StyleController = dataLayoutControl1;
+            FathersCodeTextEdit.TabIndex = 4;
+            // 
+            // ItemForFathersCode
+            // 
+            ItemForFathersCode.Control = FathersCodeTextEdit;
+            ItemForFathersCode.Location = new System.Drawing.Point(172, 72);
+            ItemForFathersCode.Name = "ItemForFathersCode";
+            ItemForFathersCode.Size = new System.Drawing.Size(247, 24);
+            ItemForFathersCode.Text = "Naam Vader";
+            ItemForFathersCode.TextSize = new System.Drawing.Size(84, 13);
+            // 
+            // MothersCodeTextEdit
+            // 
+            MothersCodeTextEdit.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", bsCactus, "MothersCode", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            MothersCodeTextEdit.Location = new System.Drawing.Point(280, 108);
+            MothersCodeTextEdit.Name = "MothersCodeTextEdit";
+            MothersCodeTextEdit.Size = new System.Drawing.Size(147, 20);
+            MothersCodeTextEdit.StyleController = dataLayoutControl1;
+            MothersCodeTextEdit.TabIndex = 5;
+            // 
+            // ItemForMothersCode
+            // 
+            ItemForMothersCode.Control = MothersCodeTextEdit;
+            ItemForMothersCode.Location = new System.Drawing.Point(172, 96);
+            ItemForMothersCode.Name = "ItemForMothersCode";
+            ItemForMothersCode.Size = new System.Drawing.Size(247, 24);
+            ItemForMothersCode.Text = "Naam Moeder";
+            ItemForMothersCode.TextSize = new System.Drawing.Size(84, 13);
+            // 
+            // CrossingNumberTextEdit
+            // 
+            CrossingNumberTextEdit.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", bsCactus, "CrossingNumber", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            CrossingNumberTextEdit.Location = new System.Drawing.Point(280, 132);
+            CrossingNumberTextEdit.Name = "CrossingNumberTextEdit";
+            CrossingNumberTextEdit.Size = new System.Drawing.Size(147, 20);
+            CrossingNumberTextEdit.StyleController = dataLayoutControl1;
+            CrossingNumberTextEdit.TabIndex = 6;
+            // 
+            // ItemForCrossingNumber
+            // 
+            ItemForCrossingNumber.Control = CrossingNumberTextEdit;
+            ItemForCrossingNumber.Location = new System.Drawing.Point(172, 120);
+            ItemForCrossingNumber.Name = "ItemForCrossingNumber";
+            ItemForCrossingNumber.Size = new System.Drawing.Size(247, 24);
+            ItemForCrossingNumber.Text = "Kruisings Nummer";
+            ItemForCrossingNumber.TextSize = new System.Drawing.Size(84, 13);
             // 
             // CactusEditData
             // 
@@ -281,6 +350,12 @@
             ((System.ComponentModel.ISupportInitialize)ItemForInfo).EndInit();
             ((System.ComponentModel.ISupportInitialize)ItemForBarcode).EndInit();
             ((System.ComponentModel.ISupportInitialize)emptySpaceItem4).EndInit();
+            ((System.ComponentModel.ISupportInitialize)FathersCodeTextEdit.Properties).EndInit();
+            ((System.ComponentModel.ISupportInitialize)ItemForFathersCode).EndInit();
+            ((System.ComponentModel.ISupportInitialize)MothersCodeTextEdit.Properties).EndInit();
+            ((System.ComponentModel.ISupportInitialize)ItemForMothersCode).EndInit();
+            ((System.ComponentModel.ISupportInitialize)CrossingNumberTextEdit.Properties).EndInit();
+            ((System.ComponentModel.ISupportInitialize)ItemForCrossingNumber).EndInit();
             ResumeLayout(false);
         }
 
@@ -305,5 +380,11 @@
         private DevExpress.XtraEditors.TextEdit InfoTextEdit;
         private DevExpress.XtraLayout.LayoutControlItem ItemForInfo;
         private DevExpress.XtraLayout.EmptySpaceItem emptySpaceItem4;
+        private DevExpress.XtraEditors.TextEdit FathersCodeTextEdit;
+        private DevExpress.XtraEditors.TextEdit MothersCodeTextEdit;
+        private DevExpress.XtraEditors.TextEdit CrossingNumberTextEdit;
+        private DevExpress.XtraLayout.LayoutControlItem ItemForFathersCode;
+        private DevExpress.XtraLayout.LayoutControlItem ItemForMothersCode;
+        private DevExpress.XtraLayout.LayoutControlItem ItemForCrossingNumber;
     }
 }

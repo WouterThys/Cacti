@@ -81,6 +81,9 @@ class CactusService @Inject constructor(
                 barcodes = grpc.barcodes,
                 photoId = grpc.photoId,
                 lastModified = Date(grpc.lastModified.seconds),
+                fathersCode = grpc.fathersCode,
+                mothersCode = grpc.mothersCode,
+                crossingsNumber = grpc.crossingNumber,
             )
 
         fun map(cactus: PendingCactus) : com.cacti.generated.Cactus {
@@ -93,6 +96,9 @@ class CactusService @Inject constructor(
             grpc.barcodes = cactus.barcodes
             grpc.photoId = cactus.photoId
             //cactus.lastModified = Date(grpc.lastModified.seconds)
+            grpc.fathersCode = cactus.fathersCode
+            grpc.mothersCode = cactus.mothersCode
+            grpc.crossingNumber = cactus.crossingsNumber
 
             return grpc.build()
         }

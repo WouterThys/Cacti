@@ -12,5 +12,8 @@ abstract class BaseCactus(
     open var location: String = "",
     open var barcodes: String = "",
     open var photoId: Long = 0,
-    open var lastModified: Date = Date(0)
+    open var lastModified: Date = Date(0),
+    open var fathersCode: String = "",
+    open var mothersCode: String = "",
+    open var crossingsNumber: String = "",
 )

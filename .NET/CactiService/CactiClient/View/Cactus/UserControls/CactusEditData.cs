@@ -1,14 +1,5 @@
 ﻿using DevExpress.Utils.Menu;
-using DevExpress.XtraEditors;
-using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace CactiClient.View.Cactus
 {
@@ -33,8 +24,8 @@ namespace CactiClient.View.Cactus
         {
             var list = new List<DXMenuItem>(e.PopupMenu.Items);
 
-            foreach (var item in list) 
-            { 
+            foreach (var item in list)
+            {
                 if (item is DXMenuItem menuItem && menuItem.Tag.ToString() == DevExpress.XtraEditors.Controls.StringId.PictureEditMenuCopy.ToString())
                 {
                     // Ok

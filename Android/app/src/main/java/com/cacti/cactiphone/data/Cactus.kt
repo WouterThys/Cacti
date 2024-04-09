@@ -14,5 +14,8 @@ data class Cactus(
     override var location: String = "",
     override var barcodes: String = "",
     override var photoId: Long = 0,
-    override var lastModified: Date = Date(0)
+    override var lastModified: Date = Date(0),
+    override var fathersCode: String = "",
+    override var mothersCode: String = "",
+    override var crossingsNumber: String = "",
 ) : BaseCactus(id)

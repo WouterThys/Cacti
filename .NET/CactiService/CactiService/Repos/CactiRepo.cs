@@ -17,32 +17,40 @@ namespace CactiServer.Repos
 
         protected override void InitializeFromReader(DbDataReader reader, DbConnection conn, Cactus obj)
         {
-            obj.Id = DatabaseAccess.RGetLong(reader, "id");
-            obj.Code = DatabaseAccess.RGetString(reader, "code");
-            obj.Description = DatabaseAccess.RGetString(reader, "description");
-            obj.Location = DatabaseAccess.RGetString(reader, "location");
-            obj.Barcodes = DatabaseAccess.RGetString(reader, "barcodes");
-            obj.PhotoId = DatabaseAccess.RGetLong(reader, "photoId");
-            obj.AndroidId = DatabaseAccess.RGetString(reader, "androidId");
-            obj.LastModified = GRPCUtils.ConvertDate(DatabaseAccess.RGetDateTime(reader, "lastModified"));
+            obj.Id = reader.RGetLong("id");
+            obj.Code = reader.RGetString("code");
+            obj.Description = reader.RGetString("description");
+            obj.Location = reader.RGetString("location");
+            obj.Barcodes = reader.RGetString("barcodes");
+            obj.PhotoId = reader.RGetLong("photoId");
+            obj.AndroidId = reader.RGetString("androidId");
+            obj.LastModified = GRPCUtils.ConvertDate(reader.RGetDateTime("lastModified"));
+
+            obj.FathersCode = reader.RGetString("fathersCode");
+            obj.MothersCode = reader.RGetString("mothersCode");
+            obj.CrossingNumber = reader.RGetString("crossingNumber");
         }
 
         protected override void AddSqlParameters(DbCommand cmd, Cactus obj)
         {
-            DatabaseAccess.AddDbValue(cmd, "id", obj.Id);
-            DatabaseAccess.AddDbValue(cmd, "code", obj.Code);
-            DatabaseAccess.AddDbValue(cmd, "description", obj.Description);
-            DatabaseAccess.AddDbValue(cmd, "location", obj.Location);
-            DatabaseAccess.AddDbValue(cmd, "barcodes", obj.Barcodes);
-            DatabaseAccess.AddDbValue(cmd, "androidId", obj.AndroidId);
-            DatabaseAccess.AddDbValue(cmd, "lastModified", GRPCUtils.ConvertDate(obj.LastModified));
+            cmd.AddDbValue("id", obj.Id);
+            cmd.AddDbValue("code", obj.Code);
+            cmd.AddDbValue("description", obj.Description);
+            cmd.AddDbValue("location", obj.Location);
+            cmd.AddDbValue("barcodes", obj.Barcodes);
+            cmd.AddDbValue("androidId", obj.AndroidId);
+            cmd.AddDbValue("lastModified", GRPCUtils.ConvertDate(obj.LastModified));
+
+            cmd.AddDbValue("fathersCode", obj.FathersCode);
+            cmd.AddDbValue("mothersCode", obj.MothersCode);
+            cmd.AddDbValue("crossingNumber", obj.CrossingNumber);
 
             long photoId = 1;
             if (obj.PhotoId > 1) 
             {
                 photoId = obj.PhotoId;
             }
-            DatabaseAccess.AddDbValue(cmd, "photoId", photoId);
+            cmd.AddDbValue("photoId", photoId);
         }
 
         protected override void SetId(Cactus obj, long id) => obj.Id = id;
