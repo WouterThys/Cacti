@@ -35,6 +35,7 @@ if %errorlevel% neq 0 (
     echo Failed to configure recovery settings for service "%service_name%". Error code: %errorlevel%
     exit /b %errorlevel%
 )
+sc config "%service_name%" DisplayName=%display_name%
 
 echo Service "%service_name%" created successfully.
 echo. 
