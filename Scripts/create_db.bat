@@ -13,8 +13,8 @@ set mysqlshow="C:\Program Files\MySQL\MySQL Server 8.0\bin\mysqlshow.exe"
 set mysql="C:\Program Files\MySQL\MySQL Server 8.0\bin\mysql.exe"
 
 :: Need to escape underscores!!
-echo Parsing database name
 set "escaped_name=%database:_=\_%"
+echo Parsing database name %database% -> %escaped_name%
 %mysqlshow% -uroot -proot "%escaped_name%" > nul 2>&1
 if errorlevel 1 (
     echo Database %database% does not exist, creating new database now
@@ -28,10 +28,12 @@ if errorlevel 1 (
     echo Database created!!
 
     echo Insert update scripts into updatescripts table
+    echo DatabaseHelper.exe EXECUTE config.json -s %server% -d %database% -u root -p root --exec %update_script%
     DatabaseHelper.exe EXECUTE config.json -s %server% -d %database% -u root -p root --exec %update_script%
 
     echo Set all updatescripts executed
     echo UPDATE %database%.updatescripts SET state = 3 WHERE id ^> 1; > update.sql
+    echo DatabaseHelper.exe EXECUTE config.json -s %server% -d %database% -u root -p root --exec update.sql
     DatabaseHelper.exe EXECUTE config.json -s %server% -d %database% -u root -p root --exec update.sql
 
     echo Cleaning up

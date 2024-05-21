@@ -37,9 +37,9 @@
                 android:layout_width="5dp"
                 android:layout_height="0dp"
                 android:background="@android:color/holo_blue_bright"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
                 android:id="@+id/iv_photo"
@@ -48,64 +48,94 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
-                android:scaleType="centerInside"
                 android:background="@drawable/image_border"
                 android:contentDescription="@null"
                 android:padding="2dp"
+                android:scaleType="centerInside"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:srcCompat="@drawable/ic_launcher_background" />
 
             <TextView
                 android:id="@+id/tv_code"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@{cactus.code}"
-                android:layout_marginTop="8dp"
                 android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
-                android:textStyle="bold"
+                android:text="@{cactus.code}"
                 android:textSize="18sp"
-                app:layout_constraintStart_toEndOf="@id/iv_photo"
+                android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/iv_photo"
                 app:layout_constraintTop_toTopOf="parent"
 
-                tools:text="CODE"
-                />
+                tools:text="CODE" />
 
             <TextView
                 android:id="@+id/tv_description"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@{cactus.description}"
-                android:layout_marginTop="8dp"
                 android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:drawablePadding="4dp"
+                android:gravity="center_vertical"
                 android:lines="2"
                 android:maxLines="2"
-                app:layout_constraintStart_toEndOf="@id/iv_photo"
+                android:text="@{cactus.description}"
+                app:drawableStartCompat="@drawable/baseline_info_24_black"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/iv_photo"
                 app:layout_constraintTop_toBottomOf="@id/tv_code"
-                tools:text="DESCRIPTION"
-                app:drawableStartCompat="@drawable/baseline_info_24_black" />
+                tools:text="DESCRIPTION" />
 
             <TextView
                 android:id="@+id/tv_location"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@{cactus.location}"
-                android:layout_marginTop="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 android:drawablePadding="4dp"
-                app:layout_constraintStart_toEndOf="@id/iv_photo"
+                android:gravity="center_vertical"
+                android:text="@{cactus.location}"
+                app:drawableStartCompat="@drawable/baseline_location_on_24_black"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/iv_photo"
                 app:layout_constraintTop_toBottomOf="@id/tv_description"
-                tools:text="DESCRIPTION"
-                app:drawableStartCompat="@drawable/baseline_location_on_24_black" />
+                tools:text="Location" />
 
+            <TextView
+                android:id="@+id/tv_father"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:drawablePadding="4dp"
+                android:gravity="center_vertical"
+                android:text="@{cactus.fathersCode}"
+                app:drawableStartCompat="@drawable/baseline_account_tree_24"
+                app:layout_constraintEnd_toStartOf="@+id/tv_mother"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/iv_photo"
+                app:layout_constraintTop_toBottomOf="@id/tv_location"
+                tools:text="Father" />
+
+            <TextView
+                android:id="@+id/tv_mother"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:drawablePadding="4dp"
+                android:gravity="center_vertical"
+                android:text="@{cactus.mothersCode}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/tv_father"
+                app:layout_constraintTop_toBottomOf="@id/tv_location"
+                app:layout_constraintBottom_toBottomOf="@id/tv_father"
+                tools:text="Mother" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
