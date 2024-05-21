@@ -12,6 +12,12 @@ set server=localhost
 set mysqlshow="C:\Program Files\MySQL\MySQL Server 8.0\bin\mysqlshow.exe"
 set mysql="C:\Program Files\MySQL\MySQL Server 8.0\bin\mysql.exe"
 
+if not exist %mysql% set mysql="D:\Program Files\MySQL\MySQL Server 8.0\bin\mysql.exe"
+if not exist %mysqlshow% set mysqlshow="D:\Program Files\MySQL\MySQL Server 8.0\bin\mysqlshow.exe"
+
+echo "Using %mysql% for creation of db"
+echo "----------------------------"
+
 :: Need to escape underscores!!
 set "escaped_name=%database:_=\_%"
 echo Parsing database name %database% -> %escaped_name%

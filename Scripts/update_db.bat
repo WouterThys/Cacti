@@ -24,10 +24,4 @@ DatabaseHelper.exe PROCEDURES config.json -s %server% -d %database% -u root -p r
 echo Execute stored procedures script
 DatabaseHelper.exe EXECUTE config.json -s %server% -d %database% -u root -p root --exec .\output\procedures.sql
 
-@REM echo Update translations
-@REM DatabaseHelper.exe EXECUTE config.json -s %server% -d %database% -u root -p root --exec %translationscript%
-
-echo Update translations
-DatabaseHelper.exe EXECUTE config.json -s %server% -d ww_common -u root -p root --exec %translationscript%
-
 echo DONE!
