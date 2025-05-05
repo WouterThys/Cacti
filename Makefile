@@ -57,7 +57,8 @@ update_version:
 	python3 Scripts\version\update_version.py $(abspath ./)/ $(VERSION_FILE)
 
 # Build 
-build: DatabaseFiles CactiClient.exe app-release.apk build_server CactiService.exe
+build: app-release.apk
+#build: DatabaseFiles CactiClient.exe app-release.apk build_server CactiService.exe
 
 DatabaseFiles: database_dir create_db.sql updatescripts.sql
 	xcopy /s $(PROCEDURES_SOURCES)\_*.sql "$(DATABASE_BUILD_DIR)" /Y
