@@ -3,25 +3,32 @@ package com.cacti.cactiphone.view
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.text.InputType
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
+import android.widget.FrameLayout
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.bumptech.glide.Glide
+import androidx.viewpager2.widget.ViewPager2
 import com.cacti.cactiphone.AppConstants.UNKNOWN_ID
 import com.cacti.cactiphone.BuildConfig
 import com.cacti.cactiphone.R
 import com.cacti.cactiphone.databinding.FragmentCactusEditBinding
+import com.cacti.cactiphone.view.adapters.PhotoAdapter
 import com.cacti.cactiphone.viewmodel.EditCactusViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
@@ -34,6 +41,7 @@ class CactusEditFragment : Fragment() {
     private val viewModel: EditCactusViewModel by viewModels()
     private var _binding: FragmentCactusEditBinding? = null
     private val binding get() = _binding!!
+    private val photoAdapter = PhotoAdapter()
 
     private lateinit var backPressedCallback: OnBackPressedCallback
 
@@ -89,6 +97,39 @@ class CactusEditFragment : Fragment() {
             }
         }
 
+        binding.vpPhotos.adapter = photoAdapter
+
+        // registering for page change callback
+        binding.vpPhotos.registerOnPageChangeCallback(
+            object : ViewPager2.OnPageChangeCallback() {
+
+                override fun onPageSelected(position: Int) {
+                    super.onPageSelected(position)
+
+                    viewModel.setCurrentPhotoIndex(position)
+                    setPageCounter()
+                }
+            }
+        )
+
+        binding.etCode.showSoftInputOnFocus = false
+
+        binding.etCode.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) {
+                showCodeDialog()
+            }
+        }
+
+        binding.fabDeletePhoto.setOnClickListener {
+            deletePhoto()
+        }
+
+        binding.fabSetFirst.setOnClickListener {
+            setCurrentPhotoAsFirst()
+        }
+
+        binding.fabSetFirst.hide()
+
         return binding.root
     }
 
@@ -98,7 +139,7 @@ class CactusEditFragment : Fragment() {
         viewModel.cactus.observe(viewLifecycleOwner) {
             it?.let { cactus ->
                 binding.cactus = cactus
-
+                viewModel.refreshPhotos(cactus)
                 if (cactus.id > UNKNOWN_ID) {
                     binding.toolbar.title = cactus.code
                 } else {
@@ -107,15 +148,10 @@ class CactusEditFragment : Fragment() {
             }
         }
 
-        viewModel.photo.observe(viewLifecycleOwner) {
-            it?.let { photo ->
-                Glide.with(view)
-                    .load(photo.path)
-                    .into(binding.ivPhoto)
-            } ?: run {
-                binding.ivPhoto.setImageDrawable(
-                    ContextCompat.getDrawable(requireContext(), R.drawable.cactus_icon_128))
-            }
+        viewModel.photos.observe(viewLifecycleOwner) {
+            photoAdapter.submit(it)
+            binding.vpPhotos.setCurrentItem(viewModel.getCurrentPhotoIndex(), true)
+            setPageCounter()
         }
     }
 
@@ -127,13 +163,7 @@ class CactusEditFragment : Fragment() {
     private fun backPressed() {
         // Create the object of AlertDialog Builder class
 
-        if (viewModel.dataChanged(
-                binding.etCode.text.toString(),
-                binding.etDescription.text.toString(),
-                binding.etLocation.text.toString(),
-                ""
-            )
-        ) {
+        if (dataChanged()) {
 
             val dialog = AlertDialog.Builder(requireContext())
                 .setMessage(getString(R.string.cactus_changed))
@@ -156,6 +186,56 @@ class CactusEditFragment : Fragment() {
         }
     }
 
+    private fun showCodeDialog() {
+        val currentCode = viewModel.cactus.value?.code ?: ""
+        val editText = EditText(requireContext()).apply {
+            setText(currentCode)
+            setSelection(currentCode.length - 1)
+            inputType = InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS
+            gravity = Gravity.CENTER  // Center the text inside the EditText
+        }
+
+        val container = FrameLayout(requireContext())
+        val params = FrameLayout.LayoutParams(
+            FrameLayout.LayoutParams.MATCH_PARENT,
+            FrameLayout.LayoutParams.WRAP_CONTENT
+        )
+        params.setMargins(8, 16, 8, 16)
+        editText.layoutParams = params
+        container.addView(editText)
+
+        val dialog = AlertDialog.Builder(requireContext())
+            .setTitle("Code")
+            .setView(container)
+            .setPositiveButton("OK") { _, _ ->
+                codeChanged(currentCode, editText.text.toString())
+            }
+            .setNegativeButton("Cancel", null)
+            .create()
+
+        dialog.setOnShowListener {
+            // Now you can optionally show the keyboard manually later
+            // if you want, using this code:
+            editText.requestFocus()
+            val imm = getSystemService(requireContext(), InputMethodManager::class.java)
+            imm?.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT)
+        }
+
+        dialog.show()
+    }
+
+    private fun codeChanged(oldCode: String, newCode:String) {
+        if (viewModel.validateCode(newCode)) {
+            binding.toolbar.title = newCode
+            binding.etCode.setText(newCode)
+            viewModel.codeChanged(oldCode, newCode)
+        } else {
+            Toast
+                .makeText(requireContext(), "Code $newCode bestaat al", Toast.LENGTH_LONG)
+                .show()
+        }
+    }
+
     private fun saveData(saveOnClose: Boolean = true) {
         launchOnIo {
             updateCactus()
@@ -172,6 +252,15 @@ class CactusEditFragment : Fragment() {
             backPressedCallback.isEnabled = false
             activity?.onBackPressedDispatcher?.onBackPressed()
         }
+    }
+
+    private fun dataChanged() : Boolean {
+        return binding.cactus?.code != binding.etCode.text.toString()
+                || binding.cactus?.description != binding.etDescription.text.toString()
+                || binding.cactus?.location != binding.etLocation.text.toString()
+                || binding.cactus?.fathersCode != binding.etFather.text.toString()
+                || binding.cactus?.mothersCode != binding.etMother.text.toString()
+                || binding.cactus?.crossingsNumber != binding.etCrossing.text.toString()
     }
 
     private fun updateCactus() {
@@ -192,12 +281,20 @@ class CactusEditFragment : Fragment() {
         }
     }
 
+    private fun deletePhoto() {
+        val currentPos = binding.vpPhotos.currentItem
+        val photo = photoAdapter.getPhoto(currentPos)
+        if (photo != null && photo.id > UNKNOWN_ID) {
+            viewModel.deletePhoto(photo)
+        }
+    }
+
+    private fun setCurrentPhotoAsFirst() {
+        viewModel.setCurrentAsFirstPhoto()
+    }
+
     private fun takePicture() {
-        checkPermission(
-            arrayOf(
-                android.Manifest.permission.CAMERA
-            )
-        ) { granted ->
+        checkPermission(arrayOf(android.Manifest.permission.CAMERA)) { granted ->
             if (granted) {
                 try {
                     val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
@@ -244,9 +341,6 @@ class CactusEditFragment : Fragment() {
         // Create an image file name
         val newImageFile = viewModel.getNewImageFile()
 
-        // Save a file: path for use with ACTION_VIEW intents
-        currentPhotoPath = newImageFile.absolutePath
-
         return newImageFile
     }
 
@@ -270,4 +364,22 @@ class CactusEditFragment : Fragment() {
             onPermissionResult(true)
         }
     }
+
+    private fun setPageCounter() {
+        val total = viewModel.getPhotoCount()
+        val selectedPage = viewModel.getCurrentPhotoIndex()
+
+        if (selectedPage == 0) {
+            binding.fabSetFirst.hide()
+        } else {
+            binding.fabSetFirst.show()
+        }
+
+        var countText = ""
+        if (total > 0) {
+            countText = "${selectedPage + 1}/$total"
+        }
+        binding.tvPhotoCount.text = countText
+    }
+
 }

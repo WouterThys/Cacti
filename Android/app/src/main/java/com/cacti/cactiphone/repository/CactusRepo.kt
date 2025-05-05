@@ -9,6 +9,7 @@ import com.cacti.cactiphone.data.Cactus
 import com.cacti.cactiphone.repository.data.Resource
 import com.cacti.cactiphone.repository.database.CactusDao
 import kotlinx.coroutines.Dispatchers
+import java.util.Date
 import javax.inject.Inject
 
 class CactusRepo @Inject constructor(
@@ -32,8 +33,9 @@ class CactusRepo @Inject constructor(
 
     suspend fun save(cactus: Cactus): Cactus {
 
-        val id = dbSource.save(cactus)
+        cactus.lastModified = Date()
 
+        val id = dbSource.save(cactus)
         cactus.id = id
 
         return cactus
