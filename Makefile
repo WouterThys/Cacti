@@ -57,7 +57,7 @@ update_version:
 	python3 Scripts\version\update_version.py $(abspath ./)/ $(VERSION_FILE)
 
 # Build 
-build: app-release.apk
+build: app-release.aab
 #build: DatabaseFiles CactiClient.exe app-release.apk build_server CactiService.exe
 
 DatabaseFiles: database_dir create_db.sql updatescripts.sql
@@ -87,7 +87,10 @@ app-release.apk:
 	$(ANDROIDBUILD) :app:assembleRelease
 	xcopy "Android\app\build\outputs\apk\release\app-release*.apk" "$(INSTALLERS_BUILD_DIR)\CactiPhone_$(VERSION)_Release_$(UPGRADE_CODE).apk"* /Y
 
-
+app-release.aab:
+	cd Android  && \
+	$(ANDROIDBUILD) :app:bundleRelease
+	xcopy "Android\app\release\app-release*.aab" "$(INSTALLERS_BUILD_DIR)\CactiPhone_$(VERSION)_Release_$(UPGRADE_CODE).aab"* /Y
 
 build_server:
 	if not exist "$(SERVER_BUILD_DIR)" mkdir $(SERVER_BUILD_DIR)
