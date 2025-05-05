@@ -4,16 +4,6 @@ import android.content.Context
 import android.net.Uri
 import com.cacti.cactiphone.repository.database.CactusDao
 import com.cacti.cactiphone.repository.database.MyDatabase
-import com.cacti.cactiphone.repository.database.PendingCactusDao
-import com.cacti.cactiphone.repository.database.PhotoDao
-import com.cacti.cactiphone.repository.web.CactusService
-import com.cacti.cactiphone.repository.web.CallbackService
-import com.cacti.cactiphone.repository.web.FileService
-import com.cacti.cactiphone.repository.web.PhotoService
-import com.cacti.services.generated.CactusesGrpcKt
-import com.cacti.services.generated.CallbacksGrpcKt
-import com.cacti.services.generated.FilesGrpcKt
-import com.cacti.services.generated.PhotosGrpcKt
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -39,14 +29,6 @@ object RepositoryDiModule {
     @Provides
     fun provideCactusDao(db: MyDatabase) = db.cactusDao()
 
-    @Singleton
-    @Provides
-    fun providePhotoDao(db: MyDatabase) = db.photoDao()
-
-    @Singleton
-    @Provides
-    fun providePendingDao(db: MyDatabase) = db.pendingDao()
-
     // endregion
 
     // region Web
@@ -68,51 +50,7 @@ object RepositoryDiModule {
         return builder.build()
     }
 
-    @Singleton
-    @Provides
-    fun provideCactusCoroutineStub(channel: ManagedChannel) =
-        CactusesGrpcKt.CactusesCoroutineStub(channel)
 
-    @Singleton
-    @Provides
-    fun provideCactusService(stub: CactusesGrpcKt.CactusesCoroutineStub) =
-        CactusService(stub)
-
-    @Singleton
-    @Provides
-    fun providePhotoCoroutineStub(channel: ManagedChannel) =
-        PhotosGrpcKt.PhotosCoroutineStub(channel)
-
-    @Singleton
-    @Provides
-    fun providePhotoService(stub: PhotosGrpcKt.PhotosCoroutineStub) =
-        PhotoService(stub)
-
-
-    @Singleton
-    @Provides
-    fun provideFileCoroutineStub(channel: ManagedChannel) =
-        FilesGrpcKt.FilesCoroutineStub(channel)
-
-    @Singleton
-    @Provides
-    fun provideFileService(stub: FilesGrpcKt.FilesCoroutineStub) =
-        FileService(stub)
-
-
-    @Singleton
-    @Provides
-    fun provideCallbackCoroutineStub(channel: ManagedChannel) =
-        CallbacksGrpcKt.CallbacksCoroutineStub(channel)
-
-    @Singleton
-    @Provides
-    fun provideCallbackService(
-        stub: CallbacksGrpcKt.CallbacksCoroutineStub,
-        cactusDao: CactusDao,
-        photoDao: PhotoDao,
-    ) =
-        CallbackService(stub, cactusDao, photoDao)
 
     // endregion
 
@@ -120,20 +58,13 @@ object RepositoryDiModule {
 
     @Singleton
     @Provides
-    fun provideCactusRepo(
-        remoteSource: CactusService,
-        localSource: CactusDao,
-        pendingSource: PendingCactusDao,
-        photoRepo: PhotoRepo,
-        fileService: FileService,
-        callbackService: CallbackService,
-    ) =
-        CactusRepo(remoteSource, localSource, pendingSource, photoRepo, fileService, callbackService)
+    fun provideCactusRepo(localSource: CactusDao) =
+        CactusRepo(localSource)
 
     @Singleton
     @Provides
-    fun providePhotoRepo(remoteSource: PhotoService, localSource: PhotoDao) =
-        PhotoRepo(remoteSource, localSource)
+    fun providePhotoRepo() =
+        PhotoRepo()
 
 
     // endregion

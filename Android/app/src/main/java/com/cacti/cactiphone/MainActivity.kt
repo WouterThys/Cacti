@@ -5,16 +5,12 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.widget.EditText
-import android.widget.LinearLayout
 import androidx.activity.viewModels
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.cacti.cactiphone.view.runWhenResumed
 import com.cacti.cactiphone.view.showToast
 import com.cacti.cactiphone.viewmodel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlin.system.exitProcess
 
 
 @AndroidEntryPoint
@@ -42,11 +38,6 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        if (!viewModel.hasHost()) {
-            showHostDialog()
-        }
-
-        viewModel.testHost()
     }
 
     private fun restart() {
@@ -68,27 +59,27 @@ class MainActivity : AppCompatActivity() {
 
     fun showHostDialog() {
 
-        val lp = LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.WRAP_CONTENT,
-            LinearLayout.LayoutParams.WRAP_CONTENT
-        )
-        lp.setMargins(16, 8, 16, 8)
-
-        val taskEditText = EditText(this)
-        taskEditText.layoutParams = lp
-        taskEditText.setText(viewModel.getHost())
-
-        val dialog: AlertDialog = AlertDialog.Builder(this)
-            .setTitle("Host")
-            .setMessage("Change host?\nApp will be restarted.")
-            .setView(taskEditText)
-            .setPositiveButton("Ok") { _, _ ->
-                val host = taskEditText.text.toString()
-                viewModel.setHost(host)
-            }
-            .setNegativeButton("Cancel", null)
-            .create()
-        dialog.show()
+//        val lp = LinearLayout.LayoutParams(
+//            LinearLayout.LayoutParams.WRAP_CONTENT,
+//            LinearLayout.LayoutParams.WRAP_CONTENT
+//        )
+//        lp.setMargins(16, 8, 16, 8)
+//
+//        val taskEditText = EditText(this)
+//        taskEditText.layoutParams = lp
+//        taskEditText.setText(viewModel.getHost())
+//
+//        val dialog: AlertDialog = AlertDialog.Builder(this)
+//            .setTitle("Host")
+//            .setMessage("Change host?\nApp will be restarted.")
+//            .setView(taskEditText)
+//            .setPositiveButton("Ok") { _, _ ->
+//                val host = taskEditText.text.toString()
+//                viewModel.setHost(host)
+//            }
+//            .setNegativeButton("Cancel", null)
+//            .create()
+//        dialog.show()
     }
 
 }

@@ -1,13 +1,11 @@
 package com.cacti.cactiphone.view
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
-import androidx.camera.core.Camera
-import androidx.camera.view.PreviewView
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,9 +20,6 @@ import com.cacti.cactiphone.view.adapters.CactusAdapter
 import com.cacti.cactiphone.view.utils.BarcodeRequestContract
 import com.cacti.cactiphone.view.utils.RecyclerClickSupport
 import com.cacti.cactiphone.viewmodel.MainViewModel
-import com.google.mlkit.vision.barcode.BarcodeScannerOptions
-import com.google.mlkit.vision.barcode.BarcodeScanning
-import com.google.mlkit.vision.barcode.common.Barcode
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -94,15 +89,6 @@ class CactusListFragment : Fragment() {
 
         viewModel.cactiCount.observe(viewLifecycleOwner) {
             binding.toolbar.subtitle = "$it cacti"
-        }
-
-        viewModel.pendingCount.observe(viewLifecycleOwner) {
-            viewModel.newPending(it)
-            if (it > 0) {
-                binding.fabRefresh.show()
-            } else {
-                binding.fabRefresh.hide()
-            }
         }
 
         binding.fabRefresh.hide()
@@ -209,7 +195,7 @@ class CactusListFragment : Fragment() {
         }
 
         binding.fabRefresh.setOnClickListener {
-            viewModel.trySendPending()
+            //viewModel.trySendPending()
         }
 
     }

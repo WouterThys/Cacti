@@ -4,29 +4,23 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import com.cacti.cactiphone.data.BaseCactus
 import com.cacti.cactiphone.data.Cactus
-import com.cacti.cactiphone.data.CactusWithPhoto
-import com.cacti.cactiphone.data.PendingCactus
+import com.cacti.cactiphone.data.CactusWithPhotos
 import com.cacti.cactiphone.data.Photo
+import com.cacti.cactiphone.repository.CactusRepo
+import com.cacti.cactiphone.repository.PhotoRepo
 import com.cacti.cactiphone.repository.data.Resource
 import java.util.Locale
 
 class CactusDataMediator(
-    cactusLiveData: LiveData<Resource<List<Cactus>>>,
-    pendingLiveData: LiveData<List<PendingCactus>>,
-    photoLiveData: LiveData<Resource<List<Photo>>>,
+    private val cactusRepo: CactusRepo,
+    private val photoRepo: PhotoRepo,
     filterLiveData: LiveData<String?>,
-) : MediatorLiveData<Resource<List<CactusWithPhoto>>>() {
+) : MediatorLiveData<Resource<List<CactusWithPhotos>>>() {
 
     private var cactusResource: Resource<List<Cactus>>? = null
-    private var pendingData: List<PendingCactus>? = null
-    private var photoResource: Resource<List<Photo>>? = null
     private var filterText: String? = null
 
-    fun forceLoading() {
-        postValue(Resource.loading(value?.data))
-    }
-
-    private fun checkStatus(resource: Resource<*>?) : Boolean {
+    private fun checkStatus(resource: Resource<*>?): Boolean {
         if (resource == null) {
             this.postValue(Resource.loading(this.value?.data))
             return false
@@ -44,9 +38,10 @@ class CactusDataMediator(
     }
 
 
-    private fun hasText(text: String?, filter: String) : Boolean {
+    private fun hasText(text: String?, filter: String): Boolean {
         if (!text.isNullOrEmpty() &&
-            text.uppercase(Locale.getDefault()).contains(filter)) {
+            text.uppercase(Locale.getDefault()).contains(filter)
+        ) {
 
             println("Text $text contains $filter")
 
@@ -55,7 +50,7 @@ class CactusDataMediator(
         return false
     }
 
-    private fun includeAfterFilter(cactus: BaseCactus) : Boolean {
+    private fun includeAfterFilter(cactus: BaseCactus): Boolean {
         if (filterText.isNullOrEmpty()) return true
 
         filterText?.let { filter ->
@@ -72,60 +67,41 @@ class CactusDataMediator(
 
     }
 
-    private fun update() {
-        if (checkStatus(cactusResource) && checkStatus(photoResource)) {
+    fun update() {
+        if (checkStatus(cactusResource)) {
             cactusResource?.data?.let { cacti ->
-                photoResource?.data?.let { photos ->
-                    pendingData?.let { pending ->
 
-                        val result = ArrayList<CactusWithPhoto>()
+                val result = ArrayList<CactusWithPhotos>()
 
-                        for (cactus in cacti) {
-                            // Don't show unknown
-                            if (cactus.id <= 1) continue
-                            checkAndAdd(cactus, photos, result)
-                        }
+                for (cactus in cacti) {
+                    // Don't show unknown
+                    if (cactus.id <= 1) continue
 
-                        for (cactus in pending) {
-                            checkAndAdd(cactus, photos, result)
-                        }
+                    val photos = photoRepo.getPhotos(cactus)
 
-                        this.postValue(Resource.success(result))
-                    }
+                    checkAndAdd(cactus, photos, result)
                 }
+
+                this.postValue(Resource.success(result))
             }
         }
     }
 
-    private fun checkAndAdd(cactus: BaseCactus, photos: List<Photo>, result: ArrayList<CactusWithPhoto>) {
+    private fun checkAndAdd(
+        cactus: Cactus,
+        photos: List<Photo>,
+        result: ArrayList<CactusWithPhotos>
+    ) {
         if (includeAfterFilter(cactus)) {
 
-            // Check photo
-            var photo: Photo? = null
-            if (cactus.photoId > 1) {
-                photo = photos.firstOrNull { p -> p.id == cactus.photoId }
-            } else if (cactus is PendingCactus && cactus.filePath.isNotEmpty()) {
-                photo = Photo(0, "", cactus.filePath)
-            }
-
             // Add to list
-            result.add(CactusWithPhoto(cactus, photo))
+            result.add(CactusWithPhotos(cactus, photos))
         }
     }
 
     init {
-        addSource(cactusLiveData) {
+        addSource(cactusRepo.getData()) {
             cactusResource = it
-            update()
-        }
-
-        addSource(pendingLiveData) {
-            pendingData = it
-            update()
-        }
-
-        addSource(photoLiveData) {
-            photoResource = it
             update()
         }
 

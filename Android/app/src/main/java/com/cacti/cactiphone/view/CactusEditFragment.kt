@@ -122,17 +122,6 @@ class CactusEditFragment : Fragment() {
                     ContextCompat.getDrawable(requireContext(), R.drawable.cactus_icon_128))
             }
         }
-
-        viewModel.pendingCount.observe(viewLifecycleOwner) {
-            if (it > 0) {
-                viewModel.newPending(it)
-            }
-        }
-
-        // Watcher for updates!!
-        viewModel.watcher.observe(viewLifecycleOwner) {it?.let { savedCactus ->
-            showToast("Saved ${savedCactus.code}")
-        } }
     }
 
     override fun onDestroyView() {
@@ -175,7 +164,7 @@ class CactusEditFragment : Fragment() {
     private fun saveData(saveOnClose: Boolean = true) {
         launchOnIo {
             updateCactus()
-            viewModel.save(binding.cactus, photoFile)
+            viewModel.save()
         }.invokeOnCompletion {
             if (saveOnClose) {
                 closeFragment()

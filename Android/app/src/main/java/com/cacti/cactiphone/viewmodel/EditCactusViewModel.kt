@@ -10,16 +10,12 @@ import androidx.lifecycle.switchMap
 import com.cacti.cactiphone.App
 import com.cacti.cactiphone.AppConstants
 import com.cacti.cactiphone.AppConstants.UNKNOWN_ID
-import com.cacti.cactiphone.data.BaseCactus
 import com.cacti.cactiphone.data.Cactus
 import com.cacti.cactiphone.data.Photo
 import com.cacti.cactiphone.repository.CactusRepo
 import com.cacti.cactiphone.repository.PhotoRepo
-import com.cacti.cactiphone.repository.data.Resource
-import com.cacti.cactiphone.repository.web.FileService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import java.io.File
 import java.util.UUID
 import javax.inject.Inject
 
@@ -28,7 +24,6 @@ class EditCactusViewModel@Inject constructor(
     private val app: App,
     private val cactusRepo: CactusRepo,
     private val photoRepo: PhotoRepo,
-    private val fileService: FileService,
     private val stateHandle: SavedStateHandle,
 ) : ViewModel() {
 
@@ -36,9 +31,7 @@ class EditCactusViewModel@Inject constructor(
     private var isInsert: Boolean = false
     private var androidId: String = ""
 
-    val pendingCount = cactusRepo.pendingCount
-
-    val cactus: LiveData<BaseCactus> = cactusId.switchMap { id -> liveData(Dispatchers.IO) {
+    val cactus: LiveData<Cactus> = cactusId.switchMap { id -> liveData(Dispatchers.IO) {
         val result = if (id < UNKNOWN_ID) {
             // Create new cactus
             isInsert = true
@@ -47,7 +40,7 @@ class EditCactusViewModel@Inject constructor(
         } else {
             // Load from repo
             isInsert = false
-            val found = cactusRepo.getByIdAsync(id) ?: Cactus()
+            val found = cactusRepo.getById(id) ?: Cactus()
             androidId = found.androidId
             found
         }
@@ -57,111 +50,31 @@ class EditCactusViewModel@Inject constructor(
         emit(result)
     } }
 
-    val watcher = cactusRepo.data.map { resource ->
-        var updatedCactus: Cactus? = null
-        if (resource.isSuccess() && resource.data != null && androidId.isNotEmpty()) {
-            resource.data.firstOrNull { c -> c.androidId == androidId }?.let { found ->
-                println("XXX Found update for ${found.code} (androidId = $androidId)")
-                cactusId.postValue(found.id)
-                updatedCactus = found
-            }
-        }
-        updatedCactus
-    }
-
-    val photo = cactus.switchMap {
+    /**
+     * The first photo
+     */
+    val photo : LiveData<Photo?> = cactus.map {
         it.let { cactus ->
             if (cactus.photoId > UNKNOWN_ID) {
-                photoRepo.getById(cactus.photoId)
+                photoRepo.getFirstPhoto(cactus)
             } else {
                 null
             }
         }
     }
 
-    fun newPending(count: Int) {
-        if (count > 0) {
-            launchOnIo {
-                cactusRepo.trySendPending()
-            }
+    suspend fun save() {
+        cactus.value?.let {
+            cactusRepo.save(it)
+            // TODO: photos
         }
     }
-
-    suspend fun save(cactus: BaseCactus?, photoFile: File?) {
-        cactus?.let {
-            if (isInsert) {
-                cactusRepo.insert(it, photoFile)
-            } else {
-                cactusRepo.update(it, photoFile)
-            }
-        }
-
-//        val test = cactusRepo.isConnected()
-//        if (test.isSuccess()) {
-//            val savedPhoto = save(photoFile)
-//            cactus?.photoId = savedPhoto?.id ?: cactus?.photoId ?: UNKNOWN_ID
-//            save(cactus)
-//        } else {
-//            // Save to temp db
-//            pendingRepo.addPending(cactus, photo.value, photoFile, PendingSaveAction.ACTION_UPDATE)
-//        }
-    }
-
-//    private suspend fun save(cactus: Cactus?) {
-//        cactus?.let {
-//            val res = cactusRepo.save(it)
-//            if (res.status == Resource.Status.SUCCESS) {
-//                cactusId.postValue(res.data?.id ?: UNKNOWN_ID)
-//            }
-//        }
-//    }
-
-//    private suspend fun save(photoFile: File?) : Photo? {
-//
-//        photoFile?.let {
-//            // Save image
-//            val path = fileService.save(it)
-//            var res: Resource<Photo?> = Resource.loading()
-//
-//            // Check if we have photo
-//            photo.value?.let { photo ->
-//                // We have photo, update it
-//                photo.path = path
-//                res = photoRepo.save(photo)
-//            } ?: run {
-//                // New photo, create one
-//                val photo = Photo(
-//                    code = it.name,
-//                    path = path,
-//                )
-//                res = photoRepo.save(photo)
-//            }
-//
-//            if (res.status == Resource.Status.SUCCESS) {
-//                return res.data
-//            }
-//
-//        }
-//
-//        return null
-//    }
 
     suspend fun delete() {
         cactus.value?.let {
             cactusRepo.delete(it.id)
+            photoRepo.deleteFor(it)
         }
-
-//        val test = cactusRepo.isConnected()
-//        if (test.isSuccess()) {
-//            cactusId.value?.let { cactusRepo.delete(it) }
-//        } else {
-//            // Save to pending
-//            cactus.value?.let { cactusToDelete ->
-//                if (cactusToDelete.id > UNKNOWN_ID) {
-//                    pendingRepo.addPending(cactusToDelete, null, null, PendingSaveAction.ACTION_DELETE)
-//                }
-//            }
-//        }
     }
 
     fun dataChanged(
