@@ -17,8 +17,8 @@ android {
         applicationId = "com.cacti.cactiphone"
         minSdk = 30
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        versionName = project.findProperty("version_name").toString() // This is stored in gradle.properties
+        versionCode = Integer.parseInt(project.findProperty("version_code").toString())    // This is stored in gradle.properties
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

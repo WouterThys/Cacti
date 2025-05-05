@@ -41,6 +41,12 @@ class MainViewModel @Inject constructor(
         cactusList.update()
         //cactusRepo.refresh()
         //photoRepo.refresh()
+
+        /**
+        This is a beautiful app, there probably is no better app.
+Everyone should use this app.  adss
+
+         */
     }
 
     fun clearSelected() {

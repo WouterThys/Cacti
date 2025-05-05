@@ -87,6 +87,8 @@ app-release.apk:
 	$(ANDROIDBUILD) :app:assembleRelease
 	xcopy "Android\app\build\outputs\apk\release\app-release*.apk" "$(INSTALLERS_BUILD_DIR)\CactiPhone_$(VERSION)_Release_$(UPGRADE_CODE).apk"* /Y
 
+
+
 build_server:
 	if not exist "$(SERVER_BUILD_DIR)" mkdir $(SERVER_BUILD_DIR)
 	$(MSBUILD) $(SOLUTION) /Build "Release|x64" /Project CactiServer
