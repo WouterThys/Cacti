@@ -13,6 +13,7 @@ import io.grpc.ManagedChannel
 import io.grpc.android.AndroidChannelBuilder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.asExecutor
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -63,8 +64,8 @@ object RepositoryDiModule {
 
     @Singleton
     @Provides
-    fun providePhotoRepo() =
-        PhotoRepo()
+    fun providePhotoRepo(@Named("ApplicationPhotoDir") photoDir: String) =
+        PhotoRepo(photoDir)
 
 
     // endregion

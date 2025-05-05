@@ -2,11 +2,14 @@ package com.cacti.cactiphone
 
 import android.app.Application
 import android.net.Uri
+import android.os.Environment
 import com.cacti.cactiphone.utils.AppSettings
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import java.io.File
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -41,6 +44,18 @@ object AppDiModule {
         }
 
         return Uri.parse(host)
+    }
+
+    @Provides
+    @Named("ApplicationPhotoDir")
+    fun providePublicStorageDirectory() : String {
+        val basePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
+        val appPath = File(basePath, "Cacti")
+        if (!appPath.mkdirs()) {
+            System.err.println("Failed to create path $appPath")
+        }
+
+        return appPath.absolutePath
     }
 
 }

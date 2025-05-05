@@ -4,8 +4,8 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
 import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
@@ -19,16 +19,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
 import com.cacti.cactiphone.AppConstants.UNKNOWN_ID
+import com.cacti.cactiphone.BuildConfig
 import com.cacti.cactiphone.R
 import com.cacti.cactiphone.databinding.FragmentCactusEditBinding
 import com.cacti.cactiphone.viewmodel.EditCactusViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
-import java.io.IOException
-import java.text.SimpleDateFormat
 import java.util.Calendar
-import java.util.Date
-import java.util.Locale
 
 
 @AndroidEntryPoint
@@ -40,7 +37,6 @@ class CactusEditFragment : Fragment() {
 
     private lateinit var backPressedCallback: OnBackPressedCallback
 
-    private var currentPhotoPath: String? = null
     private var photoFile: File? = null
     private val CAPTURE_IMAGE_REQUEST = 420
 
@@ -113,9 +109,8 @@ class CactusEditFragment : Fragment() {
 
         viewModel.photo.observe(viewLifecycleOwner) {
             it?.let { photo ->
-                currentPhotoPath = photo.path
                 Glide.with(view)
-                    .load(photo)
+                    .load(photo.path)
                     .into(binding.ivPhoto)
             } ?: run {
                 binding.ivPhoto.setImageDrawable(
@@ -136,7 +131,7 @@ class CactusEditFragment : Fragment() {
                 binding.etCode.text.toString(),
                 binding.etDescription.text.toString(),
                 binding.etLocation.text.toString(),
-                currentPhotoPath ?: ""
+                ""
             )
         ) {
 
@@ -200,8 +195,7 @@ class CactusEditFragment : Fragment() {
     private fun takePicture() {
         checkPermission(
             arrayOf(
-                android.Manifest.permission.CAMERA,
-                //android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+                android.Manifest.permission.CAMERA
             )
         ) { granted ->
             if (granted) {
@@ -210,7 +204,7 @@ class CactusEditFragment : Fragment() {
                     photoFile = createImageFile()
                     val photoURI = FileProvider.getUriForFile(
                         requireContext(),
-                        "com.cacti.cactiphone.fileprovider",
+                        BuildConfig.APPLICATION_ID + ".provider",
                         photoFile!!
                     )
                     takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
@@ -228,29 +222,32 @@ class CactusEditFragment : Fragment() {
         super.onActivityResult(requestCode, resultCode, data)
         photoFile?.let {
             if (requestCode == CAPTURE_IMAGE_REQUEST && resultCode == Activity.RESULT_OK) {
-                val myBitmap = BitmapFactory.decodeFile(it.absolutePath)
-                binding.ivPhoto.setImageBitmap(myBitmap)
+                galleryAddPic(it)
+                viewModel.addPhoto(it)
             } else {
+                it.delete()
                 showToast("Request cancelled or something went wrong.")
             }
         }
+        photoFile = null
     }
 
-    @Throws(IOException::class)
+    private fun galleryAddPic(imageFile: File) {
+        Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE).also { mediaScanIntent ->
+            mediaScanIntent.data = Uri.fromFile(imageFile)
+            requireActivity().sendBroadcast(mediaScanIntent)
+        }
+    }
+
+    @Throws(Exception::class)
     private fun createImageFile(): File {
         // Create an image file name
-        val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.ROOT).format(Date())
-        val imageFileName = "JPEG_" + timeStamp + "_"
-        val storageDir = requireActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        val image = File.createTempFile(
-            imageFileName, /* prefix */
-            ".jpg", /* suffix */
-            storageDir      /* directory */
-        )
+        val newImageFile = viewModel.getNewImageFile()
 
         // Save a file: path for use with ACTION_VIEW intents
-        currentPhotoPath = image.absolutePath
-        return image
+        currentPhotoPath = newImageFile.absolutePath
+
+        return newImageFile
     }
 
     private fun checkPermission(permissions: Array<String>, onPermissionResult: (Boolean) -> Unit) {

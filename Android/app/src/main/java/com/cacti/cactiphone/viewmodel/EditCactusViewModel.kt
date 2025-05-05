@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
-import androidx.lifecycle.map
 import androidx.lifecycle.switchMap
 import com.cacti.cactiphone.App
 import com.cacti.cactiphone.AppConstants
@@ -16,6 +15,7 @@ import com.cacti.cactiphone.repository.CactusRepo
 import com.cacti.cactiphone.repository.PhotoRepo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import java.io.File
 import java.util.UUID
 import javax.inject.Inject
 
@@ -50,17 +50,33 @@ class EditCactusViewModel@Inject constructor(
         emit(result)
     } }
 
-    /**
-     * The first photo
-     */
-    val photo : LiveData<Photo?> = cactus.map {
-        it.let { cactus ->
-            if (cactus.photoId > UNKNOWN_ID) {
-                photoRepo.getFirstPhoto(cactus)
-            } else {
-                null
+    private val _photos = MutableLiveData<List<Photo>>()
+    val photos : LiveData<List<Photo>> = _photos
+
+    fun addPhoto(image: File) {
+        if (image.exists()) {
+            cactus.value?.let {
+                photoRepo.add(it, image)
+                _photos.postValue(photoRepo.getPhotos(it))
             }
         }
+    }
+
+    fun getNewImageFile() : File {
+
+        cactus.value?.let { cactus ->
+
+            if (cactus.code.isNotBlank()) {
+                val photoCount = photos.value?.count() ?: 0
+                return photoRepo.getNewImagePath(cactus, photoCount)
+            } else {
+                throw Exception("Cactus code is empty")
+            }
+
+        } ?: run {
+            throw Exception("Invalid cactus")
+        }
+
     }
 
     suspend fun save() {
@@ -77,34 +93,6 @@ class EditCactusViewModel@Inject constructor(
         }
     }
 
-    fun dataChanged(
-            code: String,
-            description: String,
-            location: String,
-            photoPath: String
-    ) : Boolean {
-        this.cactus.value?.let {
 
-            photo.value?.let { photo ->
-                // We have photo, but path has changed
-                if (photo.path != photoPath) {
-                    return true
-                }
-            } ?: kotlin.run {
-                // We don't have photo, and now we have
-                if (photoPath.isNotEmpty()) {
-                    return true
-                }
-            }
-
-
-            return it.code != code ||
-                    it.description != description ||
-                    it.location != location
-
-        } ?: run {
-            return false
-        }
-    }
 
 }
