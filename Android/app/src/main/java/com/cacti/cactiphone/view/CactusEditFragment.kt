@@ -188,9 +188,14 @@ class CactusEditFragment : Fragment() {
 
     private fun showCodeDialog() {
         val currentCode = viewModel.cactus.value?.code ?: ""
+        val currentSelect = if (currentCode.isNotEmpty()) {
+            currentCode.length - 1
+        } else {
+            0
+        }
         val editText = EditText(requireContext()).apply {
             setText(currentCode)
-            setSelection(currentCode.length - 1)
+            setSelection(currentSelect)
             inputType = InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS
             gravity = Gravity.CENTER  // Center the text inside the EditText
         }
