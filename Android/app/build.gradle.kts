@@ -17,8 +17,8 @@ android {
         applicationId = "com.cacti.cactiphone"
         minSdk = 30
         targetSdk = 34
-        versionName = "1.0.6"
-        versionCode = 25050802
+        versionName = "2.1.6"
+        versionCode = 25051201
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

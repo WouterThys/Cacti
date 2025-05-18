@@ -6,20 +6,16 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.text.InputType
-import android.view.Gravity
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
-import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -27,6 +23,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.cacti.cactiphone.AppConstants.UNKNOWN_ID
 import com.cacti.cactiphone.BuildConfig
 import com.cacti.cactiphone.R
+import com.cacti.cactiphone.data.Cactus
 import com.cacti.cactiphone.databinding.FragmentCactusEditBinding
 import com.cacti.cactiphone.view.adapters.PhotoAdapter
 import com.cacti.cactiphone.viewmodel.EditCactusViewModel
@@ -73,29 +70,7 @@ class CactusEditFragment : Fragment() {
     ): View {
         _binding = FragmentCactusEditBinding.inflate(inflater, container, false)
 
-        binding.toolbar.inflateMenu(R.menu.menu_edit_cactus)
-        binding.toolbar.setOnMenuItemClickListener { item ->
-            return@setOnMenuItemClickListener when (item.itemId) {
-                R.id.menu_item_save -> {
-                    saveData()
-                    true
-                }
-
-                R.id.menu_item_delete -> {
-                    deleteData()
-                    true
-                }
-
-                R.id.menu_item_photo -> {
-                    takePicture()
-                    true
-                }
-
-                else -> {
-                    false
-                }
-            }
-        }
+        setupMenu()
 
         binding.vpPhotos.adapter = photoAdapter
 
@@ -112,11 +87,20 @@ class CactusEditFragment : Fragment() {
             }
         )
 
-        binding.etCode.showSoftInputOnFocus = false
+        binding.etCode.addTextChangedListener(object: TextWatcher {
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                binding.tilCode.error = null
+                updateMenu(viewModel.cactus.value, s.toString())
+            }
+
+            override fun afterTextChanged(s: Editable?) { }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
+        })
 
         binding.etCode.setOnFocusChangeListener { _, hasFocus ->
-            if (hasFocus) {
-                showCodeDialog()
+            if (!hasFocus) {
+                codeChanged(viewModel.currentCode(), binding.etCode.text.toString())
             }
         }
 
@@ -145,6 +129,7 @@ class CactusEditFragment : Fragment() {
                 } else {
                     binding.toolbar.title = getString(R.string.new_)
                 }
+                updateMenu(cactus, cactus.code)
             }
         }
 
@@ -186,47 +171,40 @@ class CactusEditFragment : Fragment() {
         }
     }
 
-    private fun showCodeDialog() {
-        val currentCode = viewModel.cactus.value?.code ?: ""
-        val currentSelect = if (currentCode.isNotEmpty()) {
-            currentCode.length - 1
-        } else {
-            0
-        }
-        val editText = EditText(requireContext()).apply {
-            setText(currentCode)
-            setSelection(currentSelect)
-            inputType = InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS
-            gravity = Gravity.CENTER  // Center the text inside the EditText
-        }
+    private fun setupMenu() {
+        binding.toolbar.inflateMenu(R.menu.menu_edit_cactus)
+        binding.toolbar.setOnMenuItemClickListener { item ->
+            return@setOnMenuItemClickListener when (item.itemId) {
+                R.id.menu_item_save -> {
+                    saveData()
+                    true
+                }
 
-        val container = FrameLayout(requireContext())
-        val params = FrameLayout.LayoutParams(
-            FrameLayout.LayoutParams.MATCH_PARENT,
-            FrameLayout.LayoutParams.WRAP_CONTENT
-        )
-        params.setMargins(8, 16, 8, 16)
-        editText.layoutParams = params
-        container.addView(editText)
+                R.id.menu_item_delete -> {
+                    deleteData()
+                    true
+                }
 
-        val dialog = AlertDialog.Builder(requireContext())
-            .setTitle("Code")
-            .setView(container)
-            .setPositiveButton("OK") { _, _ ->
-                codeChanged(currentCode, editText.text.toString())
+                R.id.menu_item_photo -> {
+                    takePicture()
+                    true
+                }
+
+                else -> {
+                    false
+                }
             }
-            .setNegativeButton("Cancel", null)
-            .create()
-
-        dialog.setOnShowListener {
-            // Now you can optionally show the keyboard manually later
-            // if you want, using this code:
-            editText.requestFocus()
-            val imm = getSystemService(requireContext(), InputMethodManager::class.java)
-            imm?.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT)
         }
+    }
 
-        dialog.show()
+    private fun updateMenu(cactus: Cactus?, newCode: String) {
+        val photoItem = binding.toolbar.menu.findItem(R.id.menu_item_photo)
+        photoItem.isVisible = newCode.isNotBlank()
+
+        val deleteItem = binding.toolbar.menu.findItem(R.id.menu_item_delete)
+        deleteItem.isVisible = (cactus?.id ?: 0) > UNKNOWN_ID
+
+        binding.toolbar.invalidateMenu()
     }
 
     private fun codeChanged(oldCode: String, newCode:String) {
@@ -242,6 +220,13 @@ class CactusEditFragment : Fragment() {
     }
 
     private fun saveData(saveOnClose: Boolean = true) {
+
+        val newCode = binding.etCode.text.toString()
+        if (newCode.isBlank()) {
+            binding.tilCode.error = "Code is verplicht.."
+            return
+        }
+
         launchOnIo {
             updateCactus()
             viewModel.save()

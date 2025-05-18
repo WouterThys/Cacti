@@ -74,6 +74,10 @@ class EditCactusViewModel @Inject constructor(
         _photos.postValue(photoRepo.getPhotos(cactus))
     }
 
+    fun currentCode() : String {
+        return cactus.value?.code ?: ""
+    }
+
     fun validateCode(newCode: String): Boolean {
         var result = false
         cactus.value?.let {
