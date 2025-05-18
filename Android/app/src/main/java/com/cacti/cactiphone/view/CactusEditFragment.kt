@@ -186,6 +186,9 @@ class CactusEditFragment : Fragment() {
                 }
 
                 R.id.menu_item_photo -> {
+                    if (binding.etCode.hasFocus()) {
+                        codeChanged(viewModel.currentCode(), binding.etCode.text.toString())
+                    }
                     takePicture()
                     true
                 }

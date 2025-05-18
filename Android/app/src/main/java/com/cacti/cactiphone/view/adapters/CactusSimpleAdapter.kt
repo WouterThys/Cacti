@@ -13,33 +13,45 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.cacti.cactiphone.R
 import com.cacti.cactiphone.data.CactusWithPhotos
-import com.cacti.cactiphone.databinding.LayoutItemCactusBinding
+import com.cacti.cactiphone.databinding.LayoutItemCactusSmallBinding
 import java.io.File
 
-class CactusAdapter(context: Context) : RecyclerView.Adapter<CactusAdapter.CactusHolder>() {
+class CactusSimpleAdapter(context: Context) : ICactusAdapter, RecyclerView.Adapter<CactusSimpleAdapter.CactusHolder>() {
 
-    private val emptyIconDrawable: Drawable = ContextCompat.getDrawable(context, R.drawable.cactus_icon_128)!!
+    private val emptyIconDrawable: Drawable =
+        ContextCompat.getDrawable(context, R.drawable.cactus_icon_128)!!
 
-    private val asyncListDiffer by lazy { AsyncListDiffer(this,
-        object : DiffUtil.ItemCallback<CactusWithPhotos>() {
-            override fun areItemsTheSame(oldItem: CactusWithPhotos, newItem: CactusWithPhotos): Boolean {
-                return oldItem.cactus.id == newItem.cactus.id
+    private val asyncListDiffer by lazy {
+        AsyncListDiffer(this,
+            object : DiffUtil.ItemCallback<CactusWithPhotos>() {
+                override fun areItemsTheSame(
+                    oldItem: CactusWithPhotos,
+                    newItem: CactusWithPhotos
+                ): Boolean {
+                    return oldItem.cactus.id == newItem.cactus.id
+                }
+
+                override fun areContentsTheSame(
+                    oldItem: CactusWithPhotos,
+                    newItem: CactusWithPhotos
+                ): Boolean {
+                    var res = oldItem.cactus.code == newItem.cactus.code
+
+                    if (res && newItem.photos.isNotEmpty()) {
+                        res = oldItem.photos[0].code == newItem.photos[0].code
+                    }
+
+                    return res
+                }
             }
+        )
+    }
 
-            override fun areContentsTheSame(oldItem: CactusWithPhotos, newItem: CactusWithPhotos): Boolean {
-                val res = oldItem.cactus.code == newItem.cactus.code
-                        && oldItem.cactus.description == newItem.cactus.description
-                        && oldItem.cactus.location == newItem.cactus.location
-                        && oldItem.cactus.photoId == newItem.cactus.photoId
-//                       && oldItem.photo?.id == newItem.photo?.id
-//                       && oldItem.photo?.path == newItem.photo?.path
+    override fun getAdapter(): RecyclerView.Adapter<*> {
+        return this
+    }
 
-                return res
-            }
-        }
-    )}
-
-    fun submit(data: List<CactusWithPhotos>?) {
+    override fun submit(data: List<CactusWithPhotos>?) {
         data?.let {
             asyncListDiffer.submitList(ArrayList(data))
         }
@@ -64,9 +76,9 @@ class CactusAdapter(context: Context) : RecyclerView.Adapter<CactusAdapter.Cactu
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CactusHolder {
-        val binding: LayoutItemCactusBinding = DataBindingUtil.inflate(
+        val binding: LayoutItemCactusSmallBinding = DataBindingUtil.inflate(
             LayoutInflater.from(parent.context),
-            R.layout.layout_item_cactus,
+            R.layout.layout_item_cactus_small,
             parent,
             false
         )
@@ -77,8 +89,6 @@ class CactusAdapter(context: Context) : RecyclerView.Adapter<CactusAdapter.Cactu
         val cactus = getItem(position)
         holder.binding?.let {
             it.cactus = cactus?.cactus
-            // Pending
-            it.vPendingAction.visibility = View.INVISIBLE
 
             // Photo
             cactus?.photos?.firstOrNull()?.let { photo ->
@@ -95,6 +105,6 @@ class CactusAdapter(context: Context) : RecyclerView.Adapter<CactusAdapter.Cactu
     }
 
     class CactusHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var binding: LayoutItemCactusBinding? = DataBindingUtil.bind(itemView)
+        var binding: LayoutItemCactusSmallBinding? = DataBindingUtil.bind(itemView)
     }
 }

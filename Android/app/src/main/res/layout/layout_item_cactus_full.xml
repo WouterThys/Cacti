@@ -10,7 +10,7 @@
 
         <variable
             name="cactus"
-            type="com.cacti.cactiphone.data.BaseCactus" />
+            type="com.cacti.cactiphone.data.Cactus" />
 
     </data>
 
