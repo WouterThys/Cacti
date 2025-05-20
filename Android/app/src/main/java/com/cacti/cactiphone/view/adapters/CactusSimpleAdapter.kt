@@ -37,7 +37,7 @@ class CactusSimpleAdapter(context: Context) : ICactusAdapter, RecyclerView.Adapt
                 ): Boolean {
                     var res = oldItem.cactus.code == newItem.cactus.code
 
-                    if (res && newItem.photos.isNotEmpty()) {
+                    if (res && newItem.photos.isNotEmpty() && oldItem.photos.isNotEmpty()) {
                         res = oldItem.photos[0].code == newItem.photos[0].code
                     }
 

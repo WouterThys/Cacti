@@ -11,6 +11,8 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
@@ -20,11 +22,13 @@ import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.ViewPager2
+import com.bumptech.glide.Glide
 import com.cacti.cactiphone.AppConstants.UNKNOWN_ID
 import com.cacti.cactiphone.BuildConfig
 import com.cacti.cactiphone.R
 import com.cacti.cactiphone.data.Cactus
 import com.cacti.cactiphone.databinding.FragmentCactusEditBinding
+import com.cacti.cactiphone.utils.QrUtils
 import com.cacti.cactiphone.view.adapters.PhotoAdapter
 import com.cacti.cactiphone.viewmodel.EditCactusViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -193,6 +197,11 @@ class CactusEditFragment : Fragment() {
                     true
                 }
 
+                R.id.menu_item_show_qr -> {
+                    showQrCode()
+                    true
+                }
+
                 else -> {
                     false
                 }
@@ -201,11 +210,20 @@ class CactusEditFragment : Fragment() {
     }
 
     private fun updateMenu(cactus: Cactus?, newCode: String) {
-        val photoItem = binding.toolbar.menu.findItem(R.id.menu_item_photo)
-        photoItem.isVisible = newCode.isNotBlank()
 
-        val deleteItem = binding.toolbar.menu.findItem(R.id.menu_item_delete)
-        deleteItem.isVisible = (cactus?.id ?: 0) > UNKNOWN_ID
+        val menu = binding.toolbar.menu
+
+        menu.findItem(R.id.menu_item_photo)?.apply {
+            isVisible = newCode.isNotBlank()
+        }
+
+        menu.findItem(R.id.menu_item_delete)?.apply {
+            isVisible = (cactus?.id ?: 0) > UNKNOWN_ID
+        }
+
+        menu.findItem(R.id.menu_item_show_qr)?.apply {
+            isVisible = (cactus?.id ?: 0) > UNKNOWN_ID
+        }
 
         binding.toolbar.invalidateMenu()
     }
@@ -375,4 +393,49 @@ class CactusEditFragment : Fragment() {
         binding.tvPhotoCount.text = countText
     }
 
+    private fun showQrCode() {
+
+        val cactus = viewModel.cactus.value
+        if ((cactus?.id ?: 0) > UNKNOWN_ID) {
+
+            val barcodeStr = cactus?.id.toString()
+            val bitmap = QrUtils.generateQrCode(barcodeStr)
+
+            val layout = RelativeLayout(requireContext())
+
+            // Imageview
+            val ivParams = RelativeLayout.LayoutParams(400, 400)
+            ivParams.setMargins(8,8,8,8)
+            ivParams.addRule(RelativeLayout.CENTER_IN_PARENT)
+            val imageView = ImageView(requireContext())
+            imageView.layoutParams = ivParams
+            layout.addView(imageView)
+
+//            // TextView
+//            val tvParams = RelativeLayout.LayoutParams(
+//                RelativeLayout.LayoutParams.WRAP_CONTENT,
+//                RelativeLayout.LayoutParams.WRAP_CONTENT)
+//            tvParams.addRule(RelativeLayout.ALIGN_BOTTOM)
+//            tvParams.bottomMargin = 16
+//            tvParams.marginStart = 8
+//            tvParams.marginEnd = 8
+//            val textView = TextView(requireContext())
+//            textView.layoutParams = tvParams
+//            textView.text = barcodeStr
+//            layout.addView(textView)
+
+            Glide.with(requireContext())
+                .load(bitmap)
+                .into(imageView)
+
+            AlertDialog.Builder(requireContext())
+                .setTitle(R.string.qrcode)
+                .setView(layout)
+                .setPositiveButton(R.string.ok, null)
+                .show()
+
+
+        }
+
+    }
 }

@@ -37,6 +37,10 @@ class MainViewModel @Inject constructor(
 
     }
 
+    fun getSettings() : AppSettings {
+        return settings
+    }
+
     fun refresh() {
         cactusList.update()
         //cactusRepo.refresh()

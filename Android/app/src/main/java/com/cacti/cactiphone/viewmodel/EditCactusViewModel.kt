@@ -13,6 +13,7 @@ import com.cacti.cactiphone.data.Cactus
 import com.cacti.cactiphone.data.Photo
 import com.cacti.cactiphone.repository.CactusRepo
 import com.cacti.cactiphone.repository.PhotoRepo
+import com.cacti.cactiphone.utils.QrUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import java.io.File
@@ -167,10 +168,23 @@ class EditCactusViewModel @Inject constructor(
 
     }
 
+    private fun saveQrCode(cactus: Cactus) {
+        try {
+            val bitmap = QrUtils.generateQrCode(cactus.id.toString())
+            val dir = photoRepo.getCactusDir(cactus)
+            val file = File(dir.absolutePath, cactus.id.toString() + ".jpg")
+            if (!file.exists()) {
+                QrUtils.writeBitmap(app, bitmap, file.absolutePath)
+            }
+        } catch (ex: Exception) {
+            ex.printStackTrace()
+        }
+    }
+
     suspend fun save() {
         cactus.value?.let {
             cactusRepo.save(it)
-            // TODO: photos
+            saveQrCode(it)
         }
     }
 

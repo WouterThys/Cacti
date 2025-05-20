@@ -4,6 +4,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+    <string name="ok">OK</string>
     <string name="code">Naam</string>
     <string name="description">Omschrijving</string>
     <string name="location">Lokatie</string>
@@ -11,6 +12,7 @@
     <string name="mother">Naam Moeder</string>
     <string name="crossing">Kruisings Nr</string>
     <string name="photo">Foto</string>
+    <string name="qrcode">QR</string>
 
 
     <string name="save">Save</string>

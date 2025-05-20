@@ -21,7 +21,7 @@ class PhotoRepo @Inject constructor(private val photoDir: String) {
         return dir
     }
 
-    private fun getCactusDir(cactus: Cactus) : File {
+    fun getCactusDir(cactus: Cactus) : File {
         return getCactusDir(cactus.code)
     }
 
@@ -45,12 +45,16 @@ class PhotoRepo @Inject constructor(private val photoDir: String) {
         if (cactus.code.isNotBlank()) {
             val dir = getCactusDir(cactus)
             dir.listFiles()?.forEach { file ->
-                result.add(Photo(
-                    id = Date().time,
-                    code = file.nameWithoutExtension,
-                    path = file.absolutePath,
-                    lastModified = Date(file.lastModified())
-                ))
+                if (file.name.startsWith("CACTUS_")) {
+                    result.add(
+                        Photo(
+                            id = Date().time,
+                            code = file.nameWithoutExtension,
+                            path = file.absolutePath,
+                            lastModified = Date(file.lastModified())
+                        )
+                    )
+                }
             }
 
             result.sortBy { f -> f.code }

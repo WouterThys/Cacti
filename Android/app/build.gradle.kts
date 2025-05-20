@@ -137,7 +137,7 @@ dependencies {
     //implementation("com.github.bumptech.glide:okhttp3-integration:$glideVersion")
     kapt("com.github.bumptech.glide:compiler:$glideVersion") // This breaks the okhttp interceptor when using ksp
 
-//    // Grpc
+    // Grpc
     val grpcVersion = "1.57.2"
     val grpcKotlinVersion = "1.3.1"
     val protobufVersion = "3.24.1"
@@ -147,7 +147,7 @@ dependencies {
     implementation("io.grpc:grpc-protobuf-lite:$grpcVersion")
     implementation("io.grpc:grpc-kotlin-stub:$grpcKotlinVersion")
     implementation("com.google.protobuf:protobuf-kotlin-lite:$protobufVersion")
-//
+
     // Room
     val androidxRoomVersion = "2.7.1"
     implementation("androidx.room:room-runtime:$androidxRoomVersion")
@@ -162,7 +162,6 @@ dependencies {
     kapt("com.google.dagger:hilt-android-compiler:$daggerHiltVersion")
     kapt("androidx.hilt:hilt-compiler:$androidxHiltVersion")
 
-
     // Navigation
     val navVersion = "2.7.7"
     implementation("androidx.navigation:navigation-fragment-ktx:$navVersion")
@@ -173,12 +172,19 @@ dependencies {
     implementation("com.google.mlkit:barcode-scanning:$scanningVersion")
     implementation("com.google.android.gms:play-services-mlkit-barcode-scanning:18.3.0")
 
+    // Camera
     val cameraxVersion = "1.4.2"
     implementation("androidx.camera:camera-core:${cameraxVersion}")
     implementation("androidx.camera:camera-camera2:${cameraxVersion}")
     implementation("androidx.camera:camera-lifecycle:${cameraxVersion}")
     implementation("androidx.camera:camera-view:${cameraxVersion}")
     implementation("androidx.camera:camera-extensions:${cameraxVersion}")
+
+    // Barcodes
+    val zxingVersion = "3.5.3"
+    implementation("com.google.zxing:core:${zxingVersion}")
+    implementation("com.google.zxing:zxing-parent:${zxingVersion}")
+
 }
 
 // Allow references to generated code
